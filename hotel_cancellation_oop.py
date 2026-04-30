@@ -621,36 +621,6 @@ class XGBoostModel(BaseHotelModel):
         )
 
 
-class CatBoostModel(BaseHotelModel):
-    name = "CatBoost"
-
-    def get_estimator(self) -> Any:
-        try:
-            catboost = importlib.import_module("catboost")
-        except ImportError as exc:
-            raise ImportError(
-                "CatBoost is required for CatBoostModel. Install it with `pip install catboost` "
-                "or remove CatBoost from the selected models."
-            ) from exc
-
-        return catboost.CatBoostClassifier(iterations=100, verbose=False, random_seed=42)
-
-
-class LightGBMModel(BaseHotelModel):
-    name = "LightGBM"
-
-    def get_estimator(self) -> Any:
-        try:
-            lightgbm = importlib.import_module("lightgbm")
-        except ImportError as exc:
-            raise ImportError(
-                "LightGBM is required for LightGBMModel. Install it with `pip install lightgbm` "
-                "or remove LightGBM from the selected models."
-            ) from exc
-
-        return lightgbm.LGBMClassifier(learning_rate=0.1, random_state=42)
-
-
 class VotingEnsembleModel(BaseHotelModel):
     name = "Voting Ensemble"
 
@@ -698,8 +668,6 @@ MODEL_REGISTRY: Dict[str, Type[BaseHotelModel]] = {
         GradientBoostingModel,
         ExtraTreesModel,
         XGBoostModel,
-        CatBoostModel,
-        LightGBMModel,
         VotingEnsembleModel,
         ANNModel,
         RNNModel,

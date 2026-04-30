@@ -7,7 +7,7 @@ The ML Models built and evaluated in this project are the following: Decision Tr
 
 The project now includes a real object-oriented implementation:
 
-- `hotel_cancellation_oop.py` contains classes for the original notebook EDA, data cleaning, feature engineering, every model, evaluation metrics, training, testing, k-fold cross validation, ANN/RNN, and SHAP helpers.
+- `hotel_cancellation_oop.py` contains classes for the original notebook EDA, data cleaning, feature engineering, supported models, evaluation metrics, training, testing, k-fold cross validation, ANN/RNN, and SHAP helpers.
 - `streamlit_app.py` contains a new standalone class-based Streamlit dashboard with animated HTML/CSS UI components.
 
 Install dependencies:
@@ -43,3 +43,5 @@ streamlit run streamlit_app.py
 ```
 
 `requirements.txt` installs `xgboost==3.2.0` everywhere and installs `tensorflow==2.21.0` only on Python versions below 3.14. For Streamlit Community Cloud, set the Python version to 3.12 or 3.11 in the app's Advanced settings if you want ANN/RNN TensorFlow models available.
+
+CatBoost and LightGBM were removed from the app because they are not used by the current deployment.

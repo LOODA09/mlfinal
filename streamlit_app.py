@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import pandas as pd
 import streamlit as st
@@ -15,6 +15,7 @@ from hotel_cancellation_oop import (
     NotebookEDAAnalyzer,
     RNNModel,
     SHAPAnalyzer,
+    _positive_probabilities,
 )
 
 
@@ -245,7 +246,13 @@ class HotelCancellationDashboard:
         with st.sidebar:
             st.header("Configuration")
             data_path = st.text_input("Dataset", "hotel_bookings.csv")
-            sample_size = st.number_input("Sample size", min_value=0, value=15000, step=1000)
+            sample_size = st.number_input(
+                "Sample size",
+                min_value=0,
+                value=0,
+                step=1000,
+                help="Use 0 for the full dataset.",
+            )
             remove_leakage = st.checkbox("Remove leakage features", value=True)
             test_size = st.slider("Test size", 0.1, 0.5, 0.3, 0.05)
             folds = st.slider("K-fold splits", 2, 10, 5)
@@ -253,7 +260,7 @@ class HotelCancellationDashboard:
             model_names = st.multiselect(
                 "Models",
                 list(MODEL_REGISTRY.keys()),
-                default=["Logistic Regression", "Decision Tree", "Random Forest"],
+                default=["Logistic Regression", "Decision Tree", "Random Forest", "XGBoost"],
             )
 
         return DashboardConfig(
@@ -341,6 +348,7 @@ class HotelCancellationDashboard:
 
         self.render_holdout_results()
         self.render_kfold_results()
+        self.prediction_section(x_data)
 
     def train_selected_models(
         self,
@@ -361,6 +369,7 @@ class HotelCancellationDashboard:
             st.session_state["trained_models"] = models
             st.session_state["x_train"] = x_train
             st.session_state["x_test"] = x_test
+            st.session_state["feature_template"] = x_data
             st.session_state["holdout_summary"] = summary
             st.session_state["holdout_details"] = details
         except Exception as exc:
@@ -449,6 +458,75 @@ class HotelCancellationDashboard:
         if not mean_results.empty:
             st.bar_chart(mean_results.set_index("model")["f1"])
         st.markdown("</div>", unsafe_allow_html=True)
+
+    def prediction_section(self, x_data: pd.DataFrame) -> None:
+        st.subheader("Manual Cancellation Prediction")
+        if "trained_models" not in st.session_state:
+            st.info("Train at least one model first, then enter booking values here.")
+            return
+
+        model_name = st.selectbox(
+            "Prediction model",
+            list(st.session_state["trained_models"].keys()),
+            key="manual_prediction_model",
+        )
+        input_row = self.manual_feature_form(x_data)
+
+        if not st.button("Predict Cancellation", type="primary", use_container_width=True):
+            return
+
+        model = st.session_state["trained_models"][model_name]
+        prediction = int(model.predict(input_row)[0])
+        probability = _positive_probabilities(model, input_row)
+        cancel_probability = float(probability[0]) if probability is not None else None
+
+        if prediction == 1:
+            st.error("Prediction: Booking will be canceled")
+        else:
+            st.success("Prediction: Booking will not be canceled")
+
+        if cancel_probability is not None:
+            st.metric("Cancellation probability", f"{cancel_probability * 100:.2f}%")
+
+    def manual_feature_form(self, x_data: pd.DataFrame) -> pd.DataFrame:
+        values: Dict[str, Any] = {}
+        categorical_columns = list(x_data.select_dtypes(include=["object", "category"]).columns)
+        numeric_columns = [column for column in x_data.columns if column not in categorical_columns]
+
+        st.write("Booking values")
+        cat_columns = st.columns(3)
+        for index, column in enumerate(categorical_columns):
+            options = sorted(x_data[column].astype(str).fillna("Unknown").unique().tolist())
+            default_value = (
+                str(x_data[column].mode(dropna=True).iloc[0])
+                if not x_data[column].mode(dropna=True).empty
+                else options[0]
+            )
+            default_index = options.index(default_value) if default_value in options else 0
+            values[column] = cat_columns[index % 3].selectbox(
+                column,
+                options,
+                index=default_index,
+                key=f"manual_{column}",
+            )
+
+        num_columns = st.columns(3)
+        for index, column in enumerate(numeric_columns):
+            series = pd.to_numeric(x_data[column], errors="coerce").fillna(0)
+            min_value = float(series.min())
+            max_value = float(series.max())
+            default_value = float(series.median())
+            step = 1.0 if pd.api.types.is_integer_dtype(series) else 0.1
+            values[column] = num_columns[index % 3].number_input(
+                column,
+                min_value=min_value,
+                max_value=max_value,
+                value=default_value,
+                step=step,
+                key=f"manual_{column}",
+            )
+
+        return pd.DataFrame([values], columns=x_data.columns)
 
 
 if __name__ == "__main__":
