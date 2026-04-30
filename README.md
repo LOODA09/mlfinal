@@ -33,8 +33,13 @@ Use these deployment settings:
 
 The repository includes `requirements.txt` and `.streamlit/config.toml`, which Streamlit Community Cloud reads during deployment.
 
-TensorFlow, XGBoost, CatBoost, and LightGBM are optional because Streamlit Cloud may use a Python version where their wheels are unavailable. The app deploys with the sklearn models by default. To use the optional models locally, install them manually:
+TensorFlow needs a compatible Python version. This project was verified locally with Python 3.11:
 
 ```bash
-pip install tensorflow xgboost catboost lightgbm
+py -3.11 -m venv .venv311
+.\.venv311\Scripts\activate
+python -m pip install -r requirements.txt
+streamlit run streamlit_app.py
 ```
+
+`requirements.txt` installs `xgboost==3.2.0` everywhere and installs `tensorflow==2.21.0` only on Python versions below 3.14. For Streamlit Community Cloud, set the Python version to 3.12 or 3.11 in the app's Advanced settings if you want ANN/RNN TensorFlow models available.

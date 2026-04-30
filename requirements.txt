@@ -6,3 +6,5 @@ seaborn
 plotly
 streamlit
 shap
+xgboost==3.2.0
+tensorflow==2.21.0; python_version < "3.14"
