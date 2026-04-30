@@ -6,7 +6,3 @@ seaborn
 plotly
 streamlit
 shap
-tensorflow
-xgboost
-catboost
-lightgbm
