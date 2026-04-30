@@ -260,7 +260,7 @@ class HotelCancellationDashboard:
             model_names = st.multiselect(
                 "Models",
                 list(MODEL_REGISTRY.keys()),
-                default=["Logistic Regression", "Decision Tree", "Random Forest", "XGBoost"],
+                default=["Decision Tree"],
             )
 
         return DashboardConfig(
@@ -363,14 +363,19 @@ class HotelCancellationDashboard:
         try:
             with st.spinner("Training models..."):
                 x_train, x_test, y_train, y_test = self.trainer.split_data(x_data, y_data)
-                models = self.trainer.train_many(self.build_models(config), x_train, y_train)
+                holdout_specs = self.build_models(config)
+                models = self.trainer.train_many(holdout_specs, x_train, y_train)
                 summary, details = self.tester.test_many(models, x_test, y_test)
+                final_models = self.trainer.train_many(self.build_models(config), x_data, y_data)
+                full_fit_summary, _ = self.tester.test_many(final_models, x_data, y_data)
 
             st.session_state["trained_models"] = models
+            st.session_state["final_prediction_models"] = final_models
             st.session_state["x_train"] = x_train
             st.session_state["x_test"] = x_test
             st.session_state["feature_template"] = x_data
             st.session_state["holdout_summary"] = summary
+            st.session_state["full_fit_summary"] = full_fit_summary
             st.session_state["holdout_details"] = details
         except Exception as exc:
             st.error(f"Training failed: {exc}")
@@ -404,6 +409,11 @@ class HotelCancellationDashboard:
         st.markdown('<div class="soft-card">', unsafe_allow_html=True)
         st.write("Holdout Evaluation")
         st.dataframe(st.session_state["holdout_summary"].style.format(precision=4), use_container_width=True)
+
+        if "full_fit_summary" in st.session_state:
+            st.write("Full-Data In-Sample Fit")
+            st.caption("This is scored on the same rows used for training. It is not an honest unseen test.")
+            st.dataframe(st.session_state["full_fit_summary"].style.format(precision=4), use_container_width=True)
 
         selected = st.selectbox("Inspect model", list(st.session_state["trained_models"].keys()))
         detail = st.session_state["holdout_details"][selected]
@@ -461,21 +471,22 @@ class HotelCancellationDashboard:
 
     def prediction_section(self, x_data: pd.DataFrame) -> None:
         st.subheader("Manual Cancellation Prediction")
-        if "trained_models" not in st.session_state:
+        if "final_prediction_models" not in st.session_state:
             st.info("Train at least one model first, then enter booking values here.")
             return
 
         model_name = st.selectbox(
             "Prediction model",
-            list(st.session_state["trained_models"].keys()),
+            list(st.session_state["final_prediction_models"].keys()),
             key="manual_prediction_model",
         )
+        st.caption("Manual predictions use the final model trained on the full dataset.")
         input_row = self.manual_feature_form(x_data)
 
         if not st.button("Predict Cancellation", type="primary", use_container_width=True):
             return
 
-        model = st.session_state["trained_models"][model_name]
+        model = st.session_state["final_prediction_models"][model_name]
         prediction = int(model.predict(input_row)[0])
         probability = _positive_probabilities(model, input_row)
         cancel_probability = float(probability[0]) if probability is not None else None

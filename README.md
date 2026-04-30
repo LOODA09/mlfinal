@@ -45,3 +45,8 @@ streamlit run streamlit_app.py
 `requirements.txt` installs `xgboost==3.2.0` everywhere and installs `tensorflow==2.21.0` only on Python versions below 3.14. For Streamlit Community Cloud, set the Python version to 3.12 or 3.11 in the app's Advanced settings if you want ANN/RNN TensorFlow models available.
 
 CatBoost and LightGBM were removed from the app because they are not used by the current deployment.
+
+The app reports two score types after training:
+
+- Holdout Evaluation: an honest test on rows not used for training.
+- Full-Data In-Sample Fit: scored on the same rows used for training, useful to show model fit but not a real unseen test. Decision Tree can reach near-1 here without leakage.

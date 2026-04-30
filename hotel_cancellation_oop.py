@@ -59,9 +59,9 @@ MONTH_ORDER = [
 
 def _one_hot_encoder() -> OneHotEncoder:
     try:
-        return OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.float32)
+        return OneHotEncoder(handle_unknown="ignore", sparse_output=True, dtype=np.float32)
     except TypeError:
-        return OneHotEncoder(handle_unknown="ignore", sparse=False, dtype=np.float32)
+        return OneHotEncoder(handle_unknown="ignore", sparse=True, dtype=np.float32)
 
 
 def _positive_probabilities(model: Any, x_data: pd.DataFrame) -> Optional[np.ndarray]:
@@ -80,17 +80,7 @@ def _positive_probabilities(model: Any, x_data: pd.DataFrame) -> Optional[np.nda
 class HotelDataProcessor:
     target_column: str = "is_canceled"
     dropped_low_signal_columns: Sequence[str] = field(
-        default_factory=lambda: (
-            "agent",
-            "adr",
-            "babies",
-            "stays_in_week_nights",
-            "arrival_date_year",
-            "arrival_date_week_number",
-            "arrival_date_day_of_month",
-            "children",
-            "stays_in_weekend_nights",
-        )
+        default_factory=tuple
     )
     leakage_columns: Sequence[str] = field(
         default_factory=lambda: ("reservation_status", "reservation_status_date")
@@ -136,7 +126,34 @@ class HotelDataProcessor:
 
         y = df[self.target_column].astype(int)
         x_data = df.drop(columns=[self.target_column])
+        x_data = self.add_engineered_features(x_data)
         return x_data, y
+
+    def add_engineered_features(self, x_data: pd.DataFrame) -> pd.DataFrame:
+        features = x_data.copy()
+
+        if {"stays_in_weekend_nights", "stays_in_week_nights"}.issubset(features.columns):
+            features["total_nights"] = (
+                features["stays_in_weekend_nights"] + features["stays_in_week_nights"]
+            )
+
+        if {"adults", "children", "babies"}.issubset(features.columns):
+            features["total_guests"] = features["adults"] + features["children"] + features["babies"]
+
+        if {"previous_cancellations", "previous_bookings_not_canceled"}.issubset(features.columns):
+            previous_total = (
+                features["previous_cancellations"] + features["previous_bookings_not_canceled"]
+            )
+            features["previous_cancel_rate"] = (
+                features["previous_cancellations"] / previous_total.replace(0, 1)
+            ).fillna(0)
+
+        if {"booking_changes", "lead_time"}.issubset(features.columns):
+            features["changes_per_lead_day"] = (
+                features["booking_changes"] / features["lead_time"].replace(0, 1)
+            ).fillna(0)
+
+        return features
 
     def build_preprocessor(self, x_data: pd.DataFrame) -> ColumnTransformer:
         categorical_columns = list(x_data.select_dtypes(include=["object", "category"]).columns)
@@ -509,6 +526,8 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         return array
 
     def fit(self, x_data: Any, y_data: Sequence[int]) -> "KerasTabularClassifier":
+        if hasattr(x_data, "toarray"):
+            x_data = x_data.toarray()
         array = np.asarray(x_data, dtype=np.float32)
         self.classes_ = np.array([0, 1])
         self.n_features_in_ = array.shape[1]
@@ -524,6 +543,8 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict_proba(self, x_data: Any) -> np.ndarray:
+        if hasattr(x_data, "toarray"):
+            x_data = x_data.toarray()
         probabilities = self.model_.predict(self._reshape(x_data), verbose=0).ravel()
         return np.vstack([1 - probabilities, probabilities]).T
 
@@ -615,8 +636,10 @@ class XGBoostModel(BaseHotelModel):
             booster="gbtree",
             learning_rate=0.1,
             max_depth=5,
-            n_estimators=180,
+            n_estimators=120,
             eval_metric="logloss",
+            tree_method="hist",
+            n_jobs=-1,
             random_state=42,
         )
 
