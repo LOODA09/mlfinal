@@ -50,3 +50,11 @@ The app reports two score types after training:
 
 - Holdout Evaluation: an honest test on rows not used for training.
 - Full-Data In-Sample Fit: scored on the same rows used for training, useful to show model fit but not a real unseen test. Decision Tree can reach near-1 here without leakage.
+
+Latest leakage-free full-dataset holdout checks:
+
+- Random Forest: accuracy `0.891983`, F1 `0.846188`, ROC-AUC `0.957766`
+- Extra Trees: accuracy `0.883707`, F1 `0.835762`, ROC-AUC `0.949663`
+- XGBoost: accuracy `0.865420`, F1 `0.809076`, ROC-AUC `0.941116`
+
+Random Forest full-data in-sample fit reached accuracy `0.995915` with leakage removed.

@@ -59,9 +59,9 @@ MONTH_ORDER = [
 
 def _one_hot_encoder() -> OneHotEncoder:
     try:
-        return OneHotEncoder(handle_unknown="ignore", sparse_output=True, dtype=np.float32)
+        return OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.float32)
     except TypeError:
-        return OneHotEncoder(handle_unknown="ignore", sparse=True, dtype=np.float32)
+        return OneHotEncoder(handle_unknown="ignore", sparse=False, dtype=np.float32)
 
 
 def _positive_probabilities(model: Any, x_data: pd.DataFrame) -> Optional[np.ndarray]:

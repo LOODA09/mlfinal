@@ -260,7 +260,7 @@ class HotelCancellationDashboard:
             model_names = st.multiselect(
                 "Models",
                 list(MODEL_REGISTRY.keys()),
-                default=["Decision Tree"],
+                default=["Random Forest", "Extra Trees", "XGBoost"],
             )
 
         return DashboardConfig(
