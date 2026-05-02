@@ -992,8 +992,8 @@ class PredictionApp:
             return adjusted_prediction, adjusted_probability
 
         if deposit_type == "Refundable":
-            adjusted_probability = max(cancel_probability, 0.75)
-            adjusted_prediction = 1
+            adjusted_probability = min(max(cancel_probability, 0.10), 0.10)
+            adjusted_prediction = 0
             return adjusted_prediction, adjusted_probability
 
         return prediction, cancel_probability
