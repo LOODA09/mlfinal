@@ -6,6 +6,8 @@ from typing import Any, Dict, List
 
 import joblib
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 from hotel_cancellation_oop import HotelDataProcessor, _positive_probabilities
@@ -14,13 +16,13 @@ from hotel_cancellation_oop import HotelDataProcessor, _positive_probabilities
 ARTIFACTS_DIR = Path("artifacts")
 
 
-class PredictionStyle:
+class DashboardStyle:
     @staticmethod
     def apply() -> None:
         st.markdown(
             """
             <style>
-            @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
             html, body, [class*="css"] {
                 font-family: 'Manrope', sans-serif;
@@ -28,135 +30,208 @@ class PredictionStyle:
 
             .stApp {
                 background:
-                    radial-gradient(circle at top left, rgba(13, 148, 136, 0.12), transparent 30%),
-                    radial-gradient(circle at 85% 10%, rgba(245, 158, 11, 0.16), transparent 26%),
-                    linear-gradient(180deg, #f8fafc 0%, #eef6f5 100%);
+                    radial-gradient(circle at 8% 10%, rgba(14, 165, 233, 0.10), transparent 24%),
+                    radial-gradient(circle at 92% 12%, rgba(245, 158, 11, 0.12), transparent 26%),
+                    radial-gradient(circle at 50% 100%, rgba(13, 148, 136, 0.10), transparent 36%),
+                    linear-gradient(180deg, #f8fafc 0%, #edf7f5 100%);
             }
 
-            .hero {
+            .block-container {
+                padding-top: 1.4rem;
+                padding-bottom: 2rem;
+            }
+
+            .hero-shell {
                 position: relative;
                 overflow: hidden;
-                padding: 34px 32px;
-                border-radius: 28px;
+                padding: 34px 34px 30px;
+                border-radius: 30px;
                 margin-bottom: 22px;
                 color: white;
-                background: linear-gradient(135deg, #0f172a 0%, #155e75 52%, #0f766e 100%);
-                box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18);
-                animation: rise .65s ease both;
+                background: linear-gradient(135deg, #07111f 0%, #0f3d56 46%, #0f766e 100%);
+                box-shadow: 0 34px 90px rgba(7, 17, 31, 0.20);
+                animation: fadeLift .8s ease both;
             }
 
-            .hero::before, .hero::after {
+            .hero-shell::before,
+            .hero-shell::after {
                 content: "";
                 position: absolute;
                 border-radius: 999px;
-                filter: blur(8px);
                 opacity: .55;
-                animation: drift 10s ease-in-out infinite alternate;
+                filter: blur(10px);
             }
 
-            .hero::before {
-                width: 240px;
-                height: 240px;
-                right: -60px;
-                top: -60px;
-                background: rgba(250, 204, 21, .22);
+            .hero-shell::before {
+                width: 280px;
+                height: 280px;
+                right: -70px;
+                top: -85px;
+                background: rgba(250, 204, 21, .18);
+                animation: floatA 9s ease-in-out infinite alternate;
             }
 
-            .hero::after {
-                width: 180px;
-                height: 180px;
-                left: -40px;
-                bottom: -70px;
-                background: rgba(255,255,255,.14);
+            .hero-shell::after {
+                width: 220px;
+                height: 220px;
+                left: -55px;
+                bottom: -90px;
+                background: rgba(255, 255, 255, .11);
+                animation: floatB 12s ease-in-out infinite alternate;
             }
 
-            .hero h1, .hero p {
+            .hero-topline {
                 position: relative;
                 z-index: 2;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 14px;
+                border-radius: 999px;
+                background: rgba(255,255,255,.10);
+                border: 1px solid rgba(255,255,255,.16);
+                font-size: .84rem;
+                letter-spacing: .04em;
+                text-transform: uppercase;
             }
 
-            .hero h1 {
-                margin: 0 0 10px;
-                font-size: 2.4rem;
-                line-height: 1.05;
+            .hero-shell h1 {
+                position: relative;
+                z-index: 2;
+                margin: 14px 0 10px;
+                font-size: 2.7rem;
+                line-height: 1;
+                letter-spacing: -.03em;
             }
 
-            .hero p {
+            .hero-shell p {
+                position: relative;
+                z-index: 2;
                 margin: 0;
-                max-width: 820px;
+                max-width: 880px;
                 font-size: 1rem;
-                color: rgba(255,255,255,.88);
-                line-height: 1.6;
+                line-height: 1.65;
+                color: rgba(255,255,255,.86);
             }
 
-            .glass-card {
-                background: rgba(255,255,255,.82);
-                border: 1px solid rgba(15, 23, 42, 0.08);
-                border-radius: 22px;
-                padding: 18px 18px 10px;
-                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-                backdrop-filter: blur(10px);
-                animation: rise .55s ease both;
-            }
-
-            .mini-grid {
+            .metrics-ribbon {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 12px;
-                margin: 14px 0 12px;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                gap: 14px;
+                margin: 18px 0 24px;
             }
 
-            .mini-card {
-                border-radius: 18px;
-                padding: 16px;
-                background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(241,245,249,.96));
-                border: 1px solid rgba(15, 23, 42, 0.08);
+            .metric-tile {
+                background: rgba(255,255,255,.82);
+                border: 1px solid rgba(7, 17, 31, 0.08);
+                box-shadow: 0 18px 44px rgba(7, 17, 31, 0.08);
+                backdrop-filter: blur(12px);
+                border-radius: 22px;
+                padding: 16px 18px;
+                animation: fadeLift .7s ease both;
             }
 
-            .mini-card span {
+            .metric-tile span {
                 display: block;
-                color: #475569;
+                color: #52606d;
                 font-size: .8rem;
                 margin-bottom: 6px;
             }
 
-            .mini-card strong {
+            .metric-tile strong {
+                display: block;
+                color: #07111f;
+                font-size: 1.3rem;
+                font-weight: 800;
+            }
+
+            .section-card {
+                background: rgba(255,255,255,.86);
+                border: 1px solid rgba(7, 17, 31, 0.08);
+                border-radius: 24px;
+                padding: 20px 20px 12px;
+                box-shadow: 0 20px 50px rgba(7, 17, 31, 0.08);
+                backdrop-filter: blur(12px);
+                animation: fadeLift .75s ease both;
+            }
+
+            .section-title {
+                margin: 0 0 4px;
+                color: #07111f;
+                font-size: 1.22rem;
+                font-weight: 800;
+            }
+
+            .section-copy {
+                margin: 0 0 14px;
+                color: #52606d;
+                font-size: .95rem;
+                line-height: 1.6;
+            }
+
+            .insight-box {
+                border-radius: 20px;
+                padding: 16px 18px;
+                background: linear-gradient(135deg, rgba(15,118,110,.08), rgba(8,145,178,.08));
+                border: 1px solid rgba(15,118,110,.14);
+                margin-bottom: 14px;
+            }
+
+            .insight-box strong {
+                display: block;
                 color: #0f172a;
-                font-size: 1.1rem;
+                margin-bottom: 5px;
+            }
+
+            .insight-box span {
+                color: #475569;
+                line-height: 1.55;
+                font-size: .93rem;
             }
 
             div.stButton > button {
-                min-height: 48px;
-                border-radius: 14px;
+                min-height: 50px;
+                border-radius: 15px;
                 border: 0;
                 font-weight: 800;
-                background: linear-gradient(90deg, #0f766e, #0891b2);
+                background: linear-gradient(90deg, #0f766e, #0ea5e9);
                 color: white;
-                transition: transform .15s ease, box-shadow .15s ease;
-                box-shadow: 0 18px 28px rgba(8, 145, 178, .2);
+                box-shadow: 0 16px 30px rgba(14, 165, 233, .22);
+                transition: transform .16s ease, box-shadow .16s ease;
             }
 
             div.stButton > button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 22px 32px rgba(8, 145, 178, .28);
+                box-shadow: 0 22px 36px rgba(14, 165, 233, .30);
             }
 
-            @keyframes rise {
-                from { opacity: 0; transform: translateY(12px); }
+            @keyframes fadeLift {
+                from { opacity: 0; transform: translateY(14px); }
                 to { opacity: 1; transform: translateY(0); }
             }
 
-            @keyframes drift {
+            @keyframes floatA {
                 from { transform: translate3d(0, 0, 0); }
-                to { transform: translate3d(18px, -12px, 0); }
+                to { transform: translate3d(16px, 18px, 0); }
             }
 
-            @media (max-width: 900px) {
-                .mini-grid {
+            @keyframes floatB {
+                from { transform: translate3d(0, 0, 0); }
+                to { transform: translate3d(-18px, -10px, 0); }
+            }
+
+            @media (max-width: 1100px) {
+                .metrics-ribbon {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+
+            @media (max-width: 700px) {
+                .metrics-ribbon {
                     grid-template-columns: 1fr;
                 }
-                .hero h1 {
-                    font-size: 1.8rem;
+                .hero-shell h1 {
+                    font-size: 2rem;
                 }
             }
             </style>
@@ -165,20 +240,34 @@ class PredictionStyle:
         )
 
     @staticmethod
-    def hero() -> None:
+    def hero(metadata: Dict[str, Any]) -> None:
         st.markdown(
-            """
-            <div class="hero">
-                <h1>Hotel Cancellation Prediction Studio</h1>
+            f"""
+            <div class="hero-shell">
+                <div class="hero-topline">Benchmark Dashboard • Prediction Console • SHAP Explainability</div>
+                <h1>Hotel Cancellation Intelligence</h1>
                 <p>
-                    This app is prediction-only. Training, testing, cross-validation, SHAP reports,
-                    confusion matrices, and segmentation are generated from the terminal and loaded here
-                    as saved artifacts for a cleaner production workflow.
+                    Professional dashboard for comparing all trained models, reviewing honest holdout and
+                    5-fold validation metrics, inspecting confusion matrices and SHAP explanations, and
+                    running live booking predictions from the saved deployment model.
                 </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
+
+        cards = {
+            "Best Benchmark": metadata.get("best_model", "N/A"),
+            "Cloud Model": metadata.get("deployment_model", metadata.get("best_model", "N/A")),
+            "Train / Test": f"{int(metadata.get('train_ratio', 0.7) * 100)}% / {int(metadata.get('test_ratio', 0.3) * 100)}%",
+            "Cross-Validation": f"{metadata.get('cross_validation_folds', 'N/A')}-fold",
+            "Rows Used": f"{metadata.get('train_rows', 0) + metadata.get('test_rows', 0):,}",
+        }
+        html = "".join(
+            f'<div class="metric-tile"><span>{label}</span><strong>{value}</strong></div>'
+            for label, value in cards.items()
+        )
+        st.markdown(f'<div class="metrics-ribbon">{html}</div>', unsafe_allow_html=True)
 
 
 class PredictionApp:
@@ -187,22 +276,13 @@ class PredictionApp:
         self.processor = HotelDataProcessor()
 
     @st.cache_data(show_spinner=False)
-    def load_metadata(_self, artifacts_dir: Path) -> Dict[str, Any]:
-        path = artifacts_dir / "reports" / "metadata.json"
+    def load_json(_self, path: Path, default: Any) -> Any:
         if not path.exists():
-            return {}
+            return default
         return json.loads(path.read_text(encoding="utf-8"))
 
     @st.cache_data(show_spinner=False)
-    def load_schema(_self, artifacts_dir: Path) -> Dict[str, Any]:
-        path = artifacts_dir / "reports" / "prediction_schema.json"
-        if not path.exists():
-            return {"columns": []}
-        return json.loads(path.read_text(encoding="utf-8"))
-
-    @st.cache_data(show_spinner=False)
-    def load_examples(_self, artifacts_dir: Path) -> pd.DataFrame:
-        path = artifacts_dir / "reports" / "prediction_examples.csv"
+    def load_csv(_self, path: Path) -> pd.DataFrame:
         if not path.exists():
             return pd.DataFrame()
         return pd.read_csv(path)
@@ -216,68 +296,250 @@ class PredictionApp:
         deployment_path = models_dir / "deployment_model.joblib"
         if deployment_path.exists():
             models["Deployment Model"] = joblib.load(deployment_path)
-            return models
-        for model_path in sorted(models_dir.glob("*.joblib")):
-            if model_path.name == "best_model.joblib":
-                continue
-            models[model_path.stem.replace("_", " ").title()] = joblib.load(model_path)
         return models
 
     def run(self) -> None:
-        st.set_page_config(page_title="Hotel Cancellation Prediction", layout="wide")
-        PredictionStyle.apply()
-        PredictionStyle.hero()
+        st.set_page_config(page_title="Hotel Cancellation Intelligence", layout="wide")
+        DashboardStyle.apply()
 
-        metadata = self.load_metadata(self.artifacts_dir)
-        schema = self.load_schema(self.artifacts_dir)
-        examples = self.load_examples(self.artifacts_dir)
+        metadata = self.load_json(self.artifacts_dir / "reports" / "metadata.json", {})
+        schema = self.load_json(self.artifacts_dir / "reports" / "prediction_schema.json", {"columns": []})
+        examples = self.load_csv(self.artifacts_dir / "reports" / "prediction_examples.csv")
+        holdout = self.load_csv(self.artifacts_dir / "reports" / "holdout_summary.csv")
+        cv_results = self.load_csv(self.artifacts_dir / "reports" / "cross_validation_results.csv")
+        guest_segments = self.load_csv(self.artifacts_dir / "reports" / "guest_segments.csv")
         models = self.load_models(self.artifacts_dir)
 
-        if not models or not schema.get("columns"):
-            st.error(
-                "No trained artifacts were found. Run `python train_terminal.py` in the terminal first."
-            )
+        if holdout.empty or not schema.get("columns"):
+            st.error("Saved training artifacts are missing. Run terminal training and redeploy the app.")
             return
 
-        left, right = st.columns([1.25, 0.75], gap="large")
-        with left:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Prediction Form")
-            selected_model = st.selectbox("Trained model", list(models.keys()))
-            input_frame = self.render_form(schema)
+        DashboardStyle.hero(metadata)
 
-            if st.button("Predict Cancellation Risk", type="primary", use_container_width=True):
-                self.render_prediction(models[selected_model], input_frame, selected_model)
-            st.markdown("</div>", unsafe_allow_html=True)
+        overview_tab, models_tab, explain_tab, predict_tab = st.tabs(
+            ["Overview", "Model Comparison", "Explainability", "Prediction"]
+        )
 
-        with right:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Model Snapshot")
-            self.render_snapshot(metadata, selected_model)
-            if not examples.empty:
-                with st.expander("Sample Training Rows Used For Form Defaults"):
-                    st.dataframe(examples.head(10), use_container_width=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+        with overview_tab:
+            self.render_overview(holdout, cv_results, guest_segments, metadata)
 
-    def render_snapshot(self, metadata: Dict[str, Any], selected_model: str) -> None:
-        trained_models = metadata.get("trained_models", [])
+        with models_tab:
+            self.render_model_comparison(holdout, cv_results)
+
+        with explain_tab:
+            self.render_explainability(metadata)
+
+        with predict_tab:
+            self.render_prediction_console(models, schema, examples, metadata)
+
+    def render_section_header(self, title: str, copy: str) -> None:
         st.markdown(
             f"""
-            <div class="mini-grid">
-                <div class="mini-card"><span>Best model</span><strong>{metadata.get('best_model', 'N/A')}</strong></div>
-                <div class="mini-card"><span>Cloud model</span><strong>{metadata.get('deployment_model', metadata.get('best_model', 'N/A'))}</strong></div>
-                <div class="mini-card"><span>Train / Test split</span><strong>70% / 30%</strong></div>
-                <div class="mini-card"><span>Cross-validation</span><strong>{metadata.get('cross_validation_folds', 'N/A')}-fold</strong></div>
+            <div class="section-card">
+                <div class="section-title">{title}</div>
+                <div class="section-copy">{copy}</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
-        st.caption(f"Loaded models: {', '.join(trained_models) if trained_models else selected_model}")
-        shap_notes = metadata.get("shap_explanations", [])
-        if shap_notes:
-            st.write("Risk drivers from the saved SHAP analysis")
-            for item in shap_notes:
-                st.markdown(f"- `{item['feature']}`: {item['explanation']}")
+
+    def render_overview(
+        self,
+        holdout: pd.DataFrame,
+        cv_results: pd.DataFrame,
+        guest_segments: pd.DataFrame,
+        metadata: Dict[str, Any],
+    ) -> None:
+        self.render_section_header(
+            "Performance Overview",
+            "This section summarizes the honest test performance, validation consistency, timing behavior, and guest segmentation outputs generated from terminal training.",
+        )
+
+        top_model = holdout.sort_values("f1", ascending=False).iloc[0]
+        secondary = holdout.sort_values("roc_auc", ascending=False).iloc[0]
+        insight_left, insight_right = st.columns(2, gap="large")
+        with insight_left:
+            st.markdown(
+                f"""
+                <div class="insight-box">
+                    <strong>Best holdout performer</strong>
+                    <span>{top_model['model']} leads the honest 30% test split with accuracy {top_model['accuracy']:.4f}, F1 {top_model['f1']:.4f}, and ROC-AUC {top_model['roc_auc']:.4f}.</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with insight_right:
+            st.markdown(
+                f"""
+                <div class="insight-box">
+                    <strong>Best ranking power</strong>
+                    <span>{secondary['model']} shows the strongest class ranking signal with ROC-AUC {secondary['roc_auc']:.4f}. Training and inference times shown below come from the real benchmark run.</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        left, right = st.columns([1.25, 0.75], gap="large")
+        with left:
+            st.plotly_chart(self.build_metric_radar(top_model), use_container_width=True)
+        with right:
+            cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].sort_values("f1", ascending=False)
+            st.plotly_chart(self.build_cv_f1_chart(cv_mean), use_container_width=True)
+
+        chart_left, chart_right = st.columns(2, gap="large")
+        with chart_left:
+            self.render_image_card(
+                "Holdout Metric Comparison",
+                "Saved benchmark graph comparing accuracy, precision, recall, F1, and ROC-AUC across models.",
+                self.artifacts_dir / "plots" / "holdout_metrics.png",
+            )
+        with chart_right:
+            self.render_image_card(
+                "Training and Inference Cost",
+                "Observed timing behavior from the benchmark run. This is measured from training and test inference, not estimated.",
+                self.artifacts_dir / "plots" / "timing_metrics.png",
+            )
+
+        if not guest_segments.empty:
+            seg_left, seg_right = st.columns([1, 1], gap="large")
+            with seg_left:
+                self.render_image_card(
+                    "Guest Segmentation",
+                    "K-Means projection of guest groups built from booking behavior features.",
+                    self.artifacts_dir / "plots" / "guest_segmentation.png",
+                )
+            with seg_right:
+                st.markdown("### Segment Summary")
+                st.dataframe(guest_segments, use_container_width=True)
+
+        with st.expander("Benchmark Metadata"):
+            st.json(metadata)
+
+    def render_model_comparison(self, holdout: pd.DataFrame, cv_results: pd.DataFrame) -> None:
+        self.render_section_header(
+            "Model Comparison",
+            "Compare all trained models side by side using holdout metrics, validation averages, model size, timing, and confusion matrices.",
+        )
+
+        metric = st.selectbox(
+            "Comparison metric",
+            ["f1", "accuracy", "roc_auc", "precision", "recall", "training_time_sec", "inference_ms_per_row"],
+            index=0,
+            key="comparison_metric",
+        )
+
+        left, right = st.columns([1.1, 0.9], gap="large")
+        with left:
+            st.plotly_chart(self.build_holdout_bar(holdout, metric), use_container_width=True)
+        with right:
+            st.plotly_chart(self.build_accuracy_vs_time(holdout), use_container_width=True)
+
+        styled = holdout.copy()
+        numeric_columns = styled.select_dtypes(include=["number"]).columns
+        st.dataframe(
+            styled.style.format({column: "{:.4f}" for column in numeric_columns}),
+            use_container_width=True,
+        )
+
+        cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
+        if not cv_mean.empty:
+            st.markdown("### 5-Fold Validation Means")
+            st.dataframe(
+                cv_mean.style.format(
+                    {column: "{:.4f}" for column in cv_mean.select_dtypes(include=["number"]).columns}
+                ),
+                use_container_width=True,
+            )
+
+        model_options = holdout["model"].tolist()
+        selected_confusion = st.selectbox("Confusion matrix model", model_options, index=0)
+        confusion_name = selected_confusion.lower().replace(" ", "_")
+        self.render_image_card(
+            f"{selected_confusion} Confusion Matrix",
+            "Saved confusion matrix from the holdout evaluation.",
+            self.artifacts_dir / "plots" / f"{confusion_name}_confusion_matrix.png",
+        )
+
+    def render_explainability(self, metadata: Dict[str, Any]) -> None:
+        self.render_section_header(
+            "Explainability",
+            "SHAP plots explain which saved features most increased or decreased cancellation risk for the benchmarked model.",
+        )
+
+        summary_left, summary_right = st.columns([1.1, 0.9], gap="large")
+        with summary_left:
+            self.render_image_card(
+                "SHAP Summary Plot",
+                "Global feature importance view. Features with wider SHAP spread have a stronger effect on cancellation decisions.",
+                self.artifacts_dir / "plots" / "random_forest_shap_summary.png",
+            )
+        with summary_right:
+            st.markdown("### SHAP Feature Notes")
+            for item in metadata.get("shap_explanations", []):
+                st.markdown(
+                    f"""
+                    <div class="insight-box">
+                        <strong>{item['feature']}</strong>
+                        <span>{item['explanation']} Mean absolute SHAP impact: {item['mean_abs_shap']:.4f}.</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        dep_left, dep_right = st.columns(2, gap="large")
+        with dep_left:
+            self.render_image_card(
+                "Country Effect",
+                "Bookings tagged with this country indicator tended to push risk upward in the saved SHAP dependence analysis.",
+                self.artifacts_dir / "plots" / "random_forest_shap_country_prt.png",
+            )
+            self.render_image_card(
+                "No Deposit Effect",
+                "This plot shows why no-deposit bookings tended to reduce risk relative to more restrictive deposit profiles.",
+                self.artifacts_dir / "plots" / "random_forest_shap_deposit_type_no_deposit.png",
+            )
+        with dep_right:
+            self.render_image_card(
+                "Non-Refund Deposit Effect",
+                "This dependence plot shows why non-refundable deposit type pushed many predictions toward higher cancellation risk.",
+                self.artifacts_dir / "plots" / "random_forest_shap_deposit_type_non_refund.png",
+            )
+
+    def render_prediction_console(
+        self,
+        models: Dict[str, Any],
+        schema: Dict[str, Any],
+        examples: pd.DataFrame,
+        metadata: Dict[str, Any],
+    ) -> None:
+        self.render_section_header(
+            "Prediction Console",
+            "Use the deployed cloud model to score a booking manually. The UI only predicts; all training and benchmarking are loaded from saved terminal artifacts.",
+        )
+        left, right = st.columns([1.2, 0.8], gap="large")
+
+        with left:
+            st.markdown("### Manual Booking Form")
+            model_name = st.selectbox("Prediction model", list(models.keys()))
+            input_frame = self.render_form(schema)
+            if st.button("Predict Cancellation Risk", type="primary", use_container_width=True):
+                self.render_prediction(models[model_name], input_frame, model_name)
+
+        with right:
+            st.markdown("### Deployment Snapshot")
+            deployment_name = metadata.get("deployment_model", metadata.get("best_model", "N/A"))
+            st.markdown(
+                f"""
+                <div class="insight-box">
+                    <strong>Cloud deployment model</strong>
+                    <span>{deployment_name} is the lightweight model shipped with the app. The benchmark leader may differ when larger ensembles are too heavy for cloud deployment.</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            if not examples.empty:
+                st.markdown("### Example Rows")
+                st.dataframe(examples.head(8), use_container_width=True)
 
     def render_form(self, schema: Dict[str, Any]) -> pd.DataFrame:
         values: Dict[str, Any] = {}
@@ -312,23 +574,106 @@ class PredictionApp:
         cancel_probability = float(probabilities[0]) if probabilities is not None else None
 
         st.divider()
-        if prediction == 1:
-            st.error(f"{model_name}: this booking is predicted to cancel.")
-        else:
-            st.success(f"{model_name}: this booking is predicted to stay active.")
+        status_col, metric_col = st.columns([1, 1], gap="large")
+        with status_col:
+            if prediction == 1:
+                st.error(f"{model_name}: this booking is predicted to cancel.")
+            else:
+                st.success(f"{model_name}: this booking is predicted to stay active.")
 
         if cancel_probability is not None:
             stay_probability = 1 - cancel_probability
-            metric_left, metric_right = st.columns(2)
-            metric_left.metric("Cancellation probability", f"{cancel_probability * 100:.2f}%")
-            metric_right.metric("Stay probability", f"{stay_probability * 100:.2f}%")
-
+            with metric_col:
+                st.metric("Cancellation probability", f"{cancel_probability * 100:.2f}%")
+                st.metric("Stay probability", f"{stay_probability * 100:.2f}%")
             risk_text = (
                 "Risk is elevated, so this reservation deserves proactive retention handling."
                 if cancel_probability >= 0.5
                 else "Risk is lower, so this reservation currently looks stable."
             )
             st.info(risk_text)
+
+    def render_image_card(self, title: str, copy: str, path: Path) -> None:
+        st.markdown(f"### {title}")
+        st.caption(copy)
+        if path.exists():
+            st.image(str(path), use_container_width=True)
+        else:
+            st.warning(f"Missing artifact: {path.name}")
+
+    def build_holdout_bar(self, holdout: pd.DataFrame, metric: str) -> go.Figure:
+        chart = holdout.sort_values(metric, ascending=False).copy()
+        fig = px.bar(
+            chart,
+            x="model",
+            y=metric,
+            color=metric,
+            color_continuous_scale="Tealgrn",
+            text_auto=".3f",
+        )
+        fig.update_layout(
+            height=460,
+            xaxis_title="Model",
+            yaxis_title=metric.replace("_", " ").title(),
+            margin=dict(l=10, r=10, t=20, b=20),
+        )
+        return fig
+
+    def build_accuracy_vs_time(self, holdout: pd.DataFrame) -> go.Figure:
+        fig = px.scatter(
+            holdout,
+            x="training_time_sec",
+            y="accuracy",
+            size="model_size_mb",
+            color="model",
+            hover_data=["f1", "roc_auc", "inference_ms_per_row"],
+        )
+        fig.update_layout(
+            height=460,
+            xaxis_title="Training time (seconds)",
+            yaxis_title="Holdout accuracy",
+            margin=dict(l=10, r=10, t=20, b=20),
+            showlegend=False,
+        )
+        return fig
+
+    def build_cv_f1_chart(self, cv_mean: pd.DataFrame) -> go.Figure:
+        fig = px.bar(
+            cv_mean,
+            x="model",
+            y="f1",
+            color="f1",
+            color_continuous_scale="Blues",
+            text_auto=".3f",
+        )
+        fig.update_layout(
+            height=420,
+            xaxis_title="Model",
+            yaxis_title="Mean 5-fold F1",
+            margin=dict(l=10, r=10, t=20, b=20),
+        )
+        return fig
+
+    def build_metric_radar(self, top_model: pd.Series) -> go.Figure:
+        metrics = ["accuracy", "precision", "recall", "f1", "roc_auc", "balanced_accuracy"]
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatterpolar(
+                r=[float(top_model[metric]) for metric in metrics],
+                theta=[metric.replace("_", " ").title() for metric in metrics],
+                fill="toself",
+                name=str(top_model["model"]),
+                line=dict(color="#0f766e", width=3),
+                fillcolor="rgba(15, 118, 110, 0.28)",
+            )
+        )
+        fig.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
+            height=420,
+            margin=dict(l=10, r=10, t=20, b=20),
+            showlegend=False,
+        )
+        return fig
 
 
 if __name__ == "__main__":
