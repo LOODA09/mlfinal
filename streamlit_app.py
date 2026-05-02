@@ -844,7 +844,7 @@ class PredictionApp:
             "Explainability",
             "Live explainability is generated after each prediction. The visuals below update from the last booking you scored, so they always reflect that booking's exact features and result.",
         )
-        self.render_live_prediction_explainability()
+        self.render_live_prediction_explainability(section_key="explain")
 
     def render_prediction_console(
         self,
@@ -883,7 +883,7 @@ class PredictionApp:
                 st.markdown("### Example Rows")
                 st.dataframe(examples.head(8), use_container_width=True)
 
-        self.render_live_prediction_explainability()
+        self.render_live_prediction_explainability(section_key="predict")
 
     def render_form(self, schema: Dict[str, Any]) -> pd.DataFrame:
         values: Dict[str, Any] = {}
@@ -983,7 +983,7 @@ class PredictionApp:
         else:
             st.warning(f"Missing artifact: {path.name}")
 
-    def render_live_prediction_explainability(self) -> None:
+    def render_live_prediction_explainability(self, section_key: str) -> None:
         latest = st.session_state.get("latest_prediction")
         if not latest:
             st.markdown(
@@ -1019,17 +1019,26 @@ class PredictionApp:
         gauge_left, gauge_right = st.columns([0.9, 1.1], gap="large")
         with gauge_left:
             if probability is not None:
-                st.plotly_chart(self.build_probability_gauge(probability), use_container_width=True)
+                st.plotly_chart(
+                    self.build_probability_gauge(probability),
+                    use_container_width=True,
+                    key=f"probability_gauge_{section_key}",
+                )
         with gauge_right:
             inc = pd.DataFrame(latest.get("increasing", []))
             dec = pd.DataFrame(latest.get("decreasing", []))
-            st.plotly_chart(self.build_local_shap_waterfall(inc, dec), use_container_width=True)
+            st.plotly_chart(
+                self.build_local_shap_waterfall(inc, dec),
+                use_container_width=True,
+                key=f"local_shap_waterfall_{section_key}",
+            )
 
         col1, col2 = st.columns(2, gap="large")
         with col1:
             st.plotly_chart(
                 self.build_local_shap_chart(pd.DataFrame(latest.get("increasing", [])), "Features That Increased Cancellation Risk"),
                 use_container_width=True,
+                key=f"increase_shap_chart_{section_key}",
             )
             for item in latest.get("increasing", []):
                 st.markdown(
@@ -1045,6 +1054,7 @@ class PredictionApp:
             st.plotly_chart(
                 self.build_local_shap_chart(pd.DataFrame(latest.get("decreasing", [])), "Features That Decreased Cancellation Risk"),
                 use_container_width=True,
+                key=f"decrease_shap_chart_{section_key}",
             )
             for item in latest.get("decreasing", []):
                 st.markdown(
