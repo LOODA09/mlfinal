@@ -195,6 +195,8 @@ class DashboardStyle:
             }
 
             .live-result {
+                position: relative;
+                overflow: hidden;
                 border-radius: 26px;
                 padding: 18px 20px;
                 margin-bottom: 16px;
@@ -212,6 +214,30 @@ class DashboardStyle:
             .live-result.risk-low {
                 background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(220,252,231,.90));
                 border-color: rgba(34,197,94,.18);
+            }
+
+            .live-result::before,
+            .live-result::after {
+                content: "";
+                position: absolute;
+                left: -10%;
+                width: 120%;
+                height: 70px;
+                border-radius: 44%;
+                opacity: .18;
+                pointer-events: none;
+            }
+
+            .live-result::before {
+                bottom: -24px;
+                background: linear-gradient(90deg, #38bdf8, #0ea5e9, #14b8a6);
+                animation: waveDriftA 7s linear infinite;
+            }
+
+            .live-result::after {
+                bottom: -34px;
+                background: linear-gradient(90deg, #fde68a, #f59e0b, #fb7185);
+                animation: waveDriftB 10s linear infinite;
             }
 
             .live-result h3 {
@@ -472,6 +498,16 @@ class DashboardStyle:
                 0%, 100% { transform: translateY(0px); box-shadow: 0 18px 40px rgba(14,165,233,.12); }
                 50% { transform: translateY(-3px); box-shadow: 0 24px 50px rgba(14,165,233,.18); }
             }
+
+            @keyframes waveDriftA {
+                from { transform: translateX(-4%) rotate(0deg); }
+                to { transform: translateX(4%) rotate(360deg); }
+            }
+
+            @keyframes waveDriftB {
+                from { transform: translateX(5%) rotate(360deg); }
+                to { transform: translateX(-5%) rotate(0deg); }
+            }
             </style>
             """,
             unsafe_allow_html=True,
@@ -600,11 +636,12 @@ class PredictionApp:
         examples = self.sanitize_examples(examples)
         holdout = self.normalize_holdout_frame(holdout)
         cv_results = self.normalize_cv_frame(cv_results)
+        holdout = self.add_complexity_tiers(holdout)
 
         DashboardStyle.hero(metadata)
 
-        overview_tab, models_tab, explain_tab, predict_tab = st.tabs(
-            ["Overview", "Model Comparison", "Explainability", "Prediction"]
+        overview_tab, models_tab, segment_tab, explain_tab, predict_tab = st.tabs(
+            ["Overview", "Model Comparison", "Guest Segmentation", "Explainability", "Prediction"]
         )
 
         with overview_tab:
@@ -612,6 +649,9 @@ class PredictionApp:
 
         with models_tab:
             self.render_model_comparison(holdout, cv_results, confusion_data)
+
+        with segment_tab:
+            self.render_segmentation(guest_segments)
 
         with explain_tab:
             self.render_explainability()
@@ -643,6 +683,26 @@ class PredictionApp:
         for column in ["accuracy", "precision", "recall", "f1", "balanced_accuracy", "roc_auc", "average_precision"]:
             if column not in frame.columns:
                 frame[column] = np.nan
+        return frame
+
+    @staticmethod
+    def add_complexity_tiers(holdout: pd.DataFrame) -> pd.DataFrame:
+        frame = holdout.copy()
+        required = ["training_time_sec", "inference_ms_per_row", "transformed_feature_count"]
+        for column in required:
+            values = pd.to_numeric(frame[column], errors="coerce")
+            fill_value = float(values.median()) if not values.dropna().empty else 0.0
+            frame[column] = values.fillna(fill_value)
+        scoring = (
+            frame["training_time_sec"].rank(pct=True).fillna(0.5) * 0.5
+            + frame["inference_ms_per_row"].rank(pct=True).fillna(0.5) * 0.3
+            + frame["transformed_feature_count"].rank(pct=True).fillna(0.5) * 0.2
+        )
+        frame["complexity_tier"] = pd.cut(
+            scoring,
+            bins=[-0.01, 0.34, 0.67, 1.01],
+            labels=["Low", "Medium", "High"],
+        ).astype(str)
         return frame
 
     @staticmethod
@@ -783,22 +843,15 @@ class PredictionApp:
                 "average_precision",
                 "training_time_sec",
                 "inference_ms_per_row",
-                "complexity_score",
-                "model_size_mb",
+                "complexity_tier",
             ]
-        ].rename(
-            columns={
-                "complexity_score": "complexity_proxy",
-                "training_time_sec": "training_time_sec",
-                "inference_ms_per_row": "inference_ms_per_row",
-            }
-        )
+        ]
         numeric_columns = styled.select_dtypes(include=["number"]).columns
         st.dataframe(
             styled.style.format({column: "{:.4f}" for column in numeric_columns}),
             use_container_width=True,
         )
-        st.caption("`complexity_proxy` is a heuristic size/structure measure derived from the trained estimator, not a universal complexity theorem.")
+        st.caption("`complexity_tier` is derived from the measured training time, inference time, and transformed feature count of the real benchmark run.")
 
         cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
         if not cv_mean.empty:
@@ -884,6 +937,25 @@ class PredictionApp:
                 st.dataframe(examples.head(8), use_container_width=True)
 
         self.render_live_prediction_explainability(section_key="predict")
+
+    def render_segmentation(self, guest_segments: pd.DataFrame) -> None:
+        self.render_section_header(
+            "Guest Segmentation",
+            "K-means clustering groups guests with similar booking behavior. This section shows the saved segmentation plot and the cluster profile table from the training artifacts.",
+        )
+        left, right = st.columns([1.1, 0.9], gap="large")
+        with left:
+            self.render_image_card(
+                "K-Means Guest Segmentation",
+                "Cluster projection built during terminal training from real booking behavior features.",
+                self.artifacts_dir / "plots" / "guest_segmentation.png",
+            )
+        with right:
+            if guest_segments.empty:
+                st.info("Guest segmentation artifacts are not available yet.")
+            else:
+                st.plotly_chart(self.build_segmentation_profile_chart(guest_segments), use_container_width=True)
+                st.dataframe(guest_segments, use_container_width=True)
 
     def render_form(self, schema: Dict[str, Any]) -> pd.DataFrame:
         values: Dict[str, Any] = {}
@@ -1144,7 +1216,6 @@ class PredictionApp:
 
     def build_accuracy_vs_time(self, holdout: pd.DataFrame) -> go.Figure:
         chart = holdout.copy()
-        chart["model_size_mb"] = pd.to_numeric(chart["model_size_mb"], errors="coerce").fillna(1.0)
         chart["training_time_sec"] = pd.to_numeric(chart["training_time_sec"], errors="coerce").fillna(0.0)
         chart["accuracy"] = pd.to_numeric(chart["accuracy"], errors="coerce").fillna(0.0)
         chart["f1"] = pd.to_numeric(chart["f1"], errors="coerce").fillna(0.0)
@@ -1154,8 +1225,8 @@ class PredictionApp:
             chart,
             x="training_time_sec",
             y="accuracy",
-            size="model_size_mb",
             color="model",
+            symbol="complexity_tier" if "complexity_tier" in chart.columns else None,
             hover_data=["f1", "roc_auc", "inference_ms_per_row"],
         )
         fig.update_layout(
@@ -1356,6 +1427,28 @@ class PredictionApp:
             )
         )
         fig.update_layout(height=320, margin=dict(l=10, r=10, t=50, b=10), paper_bgcolor="rgba(0,0,0,0)")
+        return fig
+
+    def build_segmentation_profile_chart(self, guest_segments: pd.DataFrame) -> go.Figure:
+        value_columns = [column for column in guest_segments.columns if column != "segment"]
+        frame = guest_segments.melt(id_vars="segment", value_vars=value_columns, var_name="feature", value_name="value")
+        fig = px.bar(
+            frame,
+            x="feature",
+            y="value",
+            color="segment",
+            barmode="group",
+            color_discrete_sequence=["#0f766e", "#0ea5e9", "#f59e0b", "#ef4444"],
+        )
+        fig.update_layout(
+            title="Cluster Profiles",
+            height=420,
+            margin=dict(l=10, r=10, t=40, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
+            xaxis_title="Feature",
+            yaxis_title="Average value",
+        )
         return fig
 
     def build_local_shap_waterfall(self, increasing: pd.DataFrame, decreasing: pd.DataFrame) -> go.Figure:
