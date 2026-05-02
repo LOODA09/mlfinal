@@ -1059,6 +1059,7 @@ class PredictionApp:
 
     def build_holdout_bar(self, holdout: pd.DataFrame, metric: str) -> go.Figure:
         chart = holdout.sort_values(metric, ascending=False).copy()
+        chart[metric] = pd.to_numeric(chart[metric], errors="coerce").fillna(0.0)
         fig = px.bar(
             chart,
             x="model",
@@ -1080,7 +1081,10 @@ class PredictionApp:
 
     def build_metrics_comparison_chart(self, holdout: pd.DataFrame) -> go.Figure:
         metrics = ["accuracy", "precision", "recall", "f1", "roc_auc"]
-        long_frame = holdout[["model", *metrics]].melt(
+        chart = holdout[["model", *metrics]].copy()
+        for metric in metrics:
+            chart[metric] = pd.to_numeric(chart[metric], errors="coerce").fillna(0.0)
+        long_frame = chart.melt(
             id_vars="model",
             value_vars=metrics,
             var_name="metric",
@@ -1106,8 +1110,15 @@ class PredictionApp:
         return fig
 
     def build_accuracy_vs_time(self, holdout: pd.DataFrame) -> go.Figure:
+        chart = holdout.copy()
+        chart["model_size_mb"] = pd.to_numeric(chart["model_size_mb"], errors="coerce").fillna(1.0)
+        chart["training_time_sec"] = pd.to_numeric(chart["training_time_sec"], errors="coerce").fillna(0.0)
+        chart["accuracy"] = pd.to_numeric(chart["accuracy"], errors="coerce").fillna(0.0)
+        chart["f1"] = pd.to_numeric(chart["f1"], errors="coerce").fillna(0.0)
+        chart["roc_auc"] = pd.to_numeric(chart["roc_auc"], errors="coerce").fillna(0.0)
+        chart["inference_ms_per_row"] = pd.to_numeric(chart["inference_ms_per_row"], errors="coerce").fillna(0.0)
         fig = px.scatter(
-            holdout,
+            chart,
             x="training_time_sec",
             y="accuracy",
             size="model_size_mb",
@@ -1170,7 +1181,7 @@ class PredictionApp:
 
     def build_metric_heatmap(self, holdout: pd.DataFrame) -> go.Figure:
         metrics = ["accuracy", "precision", "recall", "f1", "roc_auc", "average_precision"]
-        frame = holdout.set_index("model")[metrics]
+        frame = holdout.set_index("model")[metrics].apply(pd.to_numeric, errors="coerce").fillna(0.0)
         fig = px.imshow(
             frame,
             text_auto=".3f",
@@ -1187,6 +1198,8 @@ class PredictionApp:
 
     def build_timing_combo_chart(self, holdout: pd.DataFrame) -> go.Figure:
         chart = holdout.sort_values("f1", ascending=False).copy()
+        chart["training_time_sec"] = pd.to_numeric(chart["training_time_sec"], errors="coerce").fillna(0.0)
+        chart["inference_ms_per_row"] = pd.to_numeric(chart["inference_ms_per_row"], errors="coerce").fillna(0.0)
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         fig.add_trace(
             go.Bar(
