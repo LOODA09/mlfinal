@@ -1,5 +1,7 @@
 {
   "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_bookings.csv",
+  "python_version": "3.11.9",
+  "tensorflow_version": "2.21.0",
   "train_rows": 83446,
   "test_rows": 35763,
   "train_ratio": 0.7,
@@ -16,11 +18,10 @@
     "Gradient Boosting",
     "Extra Trees",
     "XGBoost",
-    "Voting Ensemble"
+    "Voting Ensemble",
+    "RNN"
   ],
-  "skipped_models": {
-    "RNN": "TensorFlow is not installed in this Python 3.14 environment."
-  },
+  "skipped_models": {},
   "shap_explanations": [
     {
       "feature": "country_PRT",

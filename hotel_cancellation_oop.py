@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 import json
 from pathlib import Path
 import re
+import sys
 import time
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, Type
 import importlib
@@ -775,17 +776,21 @@ class ANNModel(BaseHotelModel):
         self.epochs = epochs
         self.batch_size = batch_size
 
-    def get_estimator(self) -> MLPClassifier:
-        return MLPClassifier(
-            hidden_layer_sizes=(128, 64, 32),
-            activation="relu",
-            learning_rate_init=0.001,
-            batch_size=min(self.batch_size, 256),
-            max_iter=self.epochs,
-            early_stopping=True,
-            validation_fraction=0.1,
-            random_state=42,
-        )
+    def get_estimator(self) -> Any:
+        try:
+            importlib.import_module("tensorflow")
+            return KerasTabularClassifier(model_type="ann", epochs=self.epochs, batch_size=self.batch_size)
+        except ImportError:
+            return MLPClassifier(
+                hidden_layer_sizes=(128, 64, 32),
+                activation="relu",
+                learning_rate_init=0.001,
+                batch_size=min(self.batch_size, 256),
+                max_iter=self.epochs,
+                early_stopping=True,
+                validation_fraction=0.1,
+                random_state=42,
+            )
 
 
 class RNNModel(BaseHotelModel):
@@ -1191,6 +1196,7 @@ class TerminalTrainingRunner:
 
         metadata = {
             "data_path": str(Path(data_path).resolve()),
+            "python_version": sys.version.split()[0],
             "train_rows": int(len(x_train)),
             "test_rows": int(len(x_test)),
             "train_ratio": 0.7,
@@ -1203,6 +1209,10 @@ class TerminalTrainingRunner:
             "shap_explanations": shap_explanations,
             "segmentation_summary_rows": segmentation["summary"].to_dict(orient="records"),
         }
+        try:
+            metadata["tensorflow_version"] = importlib.import_module("tensorflow").__version__
+        except ImportError:
+            metadata["tensorflow_version"] = None
         artifacts.save_json("metadata.json", metadata)
 
         if best_model_name:

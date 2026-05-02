@@ -263,7 +263,7 @@ class DashboardStyle:
             "Cloud Model": metadata.get("deployment_model", metadata.get("best_model", "N/A")),
             "Train / Test": f"{int(metadata.get('train_ratio', 0.7) * 100)}% / {int(metadata.get('test_ratio', 0.3) * 100)}%",
             "Cross-Validation": f"{metadata.get('cross_validation_folds', 'N/A')}-fold",
-            "Rows Used": f"{metadata.get('train_rows', 0) + metadata.get('test_rows', 0):,}",
+            "Runtime": f"Py {metadata.get('python_version', 'N/A')} / TF {metadata.get('tensorflow_version', 'N/A') or 'off'}",
         }
         html = "".join(
             f'<div class="metric-tile"><span>{label}</span><strong>{value}</strong></div>'
@@ -499,6 +499,8 @@ class PredictionApp:
                 ),
                 use_container_width=True,
             )
+            if "RNN" not in cv_mean["model"].tolist() and "RNN" in holdout["model"].tolist():
+                st.caption("RNN appears in the holdout benchmark, but the saved 5-fold validation table does not yet include an RNN row from the TensorFlow runtime.")
 
         model_options = holdout["model"].tolist()
         selected_confusion = st.selectbox("Confusion matrix model", model_options, index=0)
