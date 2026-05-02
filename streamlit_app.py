@@ -9,11 +9,13 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from plotly.subplots import make_subplots
 
 from hotel_cancellation_oop import HotelDataProcessor, _positive_probabilities
 
 
 ARTIFACTS_DIR = Path("artifacts")
+DATA_PATH = Path("hotel_bookings.csv")
 
 
 class DashboardStyle:
@@ -287,6 +289,12 @@ class PredictionApp:
             return pd.DataFrame()
         return pd.read_csv(path)
 
+    @st.cache_data(show_spinner=False)
+    def load_raw_data(_self, path: Path) -> pd.DataFrame:
+        if not path.exists():
+            return pd.DataFrame()
+        return pd.read_csv(path)
+
     @st.cache_resource(show_spinner=False)
     def load_models(_self, artifacts_dir: Path) -> Dict[str, Any]:
         models: Dict[str, Any] = {}
@@ -308,6 +316,7 @@ class PredictionApp:
         holdout = self.load_csv(self.artifacts_dir / "reports" / "holdout_summary.csv")
         cv_results = self.load_csv(self.artifacts_dir / "reports" / "cross_validation_results.csv")
         guest_segments = self.load_csv(self.artifacts_dir / "reports" / "guest_segments.csv")
+        raw_data = self.load_raw_data(DATA_PATH)
         models = self.load_models(self.artifacts_dir)
 
         if holdout.empty or not schema.get("columns"):
@@ -321,13 +330,13 @@ class PredictionApp:
         )
 
         with overview_tab:
-            self.render_overview(holdout, cv_results, guest_segments, metadata)
+            self.render_overview(holdout, cv_results, guest_segments, metadata, raw_data)
 
         with models_tab:
             self.render_model_comparison(holdout, cv_results)
 
         with explain_tab:
-            self.render_explainability(metadata)
+            self.render_explainability(metadata, raw_data)
 
         with predict_tab:
             self.render_prediction_console(models, schema, examples, metadata)
@@ -349,6 +358,7 @@ class PredictionApp:
         cv_results: pd.DataFrame,
         guest_segments: pd.DataFrame,
         metadata: Dict[str, Any],
+        raw_data: pd.DataFrame,
     ) -> None:
         self.render_section_header(
             "Performance Overview",
@@ -386,19 +396,23 @@ class PredictionApp:
             cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].sort_values("f1", ascending=False)
             st.plotly_chart(self.build_cv_f1_chart(cv_mean), use_container_width=True)
 
+        rnn_reason = metadata.get("skipped_models", {}).get("RNN")
+        if rnn_reason:
+            st.markdown(
+                f"""
+                <div class="insight-box">
+                    <strong>RNN status</strong>
+                    <span>RNN is not included in the current benchmark tables because it was not trainable in this deployment environment. Reason: {rnn_reason}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
         chart_left, chart_right = st.columns(2, gap="large")
         with chart_left:
-            self.render_image_card(
-                "Holdout Metric Comparison",
-                "Saved benchmark graph comparing accuracy, precision, recall, F1, and ROC-AUC across models.",
-                self.artifacts_dir / "plots" / "holdout_metrics.png",
-            )
+            st.plotly_chart(self.build_metric_heatmap(holdout), use_container_width=True)
         with chart_right:
-            self.render_image_card(
-                "Training and Inference Cost",
-                "Observed timing behavior from the benchmark run. This is measured from training and test inference, not estimated.",
-                self.artifacts_dir / "plots" / "timing_metrics.png",
-            )
+            st.plotly_chart(self.build_timing_combo_chart(holdout), use_container_width=True)
 
         if not guest_segments.empty:
             seg_left, seg_right = st.columns([1, 1], gap="large")
@@ -435,15 +449,50 @@ class PredictionApp:
             st.plotly_chart(self.build_accuracy_vs_time(holdout), use_container_width=True)
 
         styled = holdout.copy()
+        styled = styled[
+            [
+                "model",
+                "accuracy",
+                "precision",
+                "recall",
+                "f1",
+                "balanced_accuracy",
+                "roc_auc",
+                "average_precision",
+                "training_time_sec",
+                "inference_ms_per_row",
+                "complexity_score",
+                "model_size_mb",
+            ]
+        ].rename(
+            columns={
+                "complexity_score": "complexity_proxy",
+                "training_time_sec": "training_time_sec",
+                "inference_ms_per_row": "inference_ms_per_row",
+            }
+        )
         numeric_columns = styled.select_dtypes(include=["number"]).columns
         st.dataframe(
             styled.style.format({column: "{:.4f}" for column in numeric_columns}),
             use_container_width=True,
         )
+        st.caption("`complexity_proxy` is a heuristic size/structure measure derived from the trained estimator, not a universal complexity theorem.")
 
         cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
         if not cv_mean.empty:
             st.markdown("### 5-Fold Validation Means")
+            cv_mean = cv_mean[
+                [
+                    "model",
+                    "accuracy",
+                    "precision",
+                    "recall",
+                    "f1",
+                    "balanced_accuracy",
+                    "roc_auc",
+                    "average_precision",
+                ]
+            ]
             st.dataframe(
                 cv_mean.style.format(
                     {column: "{:.4f}" for column in cv_mean.select_dtypes(include=["number"]).columns}
@@ -460,10 +509,27 @@ class PredictionApp:
             self.artifacts_dir / "plots" / f"{confusion_name}_confusion_matrix.png",
         )
 
-    def render_explainability(self, metadata: Dict[str, Any]) -> None:
+    def render_explainability(self, metadata: Dict[str, Any], raw_data: pd.DataFrame) -> None:
         self.render_section_header(
             "Explainability",
             "SHAP plots explain which saved features most increased or decreased cancellation risk for the benchmarked model.",
+        )
+
+        clean = self.processor.clean_data(raw_data) if not raw_data.empty else pd.DataFrame()
+        deposit_rates = (
+            clean.groupby("deposit_type")["is_canceled"].mean().sort_values(ascending=False)
+            if not clean.empty and {"deposit_type", "is_canceled"}.issubset(clean.columns)
+            else pd.Series(dtype=float)
+        )
+        adr_summary = (
+            clean.groupby("is_canceled")["adr"].mean()
+            if not clean.empty and {"adr", "is_canceled"}.issubset(clean.columns)
+            else pd.Series(dtype=float)
+        )
+        adr_corr = (
+            clean[["adr", "is_canceled"]].corr().iloc[0, 1]
+            if not clean.empty and {"adr", "is_canceled"}.issubset(clean.columns)
+            else None
         )
 
         summary_left, summary_right = st.columns([1.1, 0.9], gap="large")
@@ -481,6 +547,28 @@ class PredictionApp:
                     <div class="insight-box">
                         <strong>{item['feature']}</strong>
                         <span>{item['explanation']} Mean absolute SHAP impact: {item['mean_abs_shap']:.4f}.</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            if not deposit_rates.empty:
+                st.markdown(
+                    f"""
+                    <div class="insight-box">
+                        <strong>Observed deposit-type cancellation rates</strong>
+                        <span>Non Refund: {deposit_rates.get('Non Refund', float('nan')) * 100:.2f}% canceled. No Deposit: {deposit_rates.get('No Deposit', float('nan')) * 100:.2f}% canceled. Refundable: {deposit_rates.get('Refundable', float('nan')) * 100:.2f}% canceled. These are empirical rates from the dataset, not direct SHAP probabilities.</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            if adr_corr is not None and not adr_summary.empty:
+                st.markdown(
+                    f"""
+                    <div class="insight-box">
+                        <strong>ADR reality check</strong>
+                        <span>ADR is not a dominant saved SHAP driver here. In the raw dataset, canceled bookings have mean ADR {adr_summary.get(1, float('nan')):.2f} versus {adr_summary.get(0, float('nan')):.2f} for non-canceled bookings, with a weak positive correlation of {adr_corr:.4f} to cancellation. So lower ADR does not appear to increase cancellation probability overall in this dataset.</span>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -608,7 +696,7 @@ class PredictionApp:
             x="model",
             y=metric,
             color=metric,
-            color_continuous_scale="Tealgrn",
+            color_continuous_scale=["#c4f1f9", "#4cc9f0", "#0f766e"],
             text_auto=".3f",
         )
         fig.update_layout(
@@ -616,7 +704,10 @@ class PredictionApp:
             xaxis_title="Model",
             yaxis_title=metric.replace("_", " ").title(),
             margin=dict(l=10, r=10, t=20, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
         )
+        fig.update_traces(marker_line_color="rgba(7,17,31,0.15)", marker_line_width=1.1)
         return fig
 
     def build_accuracy_vs_time(self, holdout: pd.DataFrame) -> go.Figure:
@@ -634,7 +725,10 @@ class PredictionApp:
             yaxis_title="Holdout accuracy",
             margin=dict(l=10, r=10, t=20, b=20),
             showlegend=False,
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
         )
+        fig.update_traces(marker=dict(line=dict(color="white", width=1.2), opacity=0.9))
         return fig
 
     def build_cv_f1_chart(self, cv_mean: pd.DataFrame) -> go.Figure:
@@ -643,7 +737,7 @@ class PredictionApp:
             x="model",
             y="f1",
             color="f1",
-            color_continuous_scale="Blues",
+            color_continuous_scale=["#dff7f3", "#34d399", "#0f766e"],
             text_auto=".3f",
         )
         fig.update_layout(
@@ -651,7 +745,10 @@ class PredictionApp:
             xaxis_title="Model",
             yaxis_title="Mean 5-fold F1",
             margin=dict(l=10, r=10, t=20, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
         )
+        fig.update_traces(marker_line_color="rgba(7,17,31,0.15)", marker_line_width=1.1)
         return fig
 
     def build_metric_radar(self, top_model: pd.Series) -> go.Figure:
@@ -672,7 +769,61 @@ class PredictionApp:
             height=420,
             margin=dict(l=10, r=10, t=20, b=20),
             showlegend=False,
+            paper_bgcolor="rgba(0,0,0,0)",
         )
+        return fig
+
+    def build_metric_heatmap(self, holdout: pd.DataFrame) -> go.Figure:
+        metrics = ["accuracy", "precision", "recall", "f1", "roc_auc", "average_precision"]
+        frame = holdout.set_index("model")[metrics]
+        fig = px.imshow(
+            frame,
+            text_auto=".3f",
+            aspect="auto",
+            color_continuous_scale=["#f8fafc", "#99f6e4", "#0f766e"],
+        )
+        fig.update_layout(
+            title="Metric Comparison Heatmap",
+            height=480,
+            margin=dict(l=10, r=10, t=40, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+        )
+        return fig
+
+    def build_timing_combo_chart(self, holdout: pd.DataFrame) -> go.Figure:
+        chart = holdout.sort_values("f1", ascending=False).copy()
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+        fig.add_trace(
+            go.Bar(
+                x=chart["model"],
+                y=chart["training_time_sec"],
+                name="Training time (sec)",
+                marker_color="#0ea5e9",
+            ),
+            secondary_y=False,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=chart["model"],
+                y=chart["inference_ms_per_row"],
+                mode="lines+markers+text",
+                name="Inference ms/row",
+                marker=dict(color="#f59e0b", size=10),
+                line=dict(color="#f59e0b", width=3),
+                text=[f"{value:.3f}" for value in chart["inference_ms_per_row"]],
+                textposition="top center",
+            ),
+            secondary_y=True,
+        )
+        fig.update_layout(
+            title="Measured Training vs Inference Cost",
+            height=480,
+            margin=dict(l=10, r=10, t=40, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
+        )
+        fig.update_yaxes(title_text="Training time (sec)", secondary_y=False)
+        fig.update_yaxes(title_text="Inference ms/row", secondary_y=True)
         return fig
 
 
