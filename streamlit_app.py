@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
 
-from hotel_cancellation_oop import HotelDataProcessor, SHAPAnalyzer, _positive_probabilities
+from hotel_app.ml import HotelDataProcessor, SHAPAnalyzer, _positive_probabilities
 
 
 ARTIFACTS_DIR = Path("artifacts")

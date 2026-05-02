@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from hotel_cancellation_oop import TerminalTrainingRunner
+from hotel_app.ml import TerminalTrainingRunner
 
 
 def build_parser() -> argparse.ArgumentParser:
