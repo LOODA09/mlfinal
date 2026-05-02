@@ -987,13 +987,13 @@ class PredictionApp:
 
         deposit_type = str(raw_input.iloc[0].get("deposit_type", "")).strip()
         if deposit_type == "Non Refund":
-            adjusted_probability = min(cancel_probability, 0.10)
-            adjusted_prediction = 0
+            adjusted_probability = max(cancel_probability - 0.10, 0.0)
+            adjusted_prediction = 1 if adjusted_probability >= 0.5 else 0
             return adjusted_prediction, adjusted_probability
 
         if deposit_type == "Refundable":
-            adjusted_probability = min(max(cancel_probability, 0.10), 0.10)
-            adjusted_prediction = 0
+            adjusted_probability = min(cancel_probability + 0.10, 1.0)
+            adjusted_prediction = 1 if adjusted_probability >= 0.5 else 0
             return adjusted_prediction, adjusted_probability
 
         return prediction, cancel_probability
