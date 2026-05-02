@@ -316,14 +316,6 @@
       "step": 1.0
     },
     {
-      "name": "arrival_date_year",
-      "type": "numeric",
-      "default": 2016.0,
-      "min": 2015.0,
-      "max": 2017.0,
-      "step": 1.0
-    },
-    {
       "name": "arrival_date_week_number",
       "type": "numeric",
       "default": 28.0,

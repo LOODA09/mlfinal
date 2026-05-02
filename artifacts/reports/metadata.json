@@ -7,7 +7,7 @@
   "train_ratio": 0.7,
   "test_ratio": 0.3,
   "cross_validation_folds": 5,
-  "best_model": "Random Forest",
+  "best_model": "Stacking Ensemble",
   "trained_models": [
     "ANN",
     "KNN",
@@ -19,9 +19,11 @@
     "Extra Trees",
     "XGBoost",
     "Voting Ensemble",
-    "RNN"
+    "Stacking Ensemble"
   ],
-  "skipped_models": {},
+  "skipped_models": {
+    "RNN": "Not included in the refreshed year-removed holdout benchmark artifacts yet."
+  },
   "shap_explanations": [
     {
       "feature": "country_PRT",

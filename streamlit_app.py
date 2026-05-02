@@ -5,13 +5,14 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import joblib
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
 
-from hotel_cancellation_oop import HotelDataProcessor, _positive_probabilities
+from hotel_cancellation_oop import HotelDataProcessor, SHAPAnalyzer, _positive_probabilities
 
 
 ARTIFACTS_DIR = Path("artifacts")
@@ -246,7 +247,7 @@ class DashboardStyle:
         st.markdown(
             f"""
             <div class="hero-shell">
-                <div class="hero-topline">Benchmark Dashboard • Prediction Console • SHAP Explainability</div>
+                <div class="hero-topline">Benchmark Dashboard | Prediction Console | SHAP Explainability</div>
                 <h1>Hotel Cancellation Intelligence</h1>
                 <p>
                     Professional dashboard for comparing all trained models, reviewing honest holdout and
@@ -311,6 +312,7 @@ class PredictionApp:
         DashboardStyle.apply()
 
         metadata = self.load_json(self.artifacts_dir / "reports" / "metadata.json", {})
+        confusion_data = self.load_json(self.artifacts_dir / "reports" / "confusion_matrices.json", {})
         schema = self.load_json(self.artifacts_dir / "reports" / "prediction_schema.json", {"columns": []})
         examples = self.load_csv(self.artifacts_dir / "reports" / "prediction_examples.csv")
         holdout = self.load_csv(self.artifacts_dir / "reports" / "holdout_summary.csv")
@@ -333,10 +335,10 @@ class PredictionApp:
             self.render_overview(holdout, cv_results, guest_segments, metadata, raw_data)
 
         with models_tab:
-            self.render_model_comparison(holdout, cv_results)
+            self.render_model_comparison(holdout, cv_results, confusion_data)
 
         with explain_tab:
-            self.render_explainability(metadata, raw_data)
+            self.render_explainability(metadata)
 
         with predict_tab:
             self.render_prediction_console(models, schema, examples, metadata)
@@ -429,7 +431,12 @@ class PredictionApp:
         with st.expander("Benchmark Metadata"):
             st.json(metadata)
 
-    def render_model_comparison(self, holdout: pd.DataFrame, cv_results: pd.DataFrame) -> None:
+    def render_model_comparison(
+        self,
+        holdout: pd.DataFrame,
+        cv_results: pd.DataFrame,
+        confusion_data: Dict[str, Any],
+    ) -> None:
         self.render_section_header(
             "Model Comparison",
             "Compare all trained models side by side using holdout metrics, validation averages, model size, timing, and confusion matrices.",
@@ -444,9 +451,11 @@ class PredictionApp:
 
         left, right = st.columns([1.1, 0.9], gap="large")
         with left:
-            st.plotly_chart(self.build_holdout_bar(holdout, metric), use_container_width=True)
+            st.plotly_chart(self.build_metrics_comparison_chart(holdout), use_container_width=True)
         with right:
             st.plotly_chart(self.build_accuracy_vs_time(holdout), use_container_width=True)
+
+        st.plotly_chart(self.build_holdout_bar(holdout, metric), use_container_width=True)
 
         styled = holdout.copy()
         styled = styled[
@@ -504,34 +513,23 @@ class PredictionApp:
 
         model_options = holdout["model"].tolist()
         selected_confusion = st.selectbox("Confusion matrix model", model_options, index=0)
-        confusion_name = selected_confusion.lower().replace(" ", "_")
-        self.render_image_card(
-            f"{selected_confusion} Confusion Matrix",
-            "Saved confusion matrix from the holdout evaluation.",
-            self.artifacts_dir / "plots" / f"{confusion_name}_confusion_matrix.png",
-        )
+        if selected_confusion in confusion_data:
+            st.plotly_chart(
+                self.build_confusion_heatmap(selected_confusion, confusion_data[selected_confusion]),
+                use_container_width=True,
+            )
+        else:
+            confusion_name = selected_confusion.lower().replace(" ", "_")
+            self.render_image_card(
+                f"{selected_confusion} Confusion Matrix",
+                "Saved confusion matrix from the holdout evaluation.",
+                self.artifacts_dir / "plots" / f"{confusion_name}_confusion_matrix.png",
+            )
 
-    def render_explainability(self, metadata: Dict[str, Any], raw_data: pd.DataFrame) -> None:
+    def render_explainability(self, metadata: Dict[str, Any]) -> None:
         self.render_section_header(
             "Explainability",
-            "SHAP plots explain which saved features most increased or decreased cancellation risk for the benchmarked model.",
-        )
-
-        clean = self.processor.clean_data(raw_data) if not raw_data.empty else pd.DataFrame()
-        deposit_rates = (
-            clean.groupby("deposit_type")["is_canceled"].mean().sort_values(ascending=False)
-            if not clean.empty and {"deposit_type", "is_canceled"}.issubset(clean.columns)
-            else pd.Series(dtype=float)
-        )
-        adr_summary = (
-            clean.groupby("is_canceled")["adr"].mean()
-            if not clean.empty and {"adr", "is_canceled"}.issubset(clean.columns)
-            else pd.Series(dtype=float)
-        )
-        adr_corr = (
-            clean[["adr", "is_canceled"]].corr().iloc[0, 1]
-            if not clean.empty and {"adr", "is_canceled"}.issubset(clean.columns)
-            else None
+            "Global explainability visuals for the benchmark model. Detailed increase and decrease reasons are generated in the prediction tab for the exact booking you score.",
         )
 
         summary_left, summary_right = st.columns([1.1, 0.9], gap="large")
@@ -542,39 +540,7 @@ class PredictionApp:
                 self.artifacts_dir / "plots" / "random_forest_shap_summary.png",
             )
         with summary_right:
-            st.markdown("### SHAP Feature Notes")
-            for item in metadata.get("shap_explanations", []):
-                st.markdown(
-                    f"""
-                    <div class="insight-box">
-                        <strong>{item['feature']}</strong>
-                        <span>{item['explanation']} Mean absolute SHAP impact: {item['mean_abs_shap']:.4f}.</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            if not deposit_rates.empty:
-                st.markdown(
-                    f"""
-                    <div class="insight-box">
-                        <strong>Observed deposit-type cancellation rates</strong>
-                        <span>Non Refund: {deposit_rates.get('Non Refund', float('nan')) * 100:.2f}% canceled. No Deposit: {deposit_rates.get('No Deposit', float('nan')) * 100:.2f}% canceled. Refundable: {deposit_rates.get('Refundable', float('nan')) * 100:.2f}% canceled. These are empirical rates from the dataset, not direct SHAP probabilities.</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            if adr_corr is not None and not adr_summary.empty:
-                st.markdown(
-                    f"""
-                    <div class="insight-box">
-                        <strong>ADR reality check</strong>
-                        <span>ADR is not a dominant saved SHAP driver here. In the raw dataset, canceled bookings have mean ADR {adr_summary.get(1, float('nan')):.2f} versus {adr_summary.get(0, float('nan')):.2f} for non-canceled bookings, with a weak positive correlation of {adr_corr:.4f} to cancellation. So lower ADR does not appear to increase cancellation probability overall in this dataset.</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+            st.plotly_chart(self.build_global_shap_importance_chart(metadata), use_container_width=True)
 
         dep_left, dep_right = st.columns(2, gap="large")
         with dep_left:
@@ -613,7 +579,7 @@ class PredictionApp:
             model_name = st.selectbox("Prediction model", list(models.keys()))
             input_frame = self.render_form(schema)
             if st.button("Predict Cancellation Risk", type="primary", use_container_width=True):
-                self.render_prediction(models[model_name], input_frame, model_name)
+                self.render_prediction(models[model_name], input_frame, model_name, examples)
 
         with right:
             st.markdown("### Deployment Snapshot")
@@ -657,7 +623,13 @@ class PredictionApp:
                 )
         return pd.DataFrame([values])
 
-    def render_prediction(self, model: Any, raw_input: pd.DataFrame, model_name: str) -> None:
+    def render_prediction(
+        self,
+        model: Any,
+        raw_input: pd.DataFrame,
+        model_name: str,
+        examples: pd.DataFrame,
+    ) -> None:
         model_input = self.processor.add_engineered_features(raw_input.copy())
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
@@ -682,6 +654,45 @@ class PredictionApp:
                 else "Risk is lower, so this reservation currently looks stable."
             )
             st.info(risk_text)
+
+        if examples.empty:
+            return
+
+        try:
+            analyzer = SHAPAnalyzer()
+            background = self.processor.add_engineered_features(
+                examples.head(min(80, len(examples))).copy()
+            )
+            shap_values = analyzer.explain(model, background, model_input, max_background=80)
+            feature_names = list(shap_values.feature_names)
+            shap_row = np.asarray(shap_values.values[0], dtype=float)
+            data_row = np.asarray(shap_values.data[0])
+            explanation_frame = pd.DataFrame(
+                {
+                    "feature": feature_names,
+                    "feature_value": data_row,
+                    "shap_value": shap_row,
+                }
+            )
+            increasing = explanation_frame[explanation_frame["shap_value"] > 0].nlargest(5, "shap_value")
+            decreasing = explanation_frame[explanation_frame["shap_value"] < 0].nsmallest(5, "shap_value")
+
+            st.markdown("### Prediction-Specific SHAP Explanation")
+            chart_left, chart_right = st.columns(2, gap="large")
+            with chart_left:
+                st.plotly_chart(self.build_local_shap_chart(increasing, "Increase Cancellation Risk"), use_container_width=True)
+                for row in increasing.itertuples(index=False):
+                    st.markdown(
+                        f"- `{row.feature}` increased cancellation risk because this booking carries value `{row.feature_value}` and pushed the model upward by `{row.shap_value:.4f}`."
+                    )
+            with chart_right:
+                st.plotly_chart(self.build_local_shap_chart(decreasing, "Decrease Cancellation Risk"), use_container_width=True)
+                for row in decreasing.itertuples(index=False):
+                    st.markdown(
+                        f"- `{row.feature}` decreased cancellation risk because this booking carries value `{row.feature_value}` and pulled the model downward by `{abs(row.shap_value):.4f}`."
+                    )
+        except Exception as exc:
+            st.warning(f"Prediction SHAP explanation is currently unavailable: {exc}")
 
     def render_image_card(self, title: str, copy: str, path: Path) -> None:
         st.markdown(f"### {title}")
@@ -710,6 +721,33 @@ class PredictionApp:
             plot_bgcolor="rgba(248,250,252,0.7)",
         )
         fig.update_traces(marker_line_color="rgba(7,17,31,0.15)", marker_line_width=1.1)
+        return fig
+
+    def build_metrics_comparison_chart(self, holdout: pd.DataFrame) -> go.Figure:
+        metrics = ["accuracy", "precision", "recall", "f1", "roc_auc"]
+        long_frame = holdout[["model", *metrics]].melt(
+            id_vars="model",
+            value_vars=metrics,
+            var_name="metric",
+            value_name="score",
+        )
+        fig = px.bar(
+            long_frame,
+            x="model",
+            y="score",
+            color="metric",
+            barmode="group",
+            color_discrete_sequence=["#0f766e", "#0ea5e9", "#22c55e", "#f59e0b", "#1d4ed8"],
+        )
+        fig.update_layout(
+            height=500,
+            yaxis_title="Score",
+            xaxis_title="Model",
+            margin=dict(l=10, r=10, t=20, b=20),
+            legend_title="Metric",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
+        )
         return fig
 
     def build_accuracy_vs_time(self, holdout: pd.DataFrame) -> go.Figure:
@@ -826,6 +864,75 @@ class PredictionApp:
         )
         fig.update_yaxes(title_text="Training time (sec)", secondary_y=False)
         fig.update_yaxes(title_text="Inference ms/row", secondary_y=True)
+        return fig
+
+    def build_confusion_heatmap(self, model_name: str, payload: Dict[str, Any]) -> go.Figure:
+        matrix = np.asarray(payload["matrix"])
+        fig = px.imshow(
+            matrix,
+            text_auto=True,
+            x=payload.get("predicted", ["Predicted 0", "Predicted 1"]),
+            y=payload.get("labels", ["Actual 0", "Actual 1"]),
+            color_continuous_scale=["#eff6ff", "#38bdf8", "#0f766e"],
+            aspect="auto",
+        )
+        fig.update_layout(
+            title=f"{model_name} Confusion Matrix",
+            height=430,
+            margin=dict(l=10, r=10, t=40, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+        )
+        return fig
+
+    def build_global_shap_importance_chart(self, metadata: Dict[str, Any]) -> go.Figure:
+        frame = pd.DataFrame(metadata.get("shap_explanations", []))
+        if frame.empty:
+            frame = pd.DataFrame(
+                {"feature": ["No saved SHAP data"], "mean_abs_shap": [0.0]}
+            )
+        fig = px.bar(
+            frame.sort_values("mean_abs_shap", ascending=True),
+            x="mean_abs_shap",
+            y="feature",
+            orientation="h",
+            color="mean_abs_shap",
+            color_continuous_scale=["#dbeafe", "#38bdf8", "#0f766e"],
+            text_auto=".3f",
+        )
+        fig.update_layout(
+            height=420,
+            xaxis_title="Mean |SHAP|",
+            yaxis_title="Feature",
+            margin=dict(l=10, r=10, t=20, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
+            showlegend=False,
+        )
+        return fig
+
+    def build_local_shap_chart(self, frame: pd.DataFrame, title: str) -> go.Figure:
+        if frame.empty:
+            frame = pd.DataFrame({"feature": ["No features"], "shap_value": [0.0]})
+        plot_frame = frame.sort_values("shap_value")
+        fig = px.bar(
+            plot_frame,
+            x="shap_value",
+            y="feature",
+            orientation="h",
+            color="shap_value",
+            color_continuous_scale=["#1d4ed8", "#cbd5e1", "#dc2626"],
+            text_auto=".3f",
+        )
+        fig.update_layout(
+            title=title,
+            height=380,
+            xaxis_title="SHAP contribution",
+            yaxis_title="Feature",
+            margin=dict(l=10, r=10, t=40, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
+            showlegend=False,
+        )
         return fig
 
 

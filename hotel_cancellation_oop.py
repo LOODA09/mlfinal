@@ -23,6 +23,7 @@ from sklearn.ensemble import (
     ExtraTreesClassifier,
     GradientBoostingClassifier,
     RandomForestClassifier,
+    StackingClassifier,
     VotingClassifier,
 )
 from sklearn.impute import SimpleImputer
@@ -131,7 +132,7 @@ def _count_model_complexity(estimator: Any) -> int:
 class HotelDataProcessor:
     target_column: str = "is_canceled"
     dropped_low_signal_columns: Sequence[str] = field(
-        default_factory=tuple
+        default_factory=lambda: ("arrival_date_year",)
     )
     leakage_columns: Sequence[str] = field(
         default_factory=lambda: ("reservation_status", "reservation_status_date")
@@ -186,6 +187,8 @@ class HotelDataProcessor:
         if remove_leakage_features:
             drop_columns.extend(self.leakage_columns)
         drop_columns.append(self.target_column)
+        year_columns = [col for col in df.columns if col.endswith("_year")]
+        drop_columns.extend(year_columns)
         return df.drop(columns=[col for col in drop_columns if col in df.columns], errors="ignore")
 
     def add_engineered_features(self, x_data: pd.DataFrame) -> pd.DataFrame:
@@ -703,7 +706,14 @@ class RandomForestModel(BaseHotelModel):
     name = "Random Forest"
 
     def get_estimator(self) -> RandomForestClassifier:
-        return RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1)
+        return RandomForestClassifier(
+            n_estimators=450,
+            max_features="sqrt",
+            min_samples_leaf=2,
+            class_weight="balanced_subsample",
+            random_state=42,
+            n_jobs=-1,
+        )
 
 
 class AdaBoostModel(BaseHotelModel):
@@ -728,7 +738,13 @@ class ExtraTreesModel(BaseHotelModel):
     name = "Extra Trees"
 
     def get_estimator(self) -> ExtraTreesClassifier:
-        return ExtraTreesClassifier(n_estimators=200, random_state=42, n_jobs=-1)
+        return ExtraTreesClassifier(
+            n_estimators=500,
+            max_features="sqrt",
+            min_samples_leaf=2,
+            random_state=42,
+            n_jobs=-1,
+        )
 
 
 class XGBoostModel(BaseHotelModel):
@@ -745,9 +761,13 @@ class XGBoostModel(BaseHotelModel):
 
         return xgboost.XGBClassifier(
             booster="gbtree",
-            learning_rate=0.1,
-            max_depth=5,
-            n_estimators=120,
+            learning_rate=0.05,
+            max_depth=6,
+            n_estimators=320,
+            min_child_weight=2,
+            subsample=0.85,
+            colsample_bytree=0.85,
+            reg_lambda=1.5,
             eval_metric="logloss",
             tree_method="hist",
             n_jobs=-1,
@@ -761,12 +781,69 @@ class VotingEnsembleModel(BaseHotelModel):
     def get_estimator(self) -> VotingClassifier:
         estimators = [
             ("logistic", LogisticRegression(max_iter=1000, random_state=42)),
-            ("decision_tree", DecisionTreeClassifier(random_state=42)),
-            ("random_forest", RandomForestClassifier(n_estimators=150, random_state=42, n_jobs=-1)),
+            (
+                "random_forest",
+                RandomForestClassifier(
+                    n_estimators=300,
+                    max_features="sqrt",
+                    min_samples_leaf=2,
+                    class_weight="balanced_subsample",
+                    random_state=42,
+                    n_jobs=-1,
+                ),
+            ),
             ("gradient_boosting", GradientBoostingClassifier(random_state=42)),
-            ("extra_trees", ExtraTreesClassifier(n_estimators=150, random_state=42, n_jobs=-1)),
+            (
+                "extra_trees",
+                ExtraTreesClassifier(
+                    n_estimators=350,
+                    max_features="sqrt",
+                    min_samples_leaf=2,
+                    random_state=42,
+                    n_jobs=-1,
+                ),
+            ),
+            ("xgboost", XGBoostModel().get_estimator()),
         ]
         return VotingClassifier(estimators=estimators, voting="soft", n_jobs=-1)
+
+
+class StackingEnsembleModel(BaseHotelModel):
+    name = "Stacking Ensemble"
+
+    def get_estimator(self) -> StackingClassifier:
+        estimators = [
+            (
+                "random_forest",
+                RandomForestClassifier(
+                    n_estimators=250,
+                    max_features="sqrt",
+                    min_samples_leaf=2,
+                    class_weight="balanced_subsample",
+                    random_state=42,
+                    n_jobs=-1,
+                ),
+            ),
+            (
+                "extra_trees",
+                ExtraTreesClassifier(
+                    n_estimators=250,
+                    max_features="sqrt",
+                    min_samples_leaf=2,
+                    random_state=42,
+                    n_jobs=-1,
+                ),
+            ),
+            ("xgboost", XGBoostModel().get_estimator()),
+            ("gradient_boosting", GradientBoostingClassifier(random_state=42)),
+        ]
+        return StackingClassifier(
+            estimators=estimators,
+            final_estimator=LogisticRegression(max_iter=1000, random_state=42),
+            stack_method="predict_proba",
+            n_jobs=-1,
+            passthrough=False,
+        )
 
 
 class ANNModel(BaseHotelModel):
@@ -818,6 +895,7 @@ MODEL_REGISTRY: Dict[str, Type[BaseHotelModel]] = {
         ExtraTreesModel,
         XGBoostModel,
         VotingEnsembleModel,
+        StackingEnsembleModel,
         ANNModel,
         RNNModel,
     )
@@ -1088,6 +1166,7 @@ class TerminalTrainingRunner:
             ExtraTreesModel(),
             XGBoostModel(),
             VotingEnsembleModel(),
+            StackingEnsembleModel(),
         ]
         try:
             importlib.import_module("tensorflow")
@@ -1186,6 +1265,7 @@ class TerminalTrainingRunner:
                 shap_explanations = []
 
         self._save_confusion_matrices(artifacts, details)
+        self._save_confusion_matrix_json(artifacts, details)
         self._save_metric_plots(artifacts, holdout_summary, cv_results)
         segmentation = self._save_segmentation_artifacts(artifacts, x_data)
         prediction_schema = self._build_prediction_schema(prediction_inputs)
@@ -1297,6 +1377,21 @@ class TerminalTrainingRunner:
             figure.tight_layout()
             figure.savefig(artifacts.plots_dir / f"{_slugify(model_name)}_confusion_matrix.png", dpi=180)
             plt.close(figure)
+
+    def _save_confusion_matrix_json(
+        self,
+        artifacts: TrainingArtifacts,
+        details: Dict[str, Dict[str, Any]],
+    ) -> None:
+        payload = {
+            model_name: {
+                "labels": ["Actual 0", "Actual 1"],
+                "predicted": ["Predicted 0", "Predicted 1"],
+                "matrix": np.asarray(detail["confusion_matrix"]).tolist(),
+            }
+            for model_name, detail in details.items()
+        }
+        artifacts.save_json("confusion_matrices.json", payload)
 
     def _save_metric_plots(
         self,
