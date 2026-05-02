@@ -267,18 +267,49 @@ class TerminalTrainingRunner:
             except Exception:
                 shap_explanations = []
 
+        # ── Retrain every benchmarked model on the FULL dataset and save ──────
+        print("\nRetraining all models on full dataset for deployment...")
+        full_data_models: Dict[str, Pipeline] = {}
+        for model_spec in models:
+            if model_spec.name not in trained_models:
+                continue  # skip models that failed during benchmarking
+            try:
+                full_model = self.trainer.train_model(model_spec, x_data, y_data)
+                artifacts.save_model(model_spec.name, full_model)
+                full_data_models[model_spec.name] = full_model
+                print(f"  Saved full-data model: {model_spec.name}")
+            except Exception as exc:
+                print(f"  WARNING: Could not retrain {model_spec.name} on full data: {exc}")
+
+        # Save the best-performing model as the deployment model
+        deployment_model_name = best_model_name
+        if deployment_model_name and deployment_model_name in full_data_models:
+            deployment_path = artifacts.models_dir / "deployment_model.joblib"
+            joblib.dump(full_data_models[deployment_model_name], deployment_path)
+            print(f"  Deployment model saved: {deployment_model_name} → deployment_model.joblib")
+        elif trained_models:
+            # Fallback: use the best available full-data model (or benchmark model if full-data failed)
+            fallback_name = next(iter(full_data_models or trained_models))
+            deployment_model_name = fallback_name
+            fallback_model = (full_data_models or trained_models)[fallback_name]
+            deployment_path = artifacts.models_dir / "deployment_model.joblib"
+            joblib.dump(fallback_model, deployment_path)
+            print(f"  Deployment model saved (fallback): {fallback_name} → deployment_model.joblib")
+
         segmentation = self._save_segmentation_artifacts(artifacts, x_data)
         metadata = {
             "data_path": str(Path(data_path).resolve()),
             "python_version": sys.version.split()[0],
             "train_rows": int(len(x_train)),
             "test_rows": int(len(x_test)),
+            "total_rows": int(len(x_data)),
             "train_ratio": 0.7,
             "test_ratio": 0.3,
             "cross_validation_folds": cv_folds,
             "best_model": best_model_name,
-            "deployment_model": "ANN",
+            "deployment_model": deployment_model_name,
             "trained_models": list(trained_models.keys()),
+            "full_data_models": list(full_data_models.keys()),
             "skipped_models": skipped_models,
             "shap_explanations": shap_explanations,
             "segmentation_summary_rows": segmentation["summary"].to_dict(orient="records"),
