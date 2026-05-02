@@ -18,6 +18,7 @@ from hotel_cancellation_oop import HotelDataProcessor, SHAPAnalyzer, _positive_p
 
 ARTIFACTS_DIR = Path("artifacts")
 DATA_PATH = Path("hotel_bookings.csv")
+EXCLUDED_FEATURES = {"arrival_date_year"}
 
 
 class DashboardStyle:
@@ -191,6 +192,59 @@ class DashboardStyle:
                 color: #475569;
                 line-height: 1.55;
                 font-size: .93rem;
+            }
+
+            .live-result {
+                border-radius: 26px;
+                padding: 18px 20px;
+                margin-bottom: 16px;
+                border: 1px solid rgba(14,165,233,.14);
+                background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(224,242,254,.88));
+                box-shadow: 0 18px 40px rgba(14,165,233,.12);
+                animation: pulseCard 2.2s ease-in-out infinite;
+            }
+
+            .live-result.risk-high {
+                background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(254,226,226,.92));
+                border-color: rgba(239,68,68,.18);
+            }
+
+            .live-result.risk-low {
+                background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(220,252,231,.90));
+                border-color: rgba(34,197,94,.18);
+            }
+
+            .live-result h3 {
+                margin: 0 0 6px;
+                font-size: 1.35rem;
+                color: #0f172a;
+            }
+
+            .live-result p {
+                margin: 0;
+                color: #475569;
+            }
+
+            .reason-card {
+                border-radius: 18px;
+                padding: 14px 16px;
+                background: rgba(255,255,255,.86);
+                border: 1px solid rgba(15,23,42,.08);
+                box-shadow: 0 14px 30px rgba(15,23,42,.06);
+                margin-bottom: 10px;
+                animation: fadeLift .55s ease both;
+            }
+
+            .reason-card strong {
+                color: #0f172a;
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .reason-card span {
+                color: #475569;
+                font-size: .92rem;
+                line-height: 1.5;
             }
 
             div.stButton > button {
@@ -413,6 +467,11 @@ class DashboardStyle:
                 0%, 70% { opacity: 1; visibility: visible; }
                 100% { opacity: 0; visibility: hidden; }
             }
+
+            @keyframes pulseCard {
+                0%, 100% { transform: translateY(0px); box-shadow: 0 18px 40px rgba(14,165,233,.12); }
+                50% { transform: translateY(-3px); box-shadow: 0 24px 50px rgba(14,165,233,.18); }
+            }
             </style>
             """,
             unsafe_allow_html=True,
@@ -537,6 +596,8 @@ class PredictionApp:
             st.error("Saved training artifacts are missing. Run terminal training and redeploy the app.")
             return
 
+        schema = self.sanitize_schema(schema)
+        examples = self.sanitize_examples(examples)
         holdout = self.normalize_holdout_frame(holdout)
         cv_results = self.normalize_cv_frame(cv_results)
 
@@ -553,7 +614,7 @@ class PredictionApp:
             self.render_model_comparison(holdout, cv_results, confusion_data)
 
         with explain_tab:
-            self.render_explainability(metadata)
+            self.render_explainability()
 
         with predict_tab:
             self.render_prediction_console(models, schema, examples, metadata)
@@ -583,6 +644,17 @@ class PredictionApp:
             if column not in frame.columns:
                 frame[column] = np.nan
         return frame
+
+    @staticmethod
+    def sanitize_schema(schema: Dict[str, Any]) -> Dict[str, Any]:
+        columns = [column for column in schema.get("columns", []) if column.get("name") not in EXCLUDED_FEATURES]
+        return {"columns": columns}
+
+    @staticmethod
+    def sanitize_examples(examples: pd.DataFrame) -> pd.DataFrame:
+        if examples.empty:
+            return examples
+        return examples.drop(columns=[col for col in EXCLUDED_FEATURES if col in examples.columns], errors="ignore")
 
     def render_section_header(self, title: str, copy: str) -> None:
         st.markdown(
@@ -767,40 +839,12 @@ class PredictionApp:
                 self.artifacts_dir / "plots" / f"{confusion_name}_confusion_matrix.png",
             )
 
-    def render_explainability(self, metadata: Dict[str, Any]) -> None:
+    def render_explainability(self) -> None:
         self.render_section_header(
             "Explainability",
-            "Global explainability visuals for the benchmark model. Detailed increase and decrease reasons are generated in the prediction tab for the exact booking you score.",
+            "Live explainability is generated after each prediction. The visuals below update from the last booking you scored, so they always reflect that booking's exact features and result.",
         )
-
-        summary_left, summary_right = st.columns([1.1, 0.9], gap="large")
-        with summary_left:
-            self.render_image_card(
-                "SHAP Summary Plot",
-                "Global feature importance view. Features with wider SHAP spread have a stronger effect on cancellation decisions.",
-                self.artifacts_dir / "plots" / "random_forest_shap_summary.png",
-            )
-        with summary_right:
-            st.plotly_chart(self.build_global_shap_importance_chart(metadata), use_container_width=True)
-
-        dep_left, dep_right = st.columns(2, gap="large")
-        with dep_left:
-            self.render_image_card(
-                "Country Effect",
-                "Bookings tagged with this country indicator tended to push risk upward in the saved SHAP dependence analysis.",
-                self.artifacts_dir / "plots" / "random_forest_shap_country_prt.png",
-            )
-            self.render_image_card(
-                "No Deposit Effect",
-                "This plot shows why no-deposit bookings tended to reduce risk relative to more restrictive deposit profiles.",
-                self.artifacts_dir / "plots" / "random_forest_shap_deposit_type_no_deposit.png",
-            )
-        with dep_right:
-            self.render_image_card(
-                "Non-Refund Deposit Effect",
-                "This dependence plot shows why non-refundable deposit type pushed many predictions toward higher cancellation risk.",
-                self.artifacts_dir / "plots" / "random_forest_shap_deposit_type_non_refund.png",
-            )
+        self.render_live_prediction_explainability()
 
     def render_prediction_console(
         self,
@@ -820,7 +864,8 @@ class PredictionApp:
             model_name = st.selectbox("Prediction model", list(models.keys()))
             input_frame = self.render_form(schema)
             if st.button("Predict Cancellation Risk", type="primary", use_container_width=True):
-                self.render_prediction(models[model_name], input_frame, model_name, examples)
+                with st.spinner("Building live prediction and SHAP explanation..."):
+                    self.render_prediction(models[model_name], input_frame, model_name, examples)
 
         with right:
             st.markdown("### Deployment Snapshot")
@@ -837,6 +882,8 @@ class PredictionApp:
             if not examples.empty:
                 st.markdown("### Example Rows")
                 st.dataframe(examples.head(8), use_container_width=True)
+
+        self.render_live_prediction_explainability()
 
     def render_form(self, schema: Dict[str, Any]) -> pd.DataFrame:
         values: Dict[str, Any] = {}
@@ -917,21 +964,14 @@ class PredictionApp:
             )
             increasing = explanation_frame[explanation_frame["shap_value"] > 0].nlargest(5, "shap_value")
             decreasing = explanation_frame[explanation_frame["shap_value"] < 0].nsmallest(5, "shap_value")
-
-            st.markdown("### Prediction-Specific SHAP Explanation")
-            chart_left, chart_right = st.columns(2, gap="large")
-            with chart_left:
-                st.plotly_chart(self.build_local_shap_chart(increasing, "Increase Cancellation Risk"), use_container_width=True)
-                for row in increasing.itertuples(index=False):
-                    st.markdown(
-                        f"- `{row.feature}` increased cancellation risk because this booking carries value `{row.feature_value}` and pushed the model upward by `{row.shap_value:.4f}`."
-                    )
-            with chart_right:
-                st.plotly_chart(self.build_local_shap_chart(decreasing, "Decrease Cancellation Risk"), use_container_width=True)
-                for row in decreasing.itertuples(index=False):
-                    st.markdown(
-                        f"- `{row.feature}` decreased cancellation risk because this booking carries value `{row.feature_value}` and pulled the model downward by `{abs(row.shap_value):.4f}`."
-                    )
+            st.session_state["latest_prediction"] = {
+                "model_name": model_name,
+                "prediction": prediction,
+                "cancel_probability": cancel_probability,
+                "stay_probability": None if cancel_probability is None else 1 - cancel_probability,
+                "increasing": increasing.to_dict(orient="records"),
+                "decreasing": decreasing.to_dict(orient="records"),
+            }
         except Exception as exc:
             st.warning(f"Prediction SHAP explanation is currently unavailable: {exc}")
 
@@ -942,6 +982,80 @@ class PredictionApp:
             st.image(str(path), use_container_width=True)
         else:
             st.warning(f"Missing artifact: {path.name}")
+
+    def render_live_prediction_explainability(self) -> None:
+        latest = st.session_state.get("latest_prediction")
+        if not latest:
+            st.markdown(
+                """
+                <div class="insight-box">
+                    <strong>Live SHAP will appear here</strong>
+                    <span>Run a prediction to generate interactive feature explanations showing exactly which features increased cancellation risk and which ones reduced it for that booking.</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            return
+
+        probability = latest.get("cancel_probability")
+        prediction = latest.get("prediction")
+        risk_class = "risk-high" if prediction == 1 else "risk-low"
+        headline = "Booking Likely To Cancel" if prediction == 1 else "Booking Likely To Stay"
+        subcopy = (
+            f"Live explanation for {latest.get('model_name', 'model')}. Cancellation probability: {probability * 100:.2f}%."
+            if probability is not None
+            else f"Live explanation for {latest.get('model_name', 'model')}."
+        )
+        st.markdown(
+            f"""
+            <div class="live-result {risk_class}">
+                <h3>{headline}</h3>
+                <p>{subcopy}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        gauge_left, gauge_right = st.columns([0.9, 1.1], gap="large")
+        with gauge_left:
+            if probability is not None:
+                st.plotly_chart(self.build_probability_gauge(probability), use_container_width=True)
+        with gauge_right:
+            inc = pd.DataFrame(latest.get("increasing", []))
+            dec = pd.DataFrame(latest.get("decreasing", []))
+            st.plotly_chart(self.build_local_shap_waterfall(inc, dec), use_container_width=True)
+
+        col1, col2 = st.columns(2, gap="large")
+        with col1:
+            st.plotly_chart(
+                self.build_local_shap_chart(pd.DataFrame(latest.get("increasing", [])), "Features That Increased Cancellation Risk"),
+                use_container_width=True,
+            )
+            for item in latest.get("increasing", []):
+                st.markdown(
+                    f"""
+                    <div class="reason-card">
+                        <strong>{item['feature']}</strong>
+                        <span>This feature increased cancellation risk for this booking because the current value was <code>{item['feature_value']}</code> and it pushed the model upward by {float(item['shap_value']):.4f}.</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+        with col2:
+            st.plotly_chart(
+                self.build_local_shap_chart(pd.DataFrame(latest.get("decreasing", [])), "Features That Decreased Cancellation Risk"),
+                use_container_width=True,
+            )
+            for item in latest.get("decreasing", []):
+                st.markdown(
+                    f"""
+                    <div class="reason-card">
+                        <strong>{item['feature']}</strong>
+                        <span>This feature decreased cancellation risk for this booking because the current value was <code>{item['feature_value']}</code> and it pulled the model downward by {abs(float(item['shap_value'])):.4f}.</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
     def build_holdout_bar(self, holdout: pd.DataFrame, metric: str) -> go.Figure:
         chart = holdout.sort_values(metric, ascending=False).copy()
@@ -1161,7 +1275,7 @@ class PredictionApp:
             y="feature",
             orientation="h",
             color="shap_value",
-            color_continuous_scale=["#1d4ed8", "#cbd5e1", "#dc2626"],
+            color_continuous_scale=["#22c55e", "#e2e8f0", "#ef4444"],
             text_auto=".3f",
         )
         fig.update_layout(
@@ -1173,6 +1287,57 @@ class PredictionApp:
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(248,250,252,0.7)",
             showlegend=False,
+        )
+        return fig
+
+    def build_probability_gauge(self, probability: float) -> go.Figure:
+        fig = go.Figure(
+            go.Indicator(
+                mode="gauge+number",
+                value=probability * 100,
+                number={"suffix": "%", "font": {"size": 36, "color": "#0f172a"}},
+                gauge={
+                    "axis": {"range": [0, 100]},
+                    "bar": {"color": "#0ea5e9"},
+                    "steps": [
+                        {"range": [0, 35], "color": "#dcfce7"},
+                        {"range": [35, 65], "color": "#fef3c7"},
+                        {"range": [65, 100], "color": "#fee2e2"},
+                    ],
+                    "threshold": {"line": {"color": "#ef4444", "width": 4}, "thickness": 0.8, "value": probability * 100},
+                },
+                title={"text": "Cancellation Probability"},
+            )
+        )
+        fig.update_layout(height=320, margin=dict(l=10, r=10, t=50, b=10), paper_bgcolor="rgba(0,0,0,0)")
+        return fig
+
+    def build_local_shap_waterfall(self, increasing: pd.DataFrame, decreasing: pd.DataFrame) -> go.Figure:
+        inc = increasing.copy() if not increasing.empty else pd.DataFrame(columns=["feature", "shap_value"])
+        dec = decreasing.copy() if not decreasing.empty else pd.DataFrame(columns=["feature", "shap_value"])
+        frame = pd.concat([dec, inc], ignore_index=True)
+        if frame.empty:
+            frame = pd.DataFrame({"feature": ["No features"], "shap_value": [0.0]})
+        frame["label"] = frame["feature"].astype(str)
+        fig = go.Figure(
+            go.Waterfall(
+                orientation="v",
+                measure=["relative"] * len(frame),
+                x=frame["label"],
+                y=frame["shap_value"],
+                connector={"line": {"color": "rgba(15,23,42,0.18)"}},
+                increasing={"marker": {"color": "#ef4444"}},
+                decreasing={"marker": {"color": "#22c55e"}},
+            )
+        )
+        fig.update_layout(
+            title="Live SHAP Contribution Flow",
+            height=380,
+            margin=dict(l=10, r=10, t=40, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
+            xaxis_title="Feature",
+            yaxis_title="Contribution to risk",
         )
         return fig
 
