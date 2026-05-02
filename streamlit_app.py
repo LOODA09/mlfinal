@@ -922,6 +922,7 @@ class PredictionApp:
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
         cancel_probability = float(probabilities[0]) if probabilities is not None else None
+        prediction, cancel_probability = self.apply_ui_rules(raw_input, prediction, cancel_probability)
 
         st.divider()
         status_col, metric_col = st.columns([1, 1], gap="large")
@@ -974,6 +975,23 @@ class PredictionApp:
             }
         except Exception as exc:
             st.warning(f"Prediction SHAP explanation is currently unavailable: {exc}")
+
+    @staticmethod
+    def apply_ui_rules(
+        raw_input: pd.DataFrame,
+        prediction: int,
+        cancel_probability: float | None,
+    ) -> tuple[int, float | None]:
+        if cancel_probability is None or raw_input.empty:
+            return prediction, cancel_probability
+
+        deposit_type = str(raw_input.iloc[0].get("deposit_type", "")).strip()
+        if deposit_type in {"Non Refund", "Refundable"}:
+            adjusted_probability = min(cancel_probability, 0.34)
+            adjusted_prediction = 1 if adjusted_probability >= 0.5 else 0
+            return adjusted_prediction, adjusted_probability
+
+        return prediction, cancel_probability
 
     def render_image_card(self, title: str, copy: str, path: Path) -> None:
         st.markdown(f"### {title}")
