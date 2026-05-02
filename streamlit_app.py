@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import time
 from typing import Any, Dict, List
 
 import joblib
@@ -237,6 +238,181 @@ class DashboardStyle:
                     font-size: 2rem;
                 }
             }
+
+            .welcome-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 999999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background:
+                    radial-gradient(circle at 50% 20%, rgba(56,189,248,.18), transparent 28%),
+                    linear-gradient(135deg, #04111f 0%, #0b3954 48%, #0f766e 100%);
+                animation: overlayFade 3.4s ease forwards;
+                pointer-events: none;
+            }
+
+            .welcome-card {
+                text-align: center;
+                color: white;
+                padding: 30px 34px;
+                border-radius: 28px;
+                background: rgba(255,255,255,.08);
+                border: 1px solid rgba(255,255,255,.16);
+                backdrop-filter: blur(10px);
+                box-shadow: 0 30px 80px rgba(0,0,0,.20);
+            }
+
+            .hotel-graphic {
+                position: relative;
+                width: 170px;
+                height: 150px;
+                margin: 0 auto 14px;
+                animation: hotelFloat 1.8s ease-in-out infinite alternate;
+            }
+
+            .hotel-building {
+                position: absolute;
+                left: 50%;
+                bottom: 14px;
+                transform: translateX(-50%);
+                width: 110px;
+                height: 102px;
+                border-radius: 14px 14px 8px 8px;
+                background: linear-gradient(180deg, #f8fafc 0%, #dbeafe 100%);
+                box-shadow: 0 18px 40px rgba(0,0,0,.18);
+            }
+
+            .hotel-roof {
+                position: absolute;
+                left: 50%;
+                top: 8px;
+                transform: translateX(-50%);
+                width: 130px;
+                height: 28px;
+                border-radius: 18px 18px 8px 8px;
+                background: linear-gradient(90deg, #f59e0b, #fb7185);
+            }
+
+            .hotel-sign {
+                position: absolute;
+                left: 50%;
+                top: 18px;
+                transform: translateX(-50%);
+                padding: 4px 10px;
+                border-radius: 999px;
+                background: #0f766e;
+                color: white;
+                font-size: .72rem;
+                font-weight: 800;
+                letter-spacing: .14em;
+                text-transform: uppercase;
+            }
+
+            .hotel-windows {
+                position: absolute;
+                left: 50%;
+                top: 44px;
+                transform: translateX(-50%);
+                width: 72px;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .hotel-window {
+                width: 18px;
+                height: 18px;
+                border-radius: 4px;
+                background: linear-gradient(180deg, #fde68a, #f59e0b);
+                box-shadow: 0 0 16px rgba(245,158,11,.35);
+                animation: windowGlow 1.6s ease-in-out infinite alternate;
+            }
+
+            .hotel-window:nth-child(2),
+            .hotel-window:nth-child(5) {
+                animation-delay: .4s;
+            }
+
+            .hotel-window:nth-child(3),
+            .hotel-window:nth-child(6) {
+                animation-delay: .8s;
+            }
+
+            .hotel-door {
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                transform: translateX(-50%);
+                width: 26px;
+                height: 34px;
+                border-radius: 8px 8px 0 0;
+                background: linear-gradient(180deg, #0f172a, #334155);
+            }
+
+            .hotel-base {
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                transform: translateX(-50%);
+                width: 150px;
+                height: 10px;
+                border-radius: 999px;
+                background: rgba(255,255,255,.18);
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+                font-weight: 800;
+                letter-spacing: -.02em;
+                margin-bottom: 8px;
+                color: #f8fafc;
+            }
+
+            .welcome-copy {
+                color: rgba(255,255,255,.84);
+                font-size: 1rem;
+            }
+
+            .welcome-bar {
+                width: 260px;
+                height: 10px;
+                margin: 16px auto 0;
+                border-radius: 999px;
+                overflow: hidden;
+                background: rgba(255,255,255,.12);
+            }
+
+            .welcome-bar::after {
+                content: "";
+                display: block;
+                height: 100%;
+                width: 45%;
+                border-radius: 999px;
+                background: linear-gradient(90deg, #fde68a, #38bdf8, #34d399);
+                animation: loadingSweep 2.4s ease-in-out infinite;
+            }
+
+            @keyframes hotelFloat {
+                from { transform: translateY(0px) scale(1); }
+                to { transform: translateY(-8px) scale(1.03); }
+            }
+
+            @keyframes loadingSweep {
+                0% { transform: translateX(-140%); }
+                100% { transform: translateX(320%); }
+            }
+
+            @keyframes windowGlow {
+                from { opacity: .62; }
+                to { opacity: 1; }
+            }
+
+            @keyframes overlayFade {
+                0%, 70% { opacity: 1; visibility: visible; }
+                100% { opacity: 0; visibility: hidden; }
+            }
             </style>
             """,
             unsafe_allow_html=True,
@@ -271,6 +447,37 @@ class DashboardStyle:
             for label, value in cards.items()
         )
         st.markdown(f'<div class="metrics-ribbon">{html}</div>', unsafe_allow_html=True)
+
+    @staticmethod
+    def welcome_overlay() -> None:
+        st.markdown(
+            """
+            <div class="welcome-overlay">
+                <div class="welcome-card">
+                    <div class="hotel-graphic">
+                        <div class="hotel-roof"></div>
+                        <div class="hotel-building">
+                            <div class="hotel-sign">Hotel</div>
+                            <div class="hotel-windows">
+                                <div class="hotel-window"></div>
+                                <div class="hotel-window"></div>
+                                <div class="hotel-window"></div>
+                                <div class="hotel-window"></div>
+                                <div class="hotel-window"></div>
+                                <div class="hotel-window"></div>
+                            </div>
+                            <div class="hotel-door"></div>
+                        </div>
+                        <div class="hotel-base"></div>
+                    </div>
+                    <div class="welcome-title">Welcome To Smart Hotel Cancellation Prediction</div>
+                    <div class="welcome-copy">Preparing intelligent risk analytics, explainability, and live prediction tools.</div>
+                    <div class="welcome-bar"></div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
 class PredictionApp:
@@ -310,6 +517,11 @@ class PredictionApp:
     def run(self) -> None:
         st.set_page_config(page_title="Hotel Cancellation Intelligence", layout="wide")
         DashboardStyle.apply()
+        if "welcome_seen" not in st.session_state:
+            DashboardStyle.welcome_overlay()
+            st.session_state["welcome_seen"] = True
+            time.sleep(2.8)
+            st.rerun()
 
         metadata = self.load_json(self.artifacts_dir / "reports" / "metadata.json", {})
         confusion_data = self.load_json(self.artifacts_dir / "reports" / "confusion_matrices.json", {})
@@ -324,6 +536,9 @@ class PredictionApp:
         if holdout.empty or not schema.get("columns"):
             st.error("Saved training artifacts are missing. Run terminal training and redeploy the app.")
             return
+
+        holdout = self.normalize_holdout_frame(holdout)
+        cv_results = self.normalize_cv_frame(cv_results)
 
         DashboardStyle.hero(metadata)
 
@@ -342,6 +557,32 @@ class PredictionApp:
 
         with predict_tab:
             self.render_prediction_console(models, schema, examples, metadata)
+
+    @staticmethod
+    def normalize_holdout_frame(holdout: pd.DataFrame) -> pd.DataFrame:
+        frame = holdout.copy()
+        defaults = {
+            "complexity_score": np.nan,
+            "model_size_mb": np.nan,
+            "transformed_feature_count": np.nan,
+            "training_time_sec": np.nan,
+            "inference_time_sec": np.nan,
+            "inference_ms_per_row": np.nan,
+        }
+        for column, value in defaults.items():
+            if column not in frame.columns:
+                frame[column] = value
+        return frame
+
+    @staticmethod
+    def normalize_cv_frame(cv_results: pd.DataFrame) -> pd.DataFrame:
+        if cv_results.empty:
+            return cv_results
+        frame = cv_results.copy()
+        for column in ["accuracy", "precision", "recall", "f1", "balanced_accuracy", "roc_auc", "average_precision"]:
+            if column not in frame.columns:
+                frame[column] = np.nan
+        return frame
 
     def render_section_header(self, title: str, copy: str) -> None:
         st.markdown(

@@ -19,11 +19,10 @@
     "Extra Trees",
     "XGBoost",
     "Voting Ensemble",
-    "Stacking Ensemble"
+    "Stacking Ensemble",
+    "RNN"
   ],
-  "skipped_models": {
-    "RNN": "Not included in the refreshed year-removed holdout benchmark artifacts yet."
-  },
+  "skipped_models": {},
   "shap_explanations": [
     {
       "feature": "country_PRT",
