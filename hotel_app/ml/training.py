@@ -217,6 +217,7 @@ class TerminalTrainingRunner:
         models = self.default_models(ann_epochs=ann_epochs, rnn_epochs=rnn_epochs)
 
         benchmark_rows: List[Dict[str, Any]] = []
+        benchmark_rows_by_name: Dict[str, Dict[str, Any]] = {}  # keyed for later timing update
         details: Dict[str, Dict[str, Any]] = {}
         trained_models: Dict[str, Pipeline] = {}
         skipped_models: Dict[str, str] = {}
@@ -233,7 +234,8 @@ class TerminalTrainingRunner:
                 metrics.update(
                     {
                         "model": model_spec.name,
-                        "training_time_sec": training_time,
+                        "training_time_sec": training_time,      # updated after full-data retrain
+                        "benchmark_training_time_sec": training_time,  # 70% split only, preserved
                         "inference_time_sec": inference_time,
                         "inference_ms_per_row": (inference_time / max(len(x_test), 1)) * 1000,
                         "complexity_score": _count_model_complexity(trained_model.named_steps["model"]),
@@ -243,6 +245,7 @@ class TerminalTrainingRunner:
                     }
                 )
                 benchmark_rows.append(metrics)
+                benchmark_rows_by_name[model_spec.name] = metrics
                 details[model_spec.name] = detail
                 trained_models[model_spec.name] = trained_model
             except Exception as exc:
@@ -274,10 +277,17 @@ class TerminalTrainingRunner:
             if model_spec.name not in trained_models:
                 continue  # skip models that failed during benchmarking
             try:
+                full_start = time.perf_counter()
                 full_model = self.trainer.train_model(model_spec, x_data, y_data)
+                full_time = time.perf_counter() - full_start
                 artifacts.save_model(model_spec.name, full_model)
                 full_data_models[model_spec.name] = full_model
-                print(f"  Saved full-data model: {model_spec.name}")
+                # Update training_time_sec = benchmark time + full-data retrain time (true total cost)
+                if model_spec.name in benchmark_rows_by_name:
+                    row = benchmark_rows_by_name[model_spec.name]
+                    row["full_data_training_time_sec"] = full_time
+                    row["training_time_sec"] = row["benchmark_training_time_sec"] + full_time
+                print(f"  [{model_spec.name}] full-data train: {full_time:.1f}s  total: {row['training_time_sec']:.1f}s")
             except Exception as exc:
                 print(f"  WARNING: Could not retrain {model_spec.name} on full data: {exc}")
 
