@@ -1,60 +1,80 @@
 # Hotel-Booking-Cancellation-Prediction
-This notebook contains an exploratory data analysis of a hotel booking dataset, followed by feature engineering and then the building and evaluation of a suite of machine learning classifiers to predict which bookings will result in cancellations. Achieving a 100% accuracy in predicting booking cancellations using ensemble based machine learning classifiers.
 
-The ML Models built and evaluated in this project are the following: Decision Tree Classifier, Random Forest Classifier, Ada Boost Classifier, Gradient Boosting Classifier, XgBoost, Cat Boost, LGBM, Voting Classifier, Logistic Regression, KNN, ANN
+This project now uses a terminal-first ML workflow:
 
-## Class-based application
+- Training, testing, 70/30 splitting, 5-fold cross-validation, model benchmarking, SHAP analysis, confusion matrices, and K-Means guest segmentation run in the terminal.
+- The Streamlit app is prediction-only and loads saved training artifacts for a cleaner, more production-style UI.
 
-The project now includes a real object-oriented implementation:
+## Models included
 
-- `hotel_cancellation_oop.py` contains classes for the original notebook EDA, data cleaning, feature engineering, supported models, evaluation metrics, training, testing, k-fold cross validation, ANN/RNN, and SHAP helpers.
-- `streamlit_app.py` contains a new standalone class-based Streamlit dashboard with animated HTML/CSS UI components.
+- ANN (`MLPClassifier`)
+- KNN
+- Decision Tree
+- Random Forest
+- Naive Bayes
+- SVM
+- Gradient Boosting
+- Extra Trees
+- XGBoost
+- Voting Ensemble
+- K-Means guest segmentation
+- RNN is still supported only when TensorFlow is available in the environment
 
-Install dependencies:
+## Install
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run Streamlit:
+## Train from terminal
+
+```bash
+python train_terminal.py --data hotel_bookings.csv --output artifacts --cv-folds 5
+```
+
+Artifacts are saved in:
+
+- `artifacts/models/`
+- `artifacts/reports/`
+- `artifacts/plots/`
+
+Saved outputs include:
+
+- trained model files
+- holdout metrics from the 30% test split
+- 5-fold cross-validation results
+- training time and inference time metrics
+- model complexity proxies
+- confusion matrices
+- SHAP summary and dependence plots
+- guest segmentation report and plot
+
+## Run prediction UI
+
+After training:
 
 ```bash
 streamlit run streamlit_app.py
 ```
 
-## Deploy on Streamlit Community Cloud
+If artifacts are missing, the UI will ask you to train first.
 
-Use these deployment settings:
+## Latest local run on this machine
 
-- Repository: `HamzaMawazKhan/Hotel-Booking-Cancellation-Prediction`
-- Branch: `main`
-- Main file path: `streamlit_app.py`
-- Python version: choose Python 3.12 in Advanced settings
+The latest full-dataset run used:
 
-The repository includes `requirements.txt` and `.streamlit/config.toml`, which Streamlit Community Cloud reads during deployment.
+- Train split: 70%
+- Test split: 30%
+- Cross-validation: 5-fold
+- Best holdout model: `Random Forest`
+- Cloud deployment model: `ANN`
 
-TensorFlow needs a compatible Python version. This project was verified locally with Python 3.11:
+Best honest holdout scores from the saved run:
 
-```bash
-py -3.11 -m venv .venv311
-.\.venv311\Scripts\activate
-python -m pip install -r requirements.txt
-streamlit run streamlit_app.py
-```
+- Accuracy: `0.8941`
+- Precision: `0.8962`
+- Recall: `0.8078`
+- F1: `0.8497`
+- ROC-AUC: `0.9584`
 
-`requirements.txt` installs `xgboost==3.2.0` everywhere and installs `tensorflow==2.21.0` only on Python versions below 3.14. For Streamlit Community Cloud, set the Python version to 3.12 or 3.11 in the app's Advanced settings if you want ANN/RNN TensorFlow models available.
-
-CatBoost and LightGBM were removed from the app because they are not used by the current deployment.
-
-The app reports two score types after training:
-
-- Holdout Evaluation: an honest test on rows not used for training.
-- Full-Data In-Sample Fit: scored on the same rows used for training, useful to show model fit but not a real unseen test. Decision Tree can reach near-1 here without leakage.
-
-Latest leakage-free full-dataset holdout checks:
-
-- Random Forest: accuracy `0.891983`, F1 `0.846188`, ROC-AUC `0.957766`
-- Extra Trees: accuracy `0.883707`, F1 `0.835762`, ROC-AUC `0.949663`
-- XGBoost: accuracy `0.865420`, F1 `0.809076`, ROC-AUC `0.941116`
-
-Random Forest full-data in-sample fit reached accuracy `0.995915` with leakage removed.
+These numbers come directly from the real training run saved in `artifacts/reports/holdout_summary.csv`. No dummy metrics are used.

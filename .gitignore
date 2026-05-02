@@ -8,3 +8,5 @@ venv/
 env/
 .env
 .DS_Store
+artifacts/models/*.joblib
+!artifacts/models/deployment_model.joblib
