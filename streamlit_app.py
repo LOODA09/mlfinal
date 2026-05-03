@@ -1059,15 +1059,13 @@ class PredictionApp:
 
         deposit_type = str(raw_input.iloc[0].get("deposit_type", "")).strip()
         
-        # Immediate UI Override: If they paid a non-refundable deposit, they almost never cancel.
-        # This overrides the old model's dataset anomaly without needing a 2-hour retrain.
         if deposit_type == "Non Refund":
-            adjusted_probability = min(cancel_probability, 0.05)
-            adjusted_prediction = 0
+            adjusted_probability = max(cancel_probability - 0.10, 0.0)
+            adjusted_prediction = 1 if adjusted_probability >= 0.5 else 0
             return adjusted_prediction, adjusted_probability
 
         if deposit_type == "Refundable":
-            adjusted_probability = min(cancel_probability + 0.15, 1.0)
+            adjusted_probability = min(cancel_probability + 0.10, 1.0)
             adjusted_prediction = 1 if adjusted_probability >= 0.5 else 0
             return adjusted_prediction, adjusted_probability
 
