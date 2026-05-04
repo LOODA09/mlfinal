@@ -995,6 +995,13 @@ class PredictionApp:
         examples: pd.DataFrame,
     ) -> None:
         model_input = self.processor.add_engineered_features(raw_input.copy())
+        
+        # Neutralize the training effect: Force the model to evaluate a baseline without deposit bias.
+        # This guarantees that the ML model's training has ZERO effect on deposit probability,
+        # and ONLY the UI rules below will shift the probability.
+        if "deposit_type" in model_input.columns:
+            model_input["deposit_type"] = "No Deposit"
+
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
         cancel_probability = float(probabilities[0]) if probabilities is not None else None
