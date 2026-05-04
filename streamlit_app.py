@@ -49,40 +49,44 @@ class DashboardStyle:
             .hero-shell {
                 position: relative;
                 overflow: hidden;
-                padding: 34px 34px 30px;
+                padding: 40px 38px 36px;
                 border-radius: 30px;
                 margin-bottom: 22px;
                 color: white;
-                background: linear-gradient(135deg, #07111f 0%, #0f3d56 46%, #0f766e 100%);
+                background: linear-gradient(-45deg, #07111f, #0f3d56, #0f766e, #064e3b);
+                background-size: 400% 400%;
                 box-shadow: 0 34px 90px rgba(7, 17, 31, 0.20);
-                animation: fadeLift .8s ease both;
+                animation: fadeLift .8s ease both, heroGradientWave 12s ease infinite;
             }
 
             .hero-shell::before,
             .hero-shell::after {
                 content: "";
                 position: absolute;
-                border-radius: 999px;
-                opacity: .55;
-                filter: blur(10px);
+                left: -10%;
+                width: 120%;
+                height: 300px;
+                border-radius: 42%;
+                opacity: .12;
+                pointer-events: none;
             }
 
             .hero-shell::before {
-                width: 280px;
-                height: 280px;
-                right: -70px;
-                top: -85px;
-                background: rgba(250, 204, 21, .18);
-                animation: floatA 9s ease-in-out infinite alternate;
+                bottom: -220px;
+                background: linear-gradient(90deg, #38bdf8, #0ea5e9, #34d399);
+                animation: waveDriftA 14s linear infinite;
             }
 
             .hero-shell::after {
-                width: 220px;
-                height: 220px;
-                left: -55px;
-                bottom: -90px;
-                background: rgba(255, 255, 255, .11);
-                animation: floatB 12s ease-in-out infinite alternate;
+                bottom: -240px;
+                background: linear-gradient(90deg, #fde68a, #f59e0b, #fb7185);
+                animation: waveDriftB 18s linear infinite;
+            }
+
+            @keyframes heroGradientWave {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
             }
 
             .hero-topline {
