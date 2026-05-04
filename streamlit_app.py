@@ -1120,14 +1120,17 @@ class PredictionApp:
         parking = float(raw_input.iloc[0].get("required_car_parking_spaces", 0))
         if parking > 0:
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - (0.02 * parking), 0.0)
+            drop = 0.02 * parking
+            # Decrease by 2% per spot. Floor at 1% to prevent hitting 0, unless already < 1%.
+            cancel_probability = max(cancel_probability - drop, 0.01) if cancel_probability >= 0.01 else cancel_probability
             manual_adjustments.append({"feature": "required_car_parking_spaces", "feature_value": parking, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 4: Repeated Guest ---
         repeated = int(raw_input.iloc[0].get("is_repeated_guest", 0))
         if repeated == 1:
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - 0.05, 0.0)
+            # Decrease by 5%. Floor at 1% to prevent hitting 0, unless already < 1%.
+            cancel_probability = max(cancel_probability - 0.05, 0.01) if cancel_probability >= 0.01 else cancel_probability
             manual_adjustments.append({"feature": "is_repeated_guest", "feature_value": "Yes", "shap_value": cancel_probability - old_prob})
 
         # Re-evaluate final prediction class based on adjusted probability
