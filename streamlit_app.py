@@ -1102,32 +1102,32 @@ class PredictionApp:
         deposit_type = str(raw_input.iloc[0].get("deposit_type", "")).strip()
         if deposit_type == "Non Refund":
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - 0.10, 0.0)
+            cancel_probability = max(cancel_probability - 0.10, 0.01)
             manual_adjustments.append({"feature": "deposit_type", "feature_value": deposit_type, "shap_value": cancel_probability - old_prob})
         elif deposit_type == "Refundable":
             old_prob = cancel_probability
-            cancel_probability = min(cancel_probability + 0.10, 1.0)
+            cancel_probability = min(cancel_probability + 0.10, 0.99)
             manual_adjustments.append({"feature": "deposit_type", "feature_value": deposit_type, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 2: Meal Plan ---
         meal = str(raw_input.iloc[0].get("meal", "")).strip()
         if meal == "FB":
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - 0.10, 0.0)
+            cancel_probability = max(cancel_probability - 0.10, 0.01)
             manual_adjustments.append({"feature": "meal", "feature_value": meal, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 3: Parking Spaces ---
         parking = float(raw_input.iloc[0].get("required_car_parking_spaces", 0))
         if parking > 0:
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - (0.02 * parking), 0.0)
+            cancel_probability = max(cancel_probability - (0.02 * parking), 0.01)
             manual_adjustments.append({"feature": "required_car_parking_spaces", "feature_value": parking, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 4: Repeated Guest ---
         repeated = int(raw_input.iloc[0].get("is_repeated_guest", 0))
         if repeated == 1:
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - 0.05, 0.0)
+            cancel_probability = max(cancel_probability - 0.05, 0.01)
             manual_adjustments.append({"feature": "is_repeated_guest", "feature_value": "Yes", "shap_value": cancel_probability - old_prob})
 
         # Re-evaluate final prediction class based on adjusted probability
