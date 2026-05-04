@@ -1005,7 +1005,7 @@ class PredictionApp:
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
         cancel_probability = float(probabilities[0]) if probabilities is not None else None
-        prediction, cancel_probability = self.apply_ui_rules(raw_input, prediction, cancel_probability)
+        prediction, cancel_probability, manual_adjustments = self.apply_ui_rules(raw_input, prediction, cancel_probability)
 
         st.divider()
         status_col, metric_col = st.columns([1, 1], gap="large")
@@ -1027,6 +1027,28 @@ class PredictionApp:
             )
             st.info(risk_text)
 
+        # K-Means Segmentation Matching
+        segment_path = self.artifacts_dir / "reports" / "guest_segments.csv"
+        if segment_path.exists():
+            try:
+                segments_df = pd.read_csv(segment_path)
+                features_to_match = ["lead_time", "adr", "total_nights", "total_guests", "previous_cancellations"]
+                
+                live_values = {col: float(model_input[col].iloc[0]) if col in model_input.columns else 0.0 for col in features_to_match}
+                
+                min_dist = float('inf')
+                best_segment = -1
+                for _, row in segments_df.iterrows():
+                    dist = sum((((row[col] - live_values[col]) / max(1.0, row[col])) ** 2) for col in features_to_match if col in row)
+                    if dist < min_dist:
+                        min_dist = dist
+                        best_segment = int(row['segment'])
+                
+                if best_segment >= 0:
+                    st.markdown(f"💡 **Guest Intelligence:** Based on k-means clustering, this booking aligns closely with the behavior profile of **Segment {best_segment}**.")
+            except Exception:
+                pass
+
         if examples.empty:
             return
 
@@ -1046,6 +1068,13 @@ class PredictionApp:
                     "shap_value": shap_row,
                 }
             )
+            
+            # Inject our manual UI rules directly into the SHAP explanation
+            if manual_adjustments:
+                manual_frame = pd.DataFrame(manual_adjustments)
+                explanation_frame = pd.concat([explanation_frame, manual_frame], ignore_index=True)
+                # If feature exists in both, sum their shap impacts
+                explanation_frame = explanation_frame.groupby("feature").agg({"feature_value": "first", "shap_value": "sum"}).reset_index()
             increasing = explanation_frame[explanation_frame["shap_value"] > 0].nlargest(5, "shap_value")
             decreasing = explanation_frame[explanation_frame["shap_value"] < 0].nsmallest(5, "shap_value")
             st.session_state["latest_prediction"] = {
@@ -1064,34 +1093,47 @@ class PredictionApp:
         raw_input: pd.DataFrame,
         prediction: int,
         cancel_probability: float | None,
-    ) -> tuple[int, float | None]:
+    ) -> tuple[int, float | None, list[dict]]:
+        manual_adjustments = []
         if cancel_probability is None or raw_input.empty:
-            return prediction, cancel_probability
+            return prediction, cancel_probability, manual_adjustments
 
         # --- Rule 1: Deposit Type ---
         deposit_type = str(raw_input.iloc[0].get("deposit_type", "")).strip()
         if deposit_type == "Non Refund":
+            old_prob = cancel_probability
             cancel_probability = max(cancel_probability - 0.10, 0.0)
+            manual_adjustments.append({"feature": "deposit_type", "feature_value": deposit_type, "shap_value": cancel_probability - old_prob})
         elif deposit_type == "Refundable":
+            old_prob = cancel_probability
             cancel_probability = min(cancel_probability + 0.10, 1.0)
+            manual_adjustments.append({"feature": "deposit_type", "feature_value": deposit_type, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 2: Meal Plan ---
-        # The model natively handles HB correctly. 
-        # FB is forced to decrease risk by 10%.
         meal = str(raw_input.iloc[0].get("meal", "")).strip()
         if meal == "FB":
+            old_prob = cancel_probability
             cancel_probability = max(cancel_probability - 0.10, 0.0)
+            manual_adjustments.append({"feature": "meal", "feature_value": meal, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 3: Parking Spaces ---
-        # Requesting parking shows high intent to arrive. Decreases risk, but never 0%.
         parking = float(raw_input.iloc[0].get("required_car_parking_spaces", 0))
         if parking > 0:
-            cancel_probability = max(cancel_probability - 0.25, 0.05)
+            old_prob = cancel_probability
+            cancel_probability = max(cancel_probability - (0.02 * parking), 0.05)
+            manual_adjustments.append({"feature": "required_car_parking_spaces", "feature_value": parking, "shap_value": cancel_probability - old_prob})
+
+        # --- Rule 4: Repeated Guest ---
+        repeated = int(raw_input.iloc[0].get("is_repeated_guest", 0))
+        if repeated == 1:
+            old_prob = cancel_probability
+            cancel_probability = max(cancel_probability - 0.05, 0.05)
+            manual_adjustments.append({"feature": "is_repeated_guest", "feature_value": "Yes", "shap_value": cancel_probability - old_prob})
 
         # Re-evaluate final prediction class based on adjusted probability
         prediction = 1 if cancel_probability >= 0.5 else 0
 
-        return prediction, cancel_probability
+        return prediction, cancel_probability, manual_adjustments
 
     def render_image_card(self, title: str, copy: str, path: Path) -> None:
         st.markdown(f"### {title}")
