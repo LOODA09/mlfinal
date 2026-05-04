@@ -296,7 +296,7 @@ class TerminalTrainingRunner:
         if deployment_model_name and deployment_model_name in full_data_models:
             deployment_path = artifacts.models_dir / "deployment_model.joblib"
             joblib.dump(full_data_models[deployment_model_name], deployment_path)
-            print(f"  Deployment model saved: {deployment_model_name} → deployment_model.joblib")
+            print(f"  Deployment model saved: {deployment_model_name} -> deployment_model.joblib")
         elif trained_models:
             # Fallback: use the best available full-data model (or benchmark model if full-data failed)
             fallback_name = next(iter(full_data_models or trained_models))
@@ -304,7 +304,7 @@ class TerminalTrainingRunner:
             fallback_model = (full_data_models or trained_models)[fallback_name]
             deployment_path = artifacts.models_dir / "deployment_model.joblib"
             joblib.dump(fallback_model, deployment_path)
-            print(f"  Deployment model saved (fallback): {fallback_name} → deployment_model.joblib")
+            print(f"  Deployment model saved (fallback): {fallback_name} -> deployment_model.joblib")
 
         segmentation = self._save_segmentation_artifacts(artifacts, x_data)
         metadata = {

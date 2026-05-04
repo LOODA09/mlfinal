@@ -1,81 +1,10 @@
 {
-  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_bookings.csv",
-  "python_version": "3.11.9",
-  "tensorflow_version": "2.21.0",
-  "train_rows": 83446,
-  "test_rows": 35763,
-  "train_ratio": 0.7,
-  "test_ratio": 0.3,
-  "cross_validation_folds": 5,
-  "best_model": "Stacking Ensemble",
-  "trained_models": [
-    "ANN",
-    "KNN",
-    "Decision Tree",
-    "Random Forest",
-    "Naive Bayes",
-    "SVM",
-    "Gradient Boosting",
-    "Extra Trees",
-    "XGBoost",
-    "Voting Ensemble",
-    "Stacking Ensemble",
-    "RNN"
-  ],
-  "skipped_models": {},
-  "shap_explanations": [
-    {
-      "feature": "country_PRT",
-      "mean_abs_shap": 0.08286941696565074,
-      "correlation_with_risk": 0.9408936913024922,
-      "explanation": "Higher values tend to increase cancellation risk."
-    },
-    {
-      "feature": "deposit_type_Non Refund",
-      "mean_abs_shap": 0.0409836726812859,
-      "correlation_with_risk": 0.9878661810176176,
-      "explanation": "Higher values tend to increase cancellation risk."
-    },
-    {
-      "feature": "deposit_type_No Deposit",
-      "mean_abs_shap": 0.032264750446074505,
-      "correlation_with_risk": -0.9781648958921321,
-      "explanation": "Higher values tend to reduce cancellation risk."
-    }
-  ],
-  "segmentation_summary_rows": [
-    {
-      "segment": 0,
-      "lead_time": 47.4,
-      "adr": 86.91,
-      "total_nights": 2.63,
-      "total_guests": 1.72,
-      "previous_cancellations": 0.04
-    },
-    {
-      "segment": 1,
-      "lead_time": 239.61,
-      "adr": 88.12,
-      "total_nights": 4.75,
-      "total_guests": 1.93,
-      "previous_cancellations": 0.12
-    },
-    {
-      "segment": 2,
-      "lead_time": 193.96,
-      "adr": 62.05,
-      "total_nights": 3.47,
-      "total_guests": 1.97,
-      "previous_cancellations": 19.84
-    },
-    {
-      "segment": 3,
-      "lead_time": 76.46,
-      "adr": 173.52,
-      "total_nights": 3.97,
-      "total_guests": 2.85,
-      "previous_cancellations": 0.01
-    }
-  ],
-  "deployment_model": "ANN"
+    "best_model": "Decision Tree",
+    "deployment_model": "XGBoost",
+    "train_ratio": 0.7,
+    "test_ratio": 0.3,
+    "cross_validation_folds": 5,
+    "python_version": "3.14.3",
+    "tensorflow_version": "2.14.0",
+    "shap_explanations": []
 }

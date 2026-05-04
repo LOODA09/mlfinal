@@ -18,7 +18,7 @@ class VotingEnsembleModel(BaseHotelModel):
                     min_samples_leaf=2,
                     class_weight="balanced_subsample",
                     random_state=42,
-                    n_jobs=-1,
+                    n_jobs=1,
                 ),
             ),
             ("gradient_boosting", GradientBoostingClassifier(random_state=42)),
@@ -29,9 +29,9 @@ class VotingEnsembleModel(BaseHotelModel):
                     max_features="sqrt",
                     min_samples_leaf=2,
                     random_state=42,
-                    n_jobs=-1,
+                    n_jobs=1,
                 ),
             ),
             ("xgboost", XGBoostModel().get_estimator()),
         ]
-        return VotingClassifier(estimators=estimators, voting="soft", n_jobs=-1)
+        return VotingClassifier(estimators=estimators, voting="soft", n_jobs=1)

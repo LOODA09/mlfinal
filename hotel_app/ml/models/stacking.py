@@ -17,7 +17,7 @@ class StackingEnsembleModel(BaseHotelModel):
                     min_samples_leaf=2,
                     class_weight="balanced_subsample",
                     random_state=42,
-                    n_jobs=-1,
+                    n_jobs=1,
                 ),
             ),
             (
@@ -27,7 +27,7 @@ class StackingEnsembleModel(BaseHotelModel):
                     max_features="sqrt",
                     min_samples_leaf=2,
                     random_state=42,
-                    n_jobs=-1,
+                    n_jobs=1,
                 ),
             ),
             ("xgboost", XGBoostModel().get_estimator()),
@@ -37,6 +37,6 @@ class StackingEnsembleModel(BaseHotelModel):
             estimators=estimators,
             final_estimator=LogisticRegression(max_iter=1000, random_state=42),
             stack_method="predict_proba",
-            n_jobs=-1,
+            n_jobs=1,
             passthrough=False,
         )

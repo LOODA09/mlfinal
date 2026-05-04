@@ -25,6 +25,6 @@ class XGBoostModel(BaseHotelModel):
             reg_lambda=1.5,
             eval_metric="logloss",
             tree_method="hist",
-            n_jobs=-1,
+            n_jobs=1,
             random_state=42,
         )
