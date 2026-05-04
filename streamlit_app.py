@@ -1068,17 +1068,28 @@ class PredictionApp:
         if cancel_probability is None or raw_input.empty:
             return prediction, cancel_probability
 
+        # --- Rule 1: Deposit Type ---
         deposit_type = str(raw_input.iloc[0].get("deposit_type", "")).strip()
-        
         if deposit_type == "Non Refund":
-            adjusted_probability = max(cancel_probability - 0.10, 0.0)
-            adjusted_prediction = 1 if adjusted_probability >= 0.5 else 0
-            return adjusted_prediction, adjusted_probability
+            cancel_probability = max(cancel_probability - 0.10, 0.0)
+        elif deposit_type == "Refundable":
+            cancel_probability = min(cancel_probability + 0.10, 1.0)
 
-        if deposit_type == "Refundable":
-            adjusted_probability = min(cancel_probability + 0.10, 1.0)
-            adjusted_prediction = 1 if adjusted_probability >= 0.5 else 0
-            return adjusted_prediction, adjusted_probability
+        # --- Rule 2: Meal Plan ---
+        # The model natively handles HB correctly. 
+        # FB is forced to decrease risk by 10%.
+        meal = str(raw_input.iloc[0].get("meal", "")).strip()
+        if meal == "FB":
+            cancel_probability = max(cancel_probability - 0.10, 0.0)
+
+        # --- Rule 3: Parking Spaces ---
+        # Requesting parking shows high intent to arrive. Decreases risk, but never 0%.
+        parking = float(raw_input.iloc[0].get("required_car_parking_spaces", 0))
+        if parking > 0:
+            cancel_probability = max(cancel_probability - 0.25, 0.05)
+
+        # Re-evaluate final prediction class based on adjusted probability
+        prediction = 1 if cancel_probability >= 0.5 else 0
 
         return prediction, cancel_probability
 
