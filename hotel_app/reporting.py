@@ -25,6 +25,20 @@ MODEL_DESCRIPTIONS = {
 }
 
 
+def _format_duration(seconds: object) -> str:
+    try:
+        value = float(seconds)
+    except (TypeError, ValueError):
+        return "N/A"
+    if value < 60:
+        return f"{value:.1f}s"
+    minutes, remainder = divmod(int(round(value)), 60)
+    if minutes < 60:
+        return f"{minutes}m {remainder}s"
+    hours, minutes = divmod(minutes, 60)
+    return f"{hours}h {minutes}m"
+
+
 class BenchmarkPdfBuilder:
     def __init__(self, artifacts_dir: str | Path = "artifacts") -> None:
         self.artifacts_dir = Path(artifacts_dir)
@@ -34,7 +48,7 @@ class BenchmarkPdfBuilder:
     def build(self) -> Path:
         holdout = pd.read_csv(self.reports_dir / "holdout_summary.csv")
         cv_results = pd.read_csv(self.reports_dir / "cross_validation_results.csv")
-        metadata = json.loads((self.reports_dir / "metadata.json").read_text(encoding="utf-8"))
+        metadata = json.loads((self.reports_dir / "metadata.json").read_text(encoding="utf-8-sig"))
 
         with PdfPages(self.output_path) as pdf:
             pdf.savefig(self._cover_page(metadata))
@@ -52,11 +66,16 @@ class BenchmarkPdfBuilder:
             "Hotel Cancellation Prediction",
             "",
             f"Best benchmark model: {metadata.get('best_model', 'N/A')}",
+            f"Deployment artifact: {metadata.get('deployment_model', metadata.get('best_model', 'N/A'))}",
             f"Train / test split: {int(metadata.get('train_ratio', 0.7) * 100)}% / {int(metadata.get('test_ratio', 0.3) * 100)}%",
             f"Cross-validation: {metadata.get('cross_validation_folds', 'N/A')}-fold",
             f"Runtime: Python {metadata.get('python_version', 'N/A')} / TensorFlow {metadata.get('tensorflow_version', 'off')}",
+            f"Pipeline wall clock: {_format_duration(metadata.get('total_pipeline_wall_clock_sec'))}",
             "",
-            "This report summarizes how each trained model behaved on the dataset using the saved benchmark artifacts.",
+            metadata.get(
+                "pipeline_wall_clock_note",
+                "This report summarizes how each trained model behaved on the dataset using the saved benchmark artifacts.",
+            ),
         ]
         ax.text(0.08, 0.92, "\n".join(lines), va="top", ha="left", fontsize=14)
         return fig
@@ -67,7 +86,23 @@ class BenchmarkPdfBuilder:
         display = holdout.copy()
         if "complexity_tier" not in display.columns:
             display["complexity_tier"] = "Derived in dashboard"
-        cols = [c for c in ["model", "accuracy", "precision", "recall", "f1", "roc_auc", "training_time_sec", "inference_ms_per_row", "complexity_tier"] if c in display.columns]
+        cols = [
+            c
+            for c in [
+                "model",
+                "accuracy",
+                "precision",
+                "recall",
+                "f1",
+                "roc_auc",
+                "benchmark_training_time_sec",
+                "full_data_training_time_sec",
+                "training_time_sec",
+                "inference_ms_per_row",
+                "complexity_tier",
+            ]
+            if c in display.columns
+        ]
         table = ax.table(
             cellText=display[cols].round(4).astype(str).values,
             colLabels=cols,
@@ -108,7 +143,8 @@ class BenchmarkPdfBuilder:
             line = (
                 f"{row.model}: {description} Holdout accuracy {row.accuracy:.4f}, "
                 f"precision {row.precision:.4f}, recall {row.recall:.4f}, F1 {row.f1:.4f}, "
-                f"ROC-AUC {row.roc_auc:.4f}, training time {row.training_time_sec:.2f}s, "
+                f"ROC-AUC {row.roc_auc:.4f}, benchmark fit {getattr(row, 'benchmark_training_time_sec', float('nan')):.2f}s, "
+                f"full-data retrain {getattr(row, 'full_data_training_time_sec', float('nan')):.2f}s, total saved run cost {row.training_time_sec:.2f}s, "
                 f"inference {row.inference_ms_per_row:.4f} ms/row."
             )
             wrapped = fill(line, width=90)

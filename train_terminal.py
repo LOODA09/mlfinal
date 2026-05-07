@@ -18,6 +18,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--ann-epochs", type=int, default=250, help="ANN max iterations.")
     parser.add_argument("--rnn-epochs", type=int, default=10, help="RNN epochs when TensorFlow is available.")
     parser.add_argument("--shap-rows", type=int, default=250, help="Rows to use for SHAP plots.")
+    parser.add_argument(
+        "--models",
+        nargs="+",
+        default=None,
+        help="Optional list of model names to train, for example --models ANN \"Random Forest\" XGBoost",
+    )
     return parser
 
 
@@ -31,6 +37,7 @@ def main() -> None:
         ann_epochs=args.ann_epochs,
         rnn_epochs=args.rnn_epochs,
         shap_rows=args.shap_rows,
+        selected_models=args.models,
     )
 
     holdout = results["holdout_summary"].copy()

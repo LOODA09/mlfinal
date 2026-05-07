@@ -6,7 +6,7 @@ import importlib
 from pathlib import Path
 import sys
 import time
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, Sequence
 
 import joblib
 import numpy as np
@@ -27,6 +27,7 @@ from .models import (
     ExtraTreesModel,
     GradientBoostingModel,
     KNNModel,
+    LogisticRegressionModel,
     NaiveBayesModel,
     RandomForestModel,
     RNNModel,
@@ -176,25 +177,65 @@ class TerminalTrainingRunner:
         self.random_state = random_state
         self.processor = self.trainer.processor
 
-    def default_models(self, ann_epochs: int = 250, rnn_epochs: int = 10) -> List[BaseHotelModel]:
-        models: List[BaseHotelModel] = [
-            ANNModel(epochs=ann_epochs),
-            KNNModel(),
-            DecisionTreeModel(),
-            RandomForestModel(),
-            NaiveBayesModel(),
-            SVMModel(),
-            GradientBoostingModel(),
-            ExtraTreesModel(),
-            XGBoostModel(),
-            VotingEnsembleModel(),
-            StackingEnsembleModel(),
+    def default_models(
+        self,
+        ann_epochs: int = 250,
+        rnn_epochs: int = 10,
+        selected_models: Optional[Sequence[str]] = None,
+    ) -> List[BaseHotelModel]:
+        default_order = [
+            "ANN",
+            "KNN",
+            "Decision Tree",
+            "Random Forest",
+            "Naive Bayes",
+            "SVM",
+            "Gradient Boosting",
+            "Extra Trees",
+            "XGBoost",
+            "Voting Ensemble",
+            "Stacking Ensemble",
+            "RNN",
         ]
+        model_names = list(selected_models) if selected_models else default_order
+        models: List[BaseHotelModel] = []
+        tensorflow_available = False
         try:
             importlib.import_module("tensorflow")
-            models.append(RNNModel(epochs=rnn_epochs))
+            tensorflow_available = True
         except ImportError:
-            pass
+            tensorflow_available = False
+
+        for model_name in model_names:
+            if model_name == "ANN":
+                models.append(ANNModel(epochs=ann_epochs))
+            elif model_name == "Logistic Regression":
+                models.append(LogisticRegressionModel())
+            elif model_name == "KNN":
+                models.append(KNNModel())
+            elif model_name == "Decision Tree":
+                models.append(DecisionTreeModel())
+            elif model_name == "Random Forest":
+                models.append(RandomForestModel())
+            elif model_name == "Naive Bayes":
+                models.append(NaiveBayesModel())
+            elif model_name == "SVM":
+                models.append(SVMModel())
+            elif model_name == "Gradient Boosting":
+                models.append(GradientBoostingModel())
+            elif model_name == "Extra Trees":
+                models.append(ExtraTreesModel())
+            elif model_name == "XGBoost":
+                models.append(XGBoostModel())
+            elif model_name == "Voting Ensemble":
+                models.append(VotingEnsembleModel())
+            elif model_name == "Stacking Ensemble":
+                models.append(StackingEnsembleModel())
+            elif model_name == "RNN":
+                if tensorflow_available:
+                    models.append(RNNModel(epochs=rnn_epochs))
+            else:
+                raise ValueError(f"Unknown model requested: {model_name}")
         return models
 
     def run(
@@ -205,22 +246,29 @@ class TerminalTrainingRunner:
         ann_epochs: int = 250,
         rnn_epochs: int = 10,
         shap_rows: int = 250,
+        selected_models: Optional[Sequence[str]] = None,
     ) -> Dict[str, Any]:
         from .testing import ModelTester
 
+        pipeline_start = time.perf_counter()
         tester = ModelTester()
         artifacts = TrainingArtifacts(output_dir)
         raw_data = self.processor.load_data(data_path)
         prediction_inputs = self.processor.build_raw_prediction_inputs(raw_data, remove_leakage_features=True)
         x_data, y_data = self.processor.build_features(raw_data, remove_leakage_features=True)
         x_train, x_test, y_train, y_test = self.trainer.split_data(x_data, y_data)
-        models = self.default_models(ann_epochs=ann_epochs, rnn_epochs=rnn_epochs)
+        models = self.default_models(
+            ann_epochs=ann_epochs,
+            rnn_epochs=rnn_epochs,
+            selected_models=selected_models,
+        )
 
         benchmark_rows: List[Dict[str, Any]] = []
         benchmark_rows_by_name: Dict[str, Dict[str, Any]] = {}  # keyed for later timing update
         details: Dict[str, Dict[str, Any]] = {}
         trained_models: Dict[str, Pipeline] = {}
         skipped_models: Dict[str, str] = {}
+        benchmark_phase_start = time.perf_counter()
 
         for model_spec in models:
             try:
@@ -254,14 +302,15 @@ class TerminalTrainingRunner:
         holdout_summary = pd.DataFrame(benchmark_rows).sort_values(
             ["f1", "accuracy", "roc_auc"], ascending=[False, False, False]
         )
-        artifacts.save_dataframe("holdout_summary.csv", holdout_summary)
         cv_results = self.trainer.k_fold_cross_validate(
             [model for model in models if model.name in trained_models], x_data, y_data, n_splits=cv_folds
         )
         artifacts.save_dataframe("cross_validation_results.csv", cv_results)
+        benchmark_phase_wall_clock_sec = time.perf_counter() - benchmark_phase_start
 
         best_model_name = holdout_summary.iloc[0]["model"] if not holdout_summary.empty else None
         shap_explanations: List[Dict[str, Any]] = []
+        shap_phase_start = time.perf_counter()
         if best_model_name:
             try:
                 shap_explanations = self._save_shap_artifacts(
@@ -269,10 +318,12 @@ class TerminalTrainingRunner:
                 )
             except Exception:
                 shap_explanations = []
+        shap_phase_wall_clock_sec = time.perf_counter() - shap_phase_start
 
         # ── Retrain every benchmarked model on the FULL dataset and save ──────
         print("\nRetraining all models on full dataset for deployment...")
         full_data_models: Dict[str, Pipeline] = {}
+        full_retrain_phase_start = time.perf_counter()
         for model_spec in models:
             if model_spec.name not in trained_models:
                 continue  # skip models that failed during benchmarking
@@ -290,9 +341,11 @@ class TerminalTrainingRunner:
                 print(f"  [{model_spec.name}] full-data train: {full_time:.1f}s  total: {row['training_time_sec']:.1f}s")
             except Exception as exc:
                 print(f"  WARNING: Could not retrain {model_spec.name} on full data: {exc}")
+        full_retrain_phase_wall_clock_sec = time.perf_counter() - full_retrain_phase_start
 
         # Save the best-performing model as the deployment model
         deployment_model_name = best_model_name
+        artifact_finalize_start = time.perf_counter()
         if deployment_model_name and deployment_model_name in full_data_models:
             deployment_path = artifacts.models_dir / "deployment_model.joblib"
             joblib.dump(full_data_models[deployment_model_name], deployment_path)
@@ -307,6 +360,11 @@ class TerminalTrainingRunner:
             print(f"  Deployment model saved (fallback): {fallback_name} -> deployment_model.joblib")
 
         segmentation = self._save_segmentation_artifacts(artifacts, x_data)
+        holdout_summary = pd.DataFrame(benchmark_rows).sort_values(
+            ["f1", "accuracy", "roc_auc"], ascending=[False, False, False]
+        )
+        artifacts.save_dataframe("holdout_summary.csv", holdout_summary)
+        artifact_finalize_wall_clock_sec = time.perf_counter() - artifact_finalize_start
         metadata = {
             "data_path": str(Path(data_path).resolve()),
             "python_version": sys.version.split()[0],
@@ -324,7 +382,18 @@ class TerminalTrainingRunner:
             "shap_explanations": shap_explanations,
             "segmentation_summary_rows": segmentation["summary"].to_dict(orient="records"),
             "tensorflow_version": None,
+            "benchmark_phase_wall_clock_sec": benchmark_phase_wall_clock_sec,
+            "shap_phase_wall_clock_sec": shap_phase_wall_clock_sec,
+            "full_retrain_phase_wall_clock_sec": full_retrain_phase_wall_clock_sec,
+            "artifact_finalize_wall_clock_sec": artifact_finalize_wall_clock_sec,
+            "total_pipeline_wall_clock_sec": time.perf_counter() - pipeline_start,
         }
+        metadata["pipeline_wall_clock_note"] = (
+            "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, "
+            "SHAP generation, full-data retraining for deployment artifacts, and report creation. "
+            "Per-model training_time_sec is the sum of benchmark_training_time_sec and "
+            "full_data_training_time_sec for the saved run."
+        )
         try:
             metadata["tensorflow_version"] = importlib.import_module("tensorflow").__version__
         except ImportError:

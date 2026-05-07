@@ -21,6 +21,20 @@ DATA_PATH = Path("hotel_booking.csv") if Path("hotel_booking.csv").exists() else
 EXCLUDED_FEATURES = {"arrival_date_year"}
 
 
+def _format_duration(seconds: Any) -> str:
+    try:
+        value = float(seconds)
+    except (TypeError, ValueError):
+        return "N/A"
+    if value < 60:
+        return f"{value:.1f}s"
+    minutes, remainder = divmod(int(round(value)), 60)
+    if minutes < 60:
+        return f"{minutes}m {remainder}s"
+    hours, minutes = divmod(minutes, 60)
+    return f"{hours}h {minutes}m"
+
+
 class DashboardStyle:
     @staticmethod
     def apply() -> None:
@@ -539,6 +553,7 @@ class DashboardStyle:
             "Cloud Model": metadata.get("deployment_model", metadata.get("best_model", "N/A")),
             "Train / Test": f"{int(metadata.get('train_ratio', 0.7) * 100)}% / {int(metadata.get('test_ratio', 0.3) * 100)}%",
             "Cross-Validation": f"{metadata.get('cross_validation_folds', 'N/A')}-fold",
+            "Pipeline Wall Clock": _format_duration(metadata.get("total_pipeline_wall_clock_sec")),
             "Runtime": f"Py {metadata.get('python_version', 'N/A')} / TF {metadata.get('tensorflow_version', 'N/A') or 'off'}",
         }
         html = "".join(
@@ -594,7 +609,7 @@ class PredictionApp:
     def load_json(_self, path: Path, default: Any, version: int) -> Any:
         if not path.exists():
             return default
-        return json.loads(path.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8-sig"))
 
     @st.cache_data(show_spinner=False)
     def load_csv(_self, path: Path, version: int) -> pd.DataFrame:
@@ -686,6 +701,8 @@ class PredictionApp:
             "model_size_mb": np.nan,
             "transformed_feature_count": np.nan,
             "training_time_sec": np.nan,
+            "benchmark_training_time_sec": np.nan,
+            "full_data_training_time_sec": np.nan,
             "inference_time_sec": np.nan,
             "inference_ms_per_row": np.nan,
         }
@@ -783,6 +800,22 @@ class PredictionApp:
                 unsafe_allow_html=True,
             )
 
+        if metadata.get("pipeline_wall_clock_note"):
+            timing_note = (
+                f"{metadata['pipeline_wall_clock_note']} "
+                f"Saved pipeline wall clock: {_format_duration(metadata.get('total_pipeline_wall_clock_sec'))}."
+            )
+        elif metadata.get("total_pipeline_wall_clock_sec") is not None:
+            timing_note = (
+                f"Total pipeline wall clock for the saved run was {_format_duration(metadata.get('total_pipeline_wall_clock_sec'))}. "
+                f"This includes benchmark training, cross-validation, SHAP generation, full-data retraining, and artifact creation."
+            )
+        else:
+            timing_note = (
+                "Training time in the tables refers to the saved benchmark run and may not match the total interactive experimentation time."
+            )
+        st.caption(timing_note)
+
         left, right = st.columns([1.25, 0.75], gap="large")
         with left:
             st.plotly_chart(self.build_metric_radar(top_model), use_container_width=True)
@@ -863,6 +896,8 @@ class PredictionApp:
                 "balanced_accuracy",
                 "roc_auc",
                 "average_precision",
+                "benchmark_training_time_sec",
+                "full_data_training_time_sec",
                 "training_time_sec",
                 "inference_ms_per_row",
                 "complexity_tier",
@@ -873,7 +908,7 @@ class PredictionApp:
             styled.style.format({column: "{:.4f}" for column in numeric_columns}),
             use_container_width=True,
         )
-        st.caption("`complexity_tier` is derived from the measured training time, inference time, and transformed feature count of the real benchmark run.")
+        st.caption("`benchmark_training_time_sec` is the 70/30 holdout benchmark fit time, `full_data_training_time_sec` is the deployment retrain on the full dataset, and `training_time_sec` is their combined saved run cost. `complexity_tier` is derived from measured training time, inference time, and transformed feature count.")
 
         cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
         if not cv_mean.empty:

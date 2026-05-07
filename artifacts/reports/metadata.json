@@ -1,11 +1,95 @@
 {
-  "best_model": "Random Forest",
-  "deployment_model": "XGBoost",
+  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_bookings.csv",
+  "python_version": "3.11.9",
+  "train_rows": 83446,
+  "test_rows": 35763,
+  "total_rows": 119209,
   "train_ratio": 0.7,
   "test_ratio": 0.3,
-  "cross_validation_folds": 0,
-  "python_version": "3.11.9",
+  "cross_validation_folds": 3,
+  "best_model": "Random Forest",
+  "deployment_model": "XGBoost",
+  "trained_models": [
+    "Logistic Regression",
+    "KNN",
+    "Decision Tree",
+    "Random Forest",
+    "Naive Bayes",
+    "SVM",
+    "ANN",
+    "XGBoost"
+  ],
+  "full_data_models": [
+    "Logistic Regression",
+    "KNN",
+    "Decision Tree",
+    "Random Forest",
+    "Naive Bayes",
+    "SVM",
+    "ANN",
+    "XGBoost"
+  ],
+  "skipped_models": {},
+  "shap_explanations": [
+    {
+      "feature": "country_PRT",
+      "mean_abs_shap": 0.08225039498596533,
+      "correlation_with_risk": 0.9518020955589751,
+      "explanation": "Higher values tend to increase cancellation risk."
+    },
+    {
+      "feature": "deposit_type_Non Refund",
+      "mean_abs_shap": 0.03534810713691681,
+      "correlation_with_risk": 0.9930805449062892,
+      "explanation": "Higher values tend to increase cancellation risk."
+    },
+    {
+      "feature": "total_of_special_requests",
+      "mean_abs_shap": 0.03206377078320332,
+      "correlation_with_risk": -0.8371497461044203,
+      "explanation": "Higher values tend to reduce cancellation risk."
+    }
+  ],
+  "segmentation_summary_rows": [
+    {
+      "segment": 0,
+      "lead_time": 47.4,
+      "adr": 86.91,
+      "total_nights": 2.63,
+      "total_guests": 1.72,
+      "previous_cancellations": 0.04
+    },
+    {
+      "segment": 1,
+      "lead_time": 239.61,
+      "adr": 88.12,
+      "total_nights": 4.75,
+      "total_guests": 1.93,
+      "previous_cancellations": 0.12
+    },
+    {
+      "segment": 2,
+      "lead_time": 193.96,
+      "adr": 62.05,
+      "total_nights": 3.47,
+      "total_guests": 1.97,
+      "previous_cancellations": 19.84
+    },
+    {
+      "segment": 3,
+      "lead_time": 76.46,
+      "adr": 173.52,
+      "total_nights": 3.97,
+      "total_guests": 2.85,
+      "previous_cancellations": 0.01
+    }
+  ],
   "tensorflow_version": "2.21.0",
-  "shap_explanations": [],
-  "skipped_models": {}
+  "benchmark_phase_wall_clock_sec": 994.8770695000421,
+  "shap_phase_wall_clock_sec": 116.77471369993873,
+  "full_retrain_phase_wall_clock_sec": 331.93704270012677,
+  "artifact_finalize_wall_clock_sec": 6.747286099940538,
+  "total_pipeline_wall_clock_sec": 1474.796054400038,
+  "deployment_model_note": "Benchmark metrics and timing are from the fresh terminal run. The currently shipped prediction artifact remains artifacts/models/deployment_model.joblib.",
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run."
 }
