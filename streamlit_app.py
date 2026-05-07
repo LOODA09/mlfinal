@@ -16,8 +16,8 @@ from plotly.subplots import make_subplots
 from hotel_app.ml import HotelDataProcessor, SHAPAnalyzer, _positive_probabilities
 
 
-ARTIFACTS_DIR = Path("artifacts")
-DATA_PATH = Path("hotel_bookings.csv")
+ARTIFACTS_DIR = Path("artifacts_hotel_booking") if Path("artifacts_hotel_booking").exists() else Path("artifacts")
+DATA_PATH = Path("hotel_booking.csv") if Path("hotel_booking.csv").exists() else Path("hotel_bookings.csv")
 EXCLUDED_FEATURES = {"arrival_date_year"}
 
 
@@ -1120,7 +1120,7 @@ class PredictionApp:
         parking = float(raw_input.iloc[0].get("required_car_parking_spaces", 0))
         if parking > 0:
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - (0.02 * parking), 0.01)
+            cancel_probability = max(cancel_probability - (0.008 * parking), 0.01)
             manual_adjustments.append({"feature": "required_car_parking_spaces", "feature_value": parking, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 4: Repeated Guest ---
