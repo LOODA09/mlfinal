@@ -6,4 +6,4 @@ class KNNModel(BaseHotelModel):
     name = "KNN"
 
     def get_estimator(self) -> KNeighborsClassifier:
-        return KNeighborsClassifier()
+        return KNeighborsClassifier(n_neighbors=21, weights="distance", p=2)

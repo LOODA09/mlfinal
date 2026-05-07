@@ -6,4 +6,10 @@ class LogisticRegressionModel(BaseHotelModel):
     name = "Logistic Regression"
 
     def get_estimator(self) -> LogisticRegression:
-        return LogisticRegression(max_iter=1000, random_state=42)
+        return LogisticRegression(
+            C=0.75,
+            max_iter=2000,
+            class_weight="balanced",
+            solver="lbfgs",
+            random_state=42,
+        )

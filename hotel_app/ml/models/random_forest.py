@@ -7,9 +7,10 @@ class RandomForestModel(BaseHotelModel):
 
     def get_estimator(self) -> RandomForestClassifier:
         return RandomForestClassifier(
-            n_estimators=450,
-            max_features="sqrt",
-            min_samples_leaf=2,
+            n_estimators=700,
+            max_features=0.4,
+            min_samples_leaf=1,
+            max_depth=28,
             class_weight="balanced_subsample",
             random_state=42,
             n_jobs=-1,

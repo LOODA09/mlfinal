@@ -6,4 +6,4 @@ class NaiveBayesModel(BaseHotelModel):
     name = "Naive Bayes"
 
     def get_estimator(self) -> GaussianNB:
-        return GaussianNB()
+        return GaussianNB(var_smoothing=1e-8)

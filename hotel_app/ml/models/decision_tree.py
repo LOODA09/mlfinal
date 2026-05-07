@@ -6,4 +6,9 @@ class DecisionTreeModel(BaseHotelModel):
     name = "Decision Tree"
 
     def get_estimator(self) -> DecisionTreeClassifier:
-        return DecisionTreeClassifier(random_state=42)
+        return DecisionTreeClassifier(
+            max_depth=12,
+            min_samples_leaf=8,
+            class_weight="balanced",
+            random_state=42,
+        )
