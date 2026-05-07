@@ -1,5 +1,5 @@
 {
-  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_bookings.csv",
+  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_booking.csv",
   "python_version": "3.11.9",
   "train_rows": 83446,
   "test_rows": 35763,
@@ -27,20 +27,20 @@
   "shap_explanations": [
     {
       "feature": "requests_per_night",
-      "mean_abs_shap": 0.0472790068335371,
-      "correlation_with_risk": -0.7977654603323513,
+      "mean_abs_shap": 0.04766868869377251,
+      "correlation_with_risk": -0.8078512669516921,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
       "feature": "customer_type_Transient",
-      "mean_abs_shap": 0.042940705980173896,
-      "correlation_with_risk": 0.9216649086942352,
+      "mean_abs_shap": 0.044594472785462434,
+      "correlation_with_risk": 0.9021662146551405,
       "explanation": "Higher values tend to increase cancellation risk."
     },
     {
       "feature": "total_of_special_requests",
-      "mean_abs_shap": 0.04254453022367035,
-      "correlation_with_risk": -0.6834215277426704,
+      "mean_abs_shap": 0.042973694689858934,
+      "correlation_with_risk": -0.6986649442416899,
       "explanation": "Higher values tend to reduce cancellation risk."
     }
   ],
@@ -79,11 +79,11 @@
     }
   ],
   "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1108.1433043000288,
-  "shap_phase_wall_clock_sec": 46.214113200083375,
-  "full_retrain_phase_wall_clock_sec": 323.97815670003183,
-  "artifact_finalize_wall_clock_sec": 9.203283300157636,
-  "total_pipeline_wall_clock_sec": 1495.0127733999398,
+  "benchmark_phase_wall_clock_sec": 1089.718371400144,
+  "shap_phase_wall_clock_sec": 43.21721279993653,
+  "full_retrain_phase_wall_clock_sec": 330.94971930002794,
+  "artifact_finalize_wall_clock_sec": 11.407452800078318,
+  "total_pipeline_wall_clock_sec": 1483.3758463000413,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The room-assignment-free feature pipeline is deployed with the XGBoost artifact because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this TensorFlow-enabled run."
+  "deployment_model_note": "The live app/report now use the hotel_booking.csv run. XGBoost is deployed because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
 }
