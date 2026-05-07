@@ -27,22 +27,6 @@ MONTH_ORDER = [
     "December",
 ]
 
-TOP_COUNTRIES = {
-    "PRT",
-    "GBR",
-    "FRA",
-    "ESP",
-    "DEU",
-    "ITA",
-    "IRL",
-    "BEL",
-    "BRA",
-    "NLD",
-    "USA",
-    "CHE",
-}
-
-
 def _one_hot_encoder() -> OneHotEncoder:
     try:
         return OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.float32)
@@ -103,6 +87,9 @@ def _count_model_complexity(estimator: Any) -> int:
 class HotelDataProcessor:
     target_column: str = "is_canceled"
     dropped_low_signal_columns: Sequence[str] = field(default_factory=lambda: ("arrival_date_year",))
+    dropped_behavior_columns: Sequence[str] = field(
+        default_factory=lambda: ("country", "deposit_type", "required_car_parking_spaces")
+    )
     leakage_columns: Sequence[str] = field(
         default_factory=lambda: ("reservation_status", "reservation_status_date")
     )
@@ -153,6 +140,7 @@ class HotelDataProcessor:
             df["reservation_status_day"] = reservation_date.dt.day.fillna(0).astype(int)
             df = df.drop(columns=["reservation_status_date"])
         drop_columns = list(self.dropped_low_signal_columns)
+        drop_columns.extend(self.dropped_behavior_columns)
         if remove_leakage_features:
             drop_columns.extend(self.leakage_columns)
         drop_columns.append(self.target_column)
@@ -162,10 +150,6 @@ class HotelDataProcessor:
 
     def add_engineered_features(self, x_data: pd.DataFrame) -> pd.DataFrame:
         features = x_data.copy()
-        if "country" in features.columns:
-            country = features["country"].astype(str).str.upper().fillna("OTHER")
-            features["country_grouped"] = country.where(country.isin(TOP_COUNTRIES), "OTHER")
-            features = features.drop(columns=["country"])
         if "agent" in features.columns:
             agent_numeric = pd.to_numeric(features["agent"], errors="coerce").fillna(0)
             features["has_agent"] = (agent_numeric > 0).astype(int)
@@ -223,8 +207,6 @@ class HotelDataProcessor:
             ).astype(str)
         if "days_in_waiting_list" in features.columns:
             features["waiting_list_log"] = np.log1p(features["days_in_waiting_list"].clip(lower=0))
-        if "required_car_parking_spaces" in features.columns:
-            features["needs_parking"] = (pd.to_numeric(features["required_car_parking_spaces"], errors="coerce").fillna(0) > 0).astype(int)
         if "arrival_date_month" in features.columns:
             month_index = features["arrival_date_month"].map({name: i + 1 for i, name in enumerate(MONTH_ORDER)}).fillna(0)
             features["arrival_month_index"] = month_index

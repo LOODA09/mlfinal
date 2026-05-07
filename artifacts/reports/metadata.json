@@ -22,21 +22,21 @@
   "skipped_models": {},
   "shap_explanations": [
     {
-      "feature": "country_grouped_PRT",
-      "mean_abs_shap": 0.084420889678425,
-      "correlation_with_risk": 0.943206798725802,
-      "explanation": "Higher values tend to increase cancellation risk."
+      "feature": "requests_per_night",
+      "mean_abs_shap": 0.04624878607783959,
+      "correlation_with_risk": -0.7023417296743727,
+      "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
-      "feature": "market_segment_Online TA",
-      "mean_abs_shap": 0.03750434826296482,
-      "correlation_with_risk": 0.8814853179872892,
-      "explanation": "Higher values tend to increase cancellation risk."
+      "feature": "total_of_special_requests",
+      "mean_abs_shap": 0.039545774205794436,
+      "correlation_with_risk": -0.7995050826439568,
+      "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
-      "feature": "deposit_type_Non Refund",
-      "mean_abs_shap": 0.03592771083478474,
-      "correlation_with_risk": 0.9906950118576843,
+      "feature": "room_match",
+      "mean_abs_shap": 0.039308680183526755,
+      "correlation_with_risk": 0.9609346767820046,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
@@ -75,11 +75,11 @@
     }
   ],
   "tensorflow_version": null,
-  "benchmark_phase_wall_clock_sec": 204.36270960001275,
-  "shap_phase_wall_clock_sec": 90.71669350005686,
-  "full_retrain_phase_wall_clock_sec": 65.62230239994824,
-  "artifact_finalize_wall_clock_sec": 9.265895599965006,
-  "total_pipeline_wall_clock_sec": 371.47493580006994,
+  "benchmark_phase_wall_clock_sec": 161.2753103999421,
+  "shap_phase_wall_clock_sec": 89.00051909987815,
+  "full_retrain_phase_wall_clock_sec": 57.75167270004749,
+  "artifact_finalize_wall_clock_sec": 9.484926100121811,
+  "total_pipeline_wall_clock_sec": 319.0024642001372,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The tuned feature pipeline is deployed with the XGBoost artifact because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
+  "deployment_model_note": "The reasonableness-tuned feature pipeline is deployed with the XGBoost artifact because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
 }
