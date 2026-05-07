@@ -36,20 +36,20 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         model = tf.keras.Sequential()
         if self.model_type == "rnn":
             model.add(tf.keras.layers.Input(shape=(n_features, 1)))
-            model.add(tf.keras.layers.SimpleRNN(64, activation="tanh"))
+            model.add(tf.keras.layers.SimpleRNN(32, activation="tanh"))
             model.add(tf.keras.layers.Dropout(0.2))
-            model.add(tf.keras.layers.Dense(32, activation="relu"))
+            model.add(tf.keras.layers.Dense(16, activation="relu"))
         elif self.model_type == "lstm":
             model.add(tf.keras.layers.Input(shape=(n_features, 1)))
-            model.add(tf.keras.layers.LSTM(48, activation="tanh"))
+            model.add(tf.keras.layers.LSTM(24, activation="tanh"))
             model.add(tf.keras.layers.Dropout(0.2))
-            model.add(tf.keras.layers.Dense(32, activation="relu"))
+            model.add(tf.keras.layers.Dense(16, activation="relu"))
         else:
             model.add(tf.keras.layers.Input(shape=(n_features,)))
-            model.add(tf.keras.layers.Dense(75, activation="relu"))
-            model.add(tf.keras.layers.Dropout(0.2))
-            model.add(tf.keras.layers.Dense(75, activation="relu"))
-            model.add(tf.keras.layers.Dense(50, activation="relu"))
+            model.add(tf.keras.layers.Dense(96, activation="relu"))
+            model.add(tf.keras.layers.Dropout(0.15))
+            model.add(tf.keras.layers.Dense(48, activation="relu"))
+            model.add(tf.keras.layers.Dense(24, activation="relu"))
         model.add(tf.keras.layers.Dense(1, activation="sigmoid"))
         optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate, clipnorm=1.0)
         model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=["accuracy"])
@@ -68,12 +68,27 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         self.classes_ = np.array([0, 1])
         self.n_features_in_ = array.shape[1]
         self.model_ = self._build_model(self.n_features_in_)
+        tf = importlib.import_module("tensorflow")
+        callbacks = [
+            tf.keras.callbacks.EarlyStopping(
+                monitor="val_loss",
+                patience=4,
+                restore_best_weights=True,
+            ),
+            tf.keras.callbacks.ReduceLROnPlateau(
+                monitor="val_loss",
+                factor=0.5,
+                patience=2,
+                min_lr=1e-5,
+            ),
+        ]
         self.history_ = self.model_.fit(
             self._reshape(array),
             np.asarray(y_data, dtype=np.float32),
             epochs=self.epochs,
             batch_size=self.batch_size,
             validation_split=0.1,
+            callbacks=callbacks,
             verbose=self.verbose,
         )
         return self

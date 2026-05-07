@@ -27,21 +27,21 @@
   "shap_explanations": [
     {
       "feature": "requests_per_night",
-      "mean_abs_shap": 0.04766868869377251,
-      "correlation_with_risk": -0.8078512669516921,
+      "mean_abs_shap": 0.04892392433943051,
+      "correlation_with_risk": -0.8007754284016707,
+      "explanation": "Higher values tend to reduce cancellation risk."
+    },
+    {
+      "feature": "total_of_special_requests",
+      "mean_abs_shap": 0.04605382444113457,
+      "correlation_with_risk": -0.662370652829833,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
       "feature": "customer_type_Transient",
-      "mean_abs_shap": 0.044594472785462434,
-      "correlation_with_risk": 0.9021662146551405,
+      "mean_abs_shap": 0.0427654103700375,
+      "correlation_with_risk": 0.9089370213894995,
       "explanation": "Higher values tend to increase cancellation risk."
-    },
-    {
-      "feature": "total_of_special_requests",
-      "mean_abs_shap": 0.042973694689858934,
-      "correlation_with_risk": -0.6986649442416899,
-      "explanation": "Higher values tend to reduce cancellation risk."
     }
   ],
   "segmentation_summary_rows": [
@@ -79,11 +79,11 @@
     }
   ],
   "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1089.718371400144,
-  "shap_phase_wall_clock_sec": 43.21721279993653,
-  "full_retrain_phase_wall_clock_sec": 330.94971930002794,
-  "artifact_finalize_wall_clock_sec": 11.407452800078318,
-  "total_pipeline_wall_clock_sec": 1483.3758463000413,
+  "benchmark_phase_wall_clock_sec": 881.2551663999911,
+  "shap_phase_wall_clock_sec": 43.61143389996141,
+  "full_retrain_phase_wall_clock_sec": 234.886774700135,
+  "artifact_finalize_wall_clock_sec": 14.98886870010756,
+  "total_pipeline_wall_clock_sec": 1180.674893700052,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The live app/report now use the hotel_booking.csv run. XGBoost is deployed because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
+  "deployment_model_note": "The live app/report use the tuned hotel_booking.csv run. XGBoost is deployed because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
 }
