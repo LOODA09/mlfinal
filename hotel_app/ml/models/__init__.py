@@ -14,6 +14,7 @@ from hotel_app.ml.models.xgboost_model import XGBoostModel
 from hotel_app.ml.models.voting import VotingEnsembleModel
 from hotel_app.ml.models.stacking import StackingEnsembleModel
 from hotel_app.ml.models.ann import ANNModel
+from hotel_app.ml.models.lstm import LSTMModel
 from hotel_app.ml.models.rnn import RNNModel
 
 MODEL_REGISTRY: Dict[str, Type[BaseHotelModel]] = {
@@ -32,6 +33,7 @@ MODEL_REGISTRY: Dict[str, Type[BaseHotelModel]] = {
         VotingEnsembleModel,
         StackingEnsembleModel,
         ANNModel,
+        LSTMModel,
         RNNModel,
     )
 }
@@ -51,6 +53,7 @@ __all__ = [
     "VotingEnsembleModel",
     "StackingEnsembleModel",
     "ANNModel",
+    "LSTMModel",
     "RNNModel",
     "MODEL_REGISTRY"
 ]

@@ -84,24 +84,6 @@
       ]
     },
     {
-      "name": "assigned_room_type",
-      "type": "categorical",
-      "default": "A",
-      "options": [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "K",
-        "L"
-      ]
-    },
-    {
       "name": "customer_type",
       "type": "categorical",
       "default": "Transient",

@@ -88,7 +88,7 @@ class HotelDataProcessor:
     target_column: str = "is_canceled"
     dropped_low_signal_columns: Sequence[str] = field(default_factory=lambda: ("arrival_date_year",))
     dropped_behavior_columns: Sequence[str] = field(
-        default_factory=lambda: ("country", "deposit_type", "required_car_parking_spaces")
+        default_factory=lambda: ("country", "deposit_type", "required_car_parking_spaces", "assigned_room_type")
     )
     leakage_columns: Sequence[str] = field(
         default_factory=lambda: ("reservation_status", "reservation_status_date")
@@ -179,10 +179,6 @@ class HotelDataProcessor:
             features["changes_per_lead_day"] = (
                 features["booking_changes"] / features["lead_time"].replace(0, 1)
             ).fillna(0)
-        if {"reserved_room_type", "assigned_room_type"}.issubset(features.columns):
-            features["room_match"] = (
-                features["reserved_room_type"].astype(str) == features["assigned_room_type"].astype(str)
-            ).astype(int)
         if {"total_of_special_requests", "total_nights"}.issubset(features.columns):
             features["requests_per_night"] = (
                 features["total_of_special_requests"] / features["total_nights"].replace(0, 1)

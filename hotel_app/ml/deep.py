@@ -29,7 +29,7 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
             tf = importlib.import_module("tensorflow")
         except ImportError as exc:
             raise ImportError(
-                "TensorFlow is required for ANNModel and RNNModel. "
+                "TensorFlow is required for ANNModel, RNNModel, and LSTMModel. "
                 "Install it with `pip install tensorflow` or remove deep models from the run."
             ) from exc
         tf.random.set_seed(self.random_state)
@@ -37,6 +37,11 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         if self.model_type == "rnn":
             model.add(tf.keras.layers.Input(shape=(n_features, 1)))
             model.add(tf.keras.layers.SimpleRNN(64, activation="tanh"))
+            model.add(tf.keras.layers.Dropout(0.2))
+            model.add(tf.keras.layers.Dense(32, activation="relu"))
+        elif self.model_type == "lstm":
+            model.add(tf.keras.layers.Input(shape=(n_features, 1)))
+            model.add(tf.keras.layers.LSTM(48, activation="tanh"))
             model.add(tf.keras.layers.Dropout(0.2))
             model.add(tf.keras.layers.Dense(32, activation="relu"))
         else:
@@ -52,7 +57,7 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
 
     def _reshape(self, x_data: Any) -> np.ndarray:
         array = np.asarray(x_data, dtype=np.float32)
-        if self.model_type == "rnn":
+        if self.model_type in {"rnn", "lstm"}:
             return array.reshape(array.shape[0], array.shape[1], 1)
         return array
 

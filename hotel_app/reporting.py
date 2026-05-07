@@ -11,6 +11,7 @@ import pandas as pd
 
 MODEL_DESCRIPTIONS = {
     "ANN": "Feed-forward neural network used as a dense deep-learning classifier.",
+    "LSTM": "Long short-term memory network trained on reshaped tabular sequences with TensorFlow.",
     "KNN": "Distance-based classifier that predicts from nearby training examples.",
     "Decision Tree": "Rule-based tree learner that splits bookings into cancellation patterns.",
     "Random Forest": "Bagged ensemble of decision trees with randomized feature selection.",

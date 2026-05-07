@@ -1,6 +1,6 @@
 {
   "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_bookings.csv",
-  "python_version": "3.14.3",
+  "python_version": "3.11.9",
   "train_rows": 83446,
   "test_rows": 35763,
   "total_rows": 119209,
@@ -10,12 +10,16 @@
   "best_model": "Random Forest",
   "deployment_model": "XGBoost",
   "trained_models": [
-    "Logistic Regression",
+    "ANN",
+    "RNN",
+    "LSTM",
     "Random Forest",
     "XGBoost"
   ],
   "full_data_models": [
-    "Logistic Regression",
+    "ANN",
+    "RNN",
+    "LSTM",
     "Random Forest",
     "XGBoost"
   ],
@@ -23,21 +27,21 @@
   "shap_explanations": [
     {
       "feature": "requests_per_night",
-      "mean_abs_shap": 0.04624878607783959,
-      "correlation_with_risk": -0.7023417296743727,
+      "mean_abs_shap": 0.0472790068335371,
+      "correlation_with_risk": -0.7977654603323513,
       "explanation": "Higher values tend to reduce cancellation risk."
+    },
+    {
+      "feature": "customer_type_Transient",
+      "mean_abs_shap": 0.042940705980173896,
+      "correlation_with_risk": 0.9216649086942352,
+      "explanation": "Higher values tend to increase cancellation risk."
     },
     {
       "feature": "total_of_special_requests",
-      "mean_abs_shap": 0.039545774205794436,
-      "correlation_with_risk": -0.7995050826439568,
+      "mean_abs_shap": 0.04254453022367035,
+      "correlation_with_risk": -0.6834215277426704,
       "explanation": "Higher values tend to reduce cancellation risk."
-    },
-    {
-      "feature": "room_match",
-      "mean_abs_shap": 0.039308680183526755,
-      "correlation_with_risk": 0.9609346767820046,
-      "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
   "segmentation_summary_rows": [
@@ -74,12 +78,12 @@
       "previous_cancellations": 0.01
     }
   ],
-  "tensorflow_version": null,
-  "benchmark_phase_wall_clock_sec": 161.2753103999421,
-  "shap_phase_wall_clock_sec": 89.00051909987815,
-  "full_retrain_phase_wall_clock_sec": 57.75167270004749,
-  "artifact_finalize_wall_clock_sec": 9.484926100121811,
-  "total_pipeline_wall_clock_sec": 319.0024642001372,
+  "tensorflow_version": "2.21.0",
+  "benchmark_phase_wall_clock_sec": 1108.1433043000288,
+  "shap_phase_wall_clock_sec": 46.214113200083375,
+  "full_retrain_phase_wall_clock_sec": 323.97815670003183,
+  "artifact_finalize_wall_clock_sec": 9.203283300157636,
+  "total_pipeline_wall_clock_sec": 1495.0127733999398,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The reasonableness-tuned feature pipeline is deployed with the XGBoost artifact because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
+  "deployment_model_note": "The room-assignment-free feature pipeline is deployed with the XGBoost artifact because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this TensorFlow-enabled run."
 }

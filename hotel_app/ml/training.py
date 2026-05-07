@@ -27,6 +27,7 @@ from .models import (
     ExtraTreesModel,
     GradientBoostingModel,
     KNNModel,
+    LSTMModel,
     LogisticRegressionModel,
     NaiveBayesModel,
     RandomForestModel,
@@ -181,6 +182,7 @@ class TerminalTrainingRunner:
         self,
         ann_epochs: int = 250,
         rnn_epochs: int = 10,
+        lstm_epochs: int = 10,
         selected_models: Optional[Sequence[str]] = None,
     ) -> List[BaseHotelModel]:
         default_order = [
@@ -195,6 +197,7 @@ class TerminalTrainingRunner:
             "XGBoost",
             "Voting Ensemble",
             "Stacking Ensemble",
+            "LSTM",
             "RNN",
         ]
         model_names = list(selected_models) if selected_models else default_order
@@ -231,6 +234,9 @@ class TerminalTrainingRunner:
                 models.append(VotingEnsembleModel())
             elif model_name == "Stacking Ensemble":
                 models.append(StackingEnsembleModel())
+            elif model_name == "LSTM":
+                if tensorflow_available:
+                    models.append(LSTMModel(epochs=lstm_epochs))
             elif model_name == "RNN":
                 if tensorflow_available:
                     models.append(RNNModel(epochs=rnn_epochs))
@@ -245,6 +251,7 @@ class TerminalTrainingRunner:
         cv_folds: int = 5,
         ann_epochs: int = 250,
         rnn_epochs: int = 10,
+        lstm_epochs: int = 10,
         shap_rows: int = 250,
         selected_models: Optional[Sequence[str]] = None,
     ) -> Dict[str, Any]:
@@ -260,6 +267,7 @@ class TerminalTrainingRunner:
         models = self.default_models(
             ann_epochs=ann_epochs,
             rnn_epochs=rnn_epochs,
+            lstm_epochs=lstm_epochs,
             selected_models=selected_models,
         )
 
