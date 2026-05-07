@@ -584,26 +584,32 @@ class PredictionApp:
         self.artifacts_dir = artifacts_dir
         self.processor = HotelDataProcessor()
 
+    @staticmethod
+    def file_version(path: Path) -> int:
+        if not path.exists():
+            return 0
+        return path.stat().st_mtime_ns
+
     @st.cache_data(show_spinner=False)
-    def load_json(_self, path: Path, default: Any) -> Any:
+    def load_json(_self, path: Path, default: Any, version: int) -> Any:
         if not path.exists():
             return default
         return json.loads(path.read_text(encoding="utf-8"))
 
     @st.cache_data(show_spinner=False)
-    def load_csv(_self, path: Path) -> pd.DataFrame:
+    def load_csv(_self, path: Path, version: int) -> pd.DataFrame:
         if not path.exists():
             return pd.DataFrame()
         return pd.read_csv(path)
 
     @st.cache_data(show_spinner=False)
-    def load_raw_data(_self, path: Path) -> pd.DataFrame:
+    def load_raw_data(_self, path: Path, version: int) -> pd.DataFrame:
         if not path.exists():
             return pd.DataFrame()
         return pd.read_csv(path)
 
     @st.cache_resource(show_spinner=False)
-    def load_models(_self, artifacts_dir: Path) -> Dict[str, Any]:
+    def load_models(_self, artifacts_dir: Path, version: int) -> Dict[str, Any]:
         models: Dict[str, Any] = {}
         models_dir = artifacts_dir / "models"
         if not models_dir.exists():
@@ -622,15 +628,24 @@ class PredictionApp:
             time.sleep(2.8)
             st.rerun()
 
-        metadata = self.load_json(self.artifacts_dir / "reports" / "metadata.json", {})
-        confusion_data = self.load_json(self.artifacts_dir / "reports" / "confusion_matrices.json", {})
-        schema = self.load_json(self.artifacts_dir / "reports" / "prediction_schema.json", {"columns": []})
-        examples = self.load_csv(self.artifacts_dir / "reports" / "prediction_examples.csv")
-        holdout = self.load_csv(self.artifacts_dir / "reports" / "holdout_summary.csv")
-        cv_results = self.load_csv(self.artifacts_dir / "reports" / "cross_validation_results.csv")
-        guest_segments = self.load_csv(self.artifacts_dir / "reports" / "guest_segments.csv")
-        raw_data = self.load_raw_data(DATA_PATH)
-        models = self.load_models(self.artifacts_dir)
+        metadata_path = self.artifacts_dir / "reports" / "metadata.json"
+        confusion_path = self.artifacts_dir / "reports" / "confusion_matrices.json"
+        schema_path = self.artifacts_dir / "reports" / "prediction_schema.json"
+        examples_path = self.artifacts_dir / "reports" / "prediction_examples.csv"
+        holdout_path = self.artifacts_dir / "reports" / "holdout_summary.csv"
+        cv_path = self.artifacts_dir / "reports" / "cross_validation_results.csv"
+        segments_path = self.artifacts_dir / "reports" / "guest_segments.csv"
+        model_path = self.artifacts_dir / "models" / "deployment_model.joblib"
+
+        metadata = self.load_json(metadata_path, {}, self.file_version(metadata_path))
+        confusion_data = self.load_json(confusion_path, {}, self.file_version(confusion_path))
+        schema = self.load_json(schema_path, {"columns": []}, self.file_version(schema_path))
+        examples = self.load_csv(examples_path, self.file_version(examples_path))
+        holdout = self.load_csv(holdout_path, self.file_version(holdout_path))
+        cv_results = self.load_csv(cv_path, self.file_version(cv_path))
+        guest_segments = self.load_csv(segments_path, self.file_version(segments_path))
+        raw_data = self.load_raw_data(DATA_PATH, self.file_version(DATA_PATH))
+        models = self.load_models(self.artifacts_dir, self.file_version(model_path))
 
         if holdout.empty or not schema.get("columns"):
             st.error("Saved training artifacts are missing. Run terminal training and redeploy the app.")
