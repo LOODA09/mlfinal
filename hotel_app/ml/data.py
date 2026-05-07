@@ -88,7 +88,16 @@ class HotelDataProcessor:
     target_column: str = "is_canceled"
     dropped_low_signal_columns: Sequence[str] = field(default_factory=lambda: ("arrival_date_year",))
     dropped_behavior_columns: Sequence[str] = field(
-        default_factory=lambda: ("country", "deposit_type", "required_car_parking_spaces", "assigned_room_type")
+        default_factory=lambda: (
+            "country",
+            "deposit_type",
+            "required_car_parking_spaces",
+            "assigned_room_type",
+            "name",
+            "email",
+            "phone-number",
+            "credit_card",
+        )
     )
     leakage_columns: Sequence[str] = field(
         default_factory=lambda: ("reservation_status", "reservation_status_date")
