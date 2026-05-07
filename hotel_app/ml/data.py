@@ -27,6 +27,21 @@ MONTH_ORDER = [
     "December",
 ]
 
+TOP_COUNTRIES = {
+    "PRT",
+    "GBR",
+    "FRA",
+    "ESP",
+    "DEU",
+    "ITA",
+    "IRL",
+    "BEL",
+    "BRA",
+    "NLD",
+    "USA",
+    "CHE",
+}
+
 
 def _one_hot_encoder() -> OneHotEncoder:
     try:
@@ -147,18 +162,35 @@ class HotelDataProcessor:
 
     def add_engineered_features(self, x_data: pd.DataFrame) -> pd.DataFrame:
         features = x_data.copy()
+        if "country" in features.columns:
+            country = features["country"].astype(str).str.upper().fillna("OTHER")
+            features["country_grouped"] = country.where(country.isin(TOP_COUNTRIES), "OTHER")
+            features = features.drop(columns=["country"])
+        if "agent" in features.columns:
+            agent_numeric = pd.to_numeric(features["agent"], errors="coerce").fillna(0)
+            features["has_agent"] = (agent_numeric > 0).astype(int)
+            features = features.drop(columns=["agent"])
+        if "company" in features.columns:
+            company_numeric = pd.to_numeric(features["company"], errors="coerce").fillna(0)
+            features["has_company"] = (company_numeric > 0).astype(int)
+            features = features.drop(columns=["company"])
         if {"stays_in_weekend_nights", "stays_in_week_nights"}.issubset(features.columns):
             features["total_nights"] = (
                 features["stays_in_weekend_nights"] + features["stays_in_week_nights"]
             )
+            features["weekend_share"] = (
+                features["stays_in_weekend_nights"] / features["total_nights"].replace(0, 1)
+            ).fillna(0)
         if {"adults", "children", "babies"}.issubset(features.columns):
             features["total_guests"] = features["adults"] + features["children"] + features["babies"]
             features["family_booking"] = ((features["children"] + features["babies"]) > 0).astype(int)
+            features["adults_only"] = ((features["adults"] > 0) & (features["children"] + features["babies"] == 0)).astype(int)
         if {"previous_cancellations", "previous_bookings_not_canceled"}.issubset(features.columns):
             previous_total = features["previous_cancellations"] + features["previous_bookings_not_canceled"]
             features["previous_cancel_rate"] = (
                 features["previous_cancellations"] / previous_total.replace(0, 1)
             ).fillna(0)
+            features["has_booking_history"] = (previous_total > 0).astype(int)
         if {"booking_changes", "lead_time"}.issubset(features.columns):
             features["changes_per_lead_day"] = (
                 features["booking_changes"] / features["lead_time"].replace(0, 1)
@@ -175,8 +207,33 @@ class HotelDataProcessor:
             features["adr_per_guest"] = (
                 features["adr"] / features["total_guests"].replace(0, 1)
             ).fillna(0)
+        if {"adr", "total_nights"}.issubset(features.columns):
+            features["booking_value"] = features["adr"] * features["total_nights"]
+            features["adr_per_night_log"] = np.log1p(features["adr"].clip(lower=0))
+        if {"lead_time", "total_nights"}.issubset(features.columns):
+            features["lead_time_per_night"] = (
+                features["lead_time"] / features["total_nights"].replace(0, 1)
+            ).fillna(0)
         if "lead_time" in features.columns:
             features["lead_time_log"] = np.log1p(features["lead_time"])
+            features["lead_time_bucket"] = pd.cut(
+                features["lead_time"],
+                bins=[-1, 7, 30, 90, 180, np.inf],
+                labels=["Last Minute", "Short", "Medium", "Long", "Very Long"],
+            ).astype(str)
+        if "days_in_waiting_list" in features.columns:
+            features["waiting_list_log"] = np.log1p(features["days_in_waiting_list"].clip(lower=0))
+        if "required_car_parking_spaces" in features.columns:
+            features["needs_parking"] = (pd.to_numeric(features["required_car_parking_spaces"], errors="coerce").fillna(0) > 0).astype(int)
+        if "arrival_date_month" in features.columns:
+            month_index = features["arrival_date_month"].map({name: i + 1 for i, name in enumerate(MONTH_ORDER)}).fillna(0)
+            features["arrival_month_index"] = month_index
+            features["arrival_month_sin"] = np.sin(2 * np.pi * month_index / 12.0)
+            features["arrival_month_cos"] = np.cos(2 * np.pi * month_index / 12.0)
+        if "arrival_date_week_number" in features.columns:
+            week = pd.to_numeric(features["arrival_date_week_number"], errors="coerce").fillna(0)
+            features["arrival_week_sin"] = np.sin(2 * np.pi * week / 53.0)
+            features["arrival_week_cos"] = np.cos(2 * np.pi * week / 53.0)
         return features
 
     def build_preprocessor(self, x_data: pd.DataFrame) -> ColumnTransformer:
