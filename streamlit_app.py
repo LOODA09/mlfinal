@@ -1048,17 +1048,10 @@ class PredictionApp:
         examples: pd.DataFrame,
     ) -> None:
         model_input = self.processor.add_engineered_features(raw_input.copy())
-        
-        # Neutralize the training effect: Force the model to evaluate a baseline without deposit bias.
-        # This guarantees that the ML model's training has ZERO effect on deposit probability,
-        # and ONLY the UI rules below will shift the probability.
-        if "deposit_type" in model_input.columns:
-            model_input["deposit_type"] = "No Deposit"
 
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
         cancel_probability = float(probabilities[0]) if probabilities is not None else None
-        prediction, cancel_probability, manual_adjustments = self.apply_ui_rules(raw_input, prediction, cancel_probability)
 
         st.divider()
         status_col, metric_col = st.columns([1, 1], gap="large")
@@ -1121,13 +1114,6 @@ class PredictionApp:
                     "shap_value": shap_row,
                 }
             )
-            
-            # Inject our manual UI rules directly into the SHAP explanation
-            if manual_adjustments:
-                manual_frame = pd.DataFrame(manual_adjustments)
-                explanation_frame = pd.concat([explanation_frame, manual_frame], ignore_index=True)
-                # If feature exists in both, sum their shap impacts
-                explanation_frame = explanation_frame.groupby("feature").agg({"feature_value": "first", "shap_value": "sum"}).reset_index()
             increasing = explanation_frame[explanation_frame["shap_value"] > 0].nlargest(5, "shap_value")
             decreasing = explanation_frame[explanation_frame["shap_value"] < 0].nsmallest(5, "shap_value")
             st.session_state["latest_prediction"] = {
@@ -1140,54 +1126,6 @@ class PredictionApp:
             }
         except Exception as exc:
             st.warning(f"Prediction SHAP explanation is currently unavailable: {exc}")
-
-    @staticmethod
-    def apply_ui_rules(
-        raw_input: pd.DataFrame,
-        prediction: int,
-        cancel_probability: float | None,
-    ) -> tuple[int, float | None, list[dict]]:
-        manual_adjustments = []
-        if cancel_probability is None or raw_input.empty:
-            return prediction, cancel_probability, manual_adjustments
-
-        # --- Rule 1: Deposit Type ---
-        deposit_type = str(raw_input.iloc[0].get("deposit_type", "")).strip()
-        if deposit_type == "Non Refund":
-            old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - 0.10, 0.01)
-            manual_adjustments.append({"feature": "deposit_type", "feature_value": deposit_type, "shap_value": cancel_probability - old_prob})
-        elif deposit_type == "Refundable":
-            old_prob = cancel_probability
-            cancel_probability = min(cancel_probability + 0.10, 0.99)
-            manual_adjustments.append({"feature": "deposit_type", "feature_value": deposit_type, "shap_value": cancel_probability - old_prob})
-
-        # --- Rule 2: Meal Plan ---
-        meal = str(raw_input.iloc[0].get("meal", "")).strip()
-        if meal == "FB":
-            old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - 0.10, 0.01)
-            manual_adjustments.append({"feature": "meal", "feature_value": meal, "shap_value": cancel_probability - old_prob})
-
-        # --- Rule 3: Parking Spaces ---
-        parking = float(raw_input.iloc[0].get("required_car_parking_spaces", 0))
-        if parking > 0:
-            old_prob = cancel_probability
-            parking_impact = min(0.015, 0.005 * parking)
-            cancel_probability = max(cancel_probability - parking_impact, 0.01)
-            manual_adjustments.append({"feature": "required_car_parking_spaces", "feature_value": parking, "shap_value": cancel_probability - old_prob})
-
-        # --- Rule 4: Repeated Guest ---
-        repeated = int(raw_input.iloc[0].get("is_repeated_guest", 0))
-        if repeated == 1:
-            old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - 0.05, 0.01)
-            manual_adjustments.append({"feature": "is_repeated_guest", "feature_value": "Yes", "shap_value": cancel_probability - old_prob})
-
-        # Re-evaluate final prediction class based on adjusted probability
-        prediction = 1 if cancel_probability >= 0.5 else 0
-
-        return prediction, cancel_probability, manual_adjustments
 
     def render_image_card(self, title: str, copy: str, path: Path) -> None:
         st.markdown(f"### {title}")
