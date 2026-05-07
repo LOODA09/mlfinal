@@ -27,6 +27,7 @@ from .models import (
     ExtraTreesModel,
     GradientBoostingModel,
     KNNModel,
+    LightGBMModel,
     LSTMModel,
     LogisticRegressionModel,
     NaiveBayesModel,
@@ -195,6 +196,7 @@ class TerminalTrainingRunner:
             "Gradient Boosting",
             "Extra Trees",
             "XGBoost",
+            "LightGBM",
             "Voting Ensemble",
             "Stacking Ensemble",
             "LSTM",
@@ -230,6 +232,8 @@ class TerminalTrainingRunner:
                 models.append(ExtraTreesModel())
             elif model_name == "XGBoost":
                 models.append(XGBoostModel())
+            elif model_name == "LightGBM":
+                models.append(LightGBMModel())
             elif model_name == "Voting Ensemble":
                 models.append(VotingEnsembleModel())
             elif model_name == "Stacking Ensemble":

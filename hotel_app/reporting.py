@@ -20,6 +20,7 @@ MODEL_DESCRIPTIONS = {
     "Gradient Boosting": "Sequential boosted trees focusing on previous residual errors.",
     "Extra Trees": "Highly randomized tree ensemble reducing variance through random splits.",
     "XGBoost": "Optimized gradient boosting tree method with regularized boosting.",
+    "LightGBM": "Histogram-based gradient boosting tree model with efficient leaf-wise growth.",
     "Voting Ensemble": "Soft-voting ensemble that averages probabilities from several models.",
     "Stacking Ensemble": "Meta-ensemble combining strong base learners through a final estimator.",
     "RNN": "Recurrent neural network trained on reshaped tabular sequences with TensorFlow.",

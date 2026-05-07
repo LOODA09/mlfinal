@@ -19,7 +19,8 @@
     "RNN",
     "LSTM",
     "Random Forest",
-    "XGBoost"
+    "XGBoost",
+    "LightGBM"
   ],
   "full_data_models": [
     "Logistic Regression",
@@ -31,26 +32,27 @@
     "RNN",
     "LSTM",
     "Random Forest",
-    "XGBoost"
+    "XGBoost",
+    "LightGBM"
   ],
   "skipped_models": {},
   "shap_explanations": [
     {
       "feature": "requests_per_night",
-      "mean_abs_shap": 0.06125041658394002,
-      "correlation_with_risk": -0.7727052730694688,
+      "mean_abs_shap": 0.05947116774338566,
+      "correlation_with_risk": -0.6903688594229167,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
       "feature": "customer_type_Transient",
-      "mean_abs_shap": 0.04286053156138628,
-      "correlation_with_risk": 0.8548519959754106,
+      "mean_abs_shap": 0.03855625335578099,
+      "correlation_with_risk": 0.856460339654142,
       "explanation": "Higher values tend to increase cancellation risk."
     },
     {
-      "feature": "previous_cancel_rate",
-      "mean_abs_shap": 0.03662803809127528,
-      "correlation_with_risk": 0.9943964541656655,
+      "feature": "lead_time_log",
+      "mean_abs_shap": 0.0328958460756009,
+      "correlation_with_risk": 0.8458652475687133,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
@@ -89,11 +91,11 @@
     }
   ],
   "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1227.8947417000309,
-  "shap_phase_wall_clock_sec": 45.8742656998802,
-  "full_retrain_phase_wall_clock_sec": 298.8061573000159,
-  "artifact_finalize_wall_clock_sec": 17.672270099865273,
-  "total_pipeline_wall_clock_sec": 1598.10177389998,
+  "benchmark_phase_wall_clock_sec": 1184.415174299851,
+  "shap_phase_wall_clock_sec": 238.73787309997715,
+  "full_retrain_phase_wall_clock_sec": 295.7754645999521,
+  "artifact_finalize_wall_clock_sec": 8.535546500002965,
+  "total_pipeline_wall_clock_sec": 1734.8638307999354,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The live app/report use the tuned all-model hotel_booking.csv run. XGBoost is deployed because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
+  "deployment_model_note": "The live app/report use the refreshed hotel_booking.csv benchmark that includes ANN, RNN, LSTM, SVM, and LightGBM. XGBoost remains the deployed model because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
 }

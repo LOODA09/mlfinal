@@ -11,6 +11,7 @@ from hotel_app.ml.models.adaboost import AdaBoostModel
 from hotel_app.ml.models.gradient_boosting import GradientBoostingModel
 from hotel_app.ml.models.extra_trees import ExtraTreesModel
 from hotel_app.ml.models.xgboost_model import XGBoostModel
+from hotel_app.ml.models.lightgbm import LightGBMModel
 from hotel_app.ml.models.voting import VotingEnsembleModel
 from hotel_app.ml.models.stacking import StackingEnsembleModel
 from hotel_app.ml.models.ann import ANNModel
@@ -30,6 +31,7 @@ MODEL_REGISTRY: Dict[str, Type[BaseHotelModel]] = {
         GradientBoostingModel,
         ExtraTreesModel,
         XGBoostModel,
+        LightGBMModel,
         VotingEnsembleModel,
         StackingEnsembleModel,
         ANNModel,
@@ -50,6 +52,7 @@ __all__ = [
     "GradientBoostingModel",
     "ExtraTreesModel",
     "XGBoostModel",
+    "LightGBMModel",
     "VotingEnsembleModel",
     "StackingEnsembleModel",
     "ANNModel",
