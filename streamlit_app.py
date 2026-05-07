@@ -1173,7 +1173,8 @@ class PredictionApp:
         parking = float(raw_input.iloc[0].get("required_car_parking_spaces", 0))
         if parking > 0:
             old_prob = cancel_probability
-            cancel_probability = max(cancel_probability - (0.008 * parking), 0.01)
+            parking_impact = min(0.015, 0.005 * parking)
+            cancel_probability = max(cancel_probability - parking_impact, 0.01)
             manual_adjustments.append({"feature": "required_car_parking_spaces", "feature_value": parking, "shap_value": cancel_probability - old_prob})
 
         # --- Rule 4: Repeated Guest ---
