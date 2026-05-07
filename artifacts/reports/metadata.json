@@ -1,10 +1,11 @@
 {
-    "best_model": "Decision Tree",
-    "deployment_model": "XGBoost",
-    "train_ratio": 0.7,
-    "test_ratio": 0.3,
-    "cross_validation_folds": 5,
-    "python_version": "3.14.3",
-    "tensorflow_version": "2.14.0",
-    "shap_explanations": []
+  "best_model": "Random Forest",
+  "deployment_model": "XGBoost",
+  "train_ratio": 0.7,
+  "test_ratio": 0.3,
+  "cross_validation_folds": 0,
+  "python_version": "3.11.9",
+  "tensorflow_version": "2.21.0",
+  "shap_explanations": [],
+  "skipped_models": {}
 }

@@ -773,7 +773,10 @@ class PredictionApp:
             st.plotly_chart(self.build_metric_radar(top_model), use_container_width=True)
         with right:
             cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].sort_values("f1", ascending=False)
-            st.plotly_chart(self.build_cv_f1_chart(cv_mean), use_container_width=True)
+            if cv_mean.empty:
+                st.info("Cross-validation results are not available for the current artifact set.")
+            else:
+                st.plotly_chart(self.build_cv_f1_chart(cv_mean), use_container_width=True)
 
         rnn_reason = metadata.get("skipped_models", {}).get("RNN")
         if rnn_reason:
