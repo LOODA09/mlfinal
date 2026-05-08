@@ -10,7 +10,7 @@
   "test_ratio": 0.3,
   "cross_validation_folds": 3,
   "best_model": "Logistic Regression",
-  "deployment_model": "Logistic Regression",
+  "deployment_model": "Random Forest",
   "trained_models": [
     "Logistic Regression",
     "KNN",
@@ -21,7 +21,6 @@
     "RNN",
     "LSTM",
     "Random Forest",
-    "XGBoost",
     "LightGBM"
   ],
   "full_data_models": [
@@ -34,7 +33,6 @@
     "RNN",
     "LSTM",
     "Random Forest",
-    "XGBoost",
     "LightGBM"
   ],
   "skipped_models": {},
@@ -99,5 +97,5 @@
   "artifact_finalize_wall_clock_sec": 5.705934800207615,
   "total_pipeline_wall_clock_sec": 1357.2333711998072,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "Leakage-enabled mode keeps future-only fields such as reservation_status. This produces much higher benchmark accuracy, but it is not valid for real future-booking prediction."
+  "deployment_model_note": "Leakage-enabled mode keeps future-only fields such as reservation_status. This produces much higher benchmark accuracy, but it is not valid for real future-booking prediction. Random Forest is used as the deployed model for consistency with the main app mode."
 }

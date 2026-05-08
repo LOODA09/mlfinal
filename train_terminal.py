@@ -28,7 +28,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--models",
         nargs="+",
         default=None,
-        help="Optional list of model names to train, for example --models ANN \"Random Forest\" XGBoost",
+        help="Optional list of model names to train, for example --models ANN \"Random Forest\" LightGBM",
     )
     return parser
 

@@ -29,7 +29,6 @@ from .models import (
     SVMModel,
     StackingEnsembleModel,
     VotingEnsembleModel,
-    XGBoostModel,
 )
 from .testing import ModelTester
 from .training import KMeansSegmenter, ModelTrainer, TerminalTrainingRunner, TrainingArtifacts
@@ -64,7 +63,6 @@ __all__ = [
     "SVMModel",
     "StackingEnsembleModel",
     "VotingEnsembleModel",
-    "XGBoostModel",
     "ModelTester",
     "KMeansSegmenter",
     "ModelTrainer",

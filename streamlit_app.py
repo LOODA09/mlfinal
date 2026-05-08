@@ -626,12 +626,14 @@ class PredictionApp:
         return pd.read_csv(path)
 
     @st.cache_resource(show_spinner=False)
-    def load_models(_self, artifacts_dir: Path, version: int) -> Dict[str, Any]:
+    def load_models(_self, artifacts_dir: Path, deployment_model_name: str, version: int) -> Dict[str, Any]:
         models: Dict[str, Any] = {}
         models_dir = artifacts_dir / "models"
         if not models_dir.exists():
             return models
-        deployment_path = models_dir / "deployment_model.joblib"
+        slug_name = deployment_model_name.lower().replace(" ", "_")
+        preferred_path = models_dir / f"{slug_name}.joblib"
+        deployment_path = preferred_path if preferred_path.exists() else models_dir / "deployment_model.joblib"
         if deployment_path.exists():
             models["Deployment Model"] = joblib.load(deployment_path)
         return models
@@ -678,7 +680,11 @@ class PredictionApp:
         cv_results = self.load_csv(cv_path, self.file_version(cv_path))
         guest_segments = self.load_csv(segments_path, self.file_version(segments_path))
         raw_data = self.load_raw_data(DATA_PATH, self.file_version(DATA_PATH))
-        models = self.load_models(self.artifacts_dir, self.file_version(model_path))
+        models = self.load_models(
+            self.artifacts_dir,
+            str(metadata.get("deployment_model", metadata.get("best_model", "Deployment Model"))),
+            self.file_version(model_path),
+        )
 
         if holdout.empty or not schema.get("columns"):
             st.error("Saved training artifacts are missing. Run terminal training and redeploy the app.")

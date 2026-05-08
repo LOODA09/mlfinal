@@ -36,7 +36,6 @@ from .models import (
     SVMModel,
     StackingEnsembleModel,
     VotingEnsembleModel,
-    XGBoostModel,
 )
 
 
@@ -195,7 +194,6 @@ class TerminalTrainingRunner:
             "SVM",
             "Gradient Boosting",
             "Extra Trees",
-            "XGBoost",
             "LightGBM",
             "Voting Ensemble",
             "Stacking Ensemble",
@@ -230,8 +228,6 @@ class TerminalTrainingRunner:
                 models.append(GradientBoostingModel())
             elif model_name == "Extra Trees":
                 models.append(ExtraTreesModel())
-            elif model_name == "XGBoost":
-                models.append(XGBoostModel())
             elif model_name == "LightGBM":
                 models.append(LightGBMModel())
             elif model_name == "Voting Ensemble":

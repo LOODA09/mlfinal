@@ -8,7 +8,7 @@
   "test_ratio": 0.3,
   "cross_validation_folds": 3,
   "best_model": "Random Forest",
-  "deployment_model": "XGBoost",
+  "deployment_model": "Random Forest",
   "trained_models": [
     "Logistic Regression",
     "KNN",
@@ -19,7 +19,6 @@
     "RNN",
     "LSTM",
     "Random Forest",
-    "XGBoost",
     "LightGBM"
   ],
   "full_data_models": [
@@ -32,7 +31,6 @@
     "RNN",
     "LSTM",
     "Random Forest",
-    "XGBoost",
     "LightGBM"
   ],
   "skipped_models": {},
@@ -97,5 +95,5 @@
   "artifact_finalize_wall_clock_sec": 8.535546500002965,
   "total_pipeline_wall_clock_sec": 1734.8638307999354,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The live app/report use the refreshed hotel_booking.csv benchmark that includes ANN, RNN, LSTM, SVM, and LightGBM. XGBoost remains the deployed model because it is small enough to ship to GitHub, while Random Forest remains the best benchmark model in this run."
+  "deployment_model_note": "The live app/report use the refreshed hotel_booking.csv benchmark that includes ANN, RNN, LSTM, SVM, and LightGBM. Random Forest is both the best benchmark model and the deployed prediction model in this run."
 }
