@@ -1,0 +1,103 @@
+{
+  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_booking.csv",
+  "remove_leakage_features": true,
+  "feature_preset": "honest",
+  "evaluation_mode": "Honest Prediction",
+  "python_version": "3.11.9",
+  "train_rows": 83446,
+  "test_rows": 35763,
+  "total_rows": 119209,
+  "train_ratio": 0.7,
+  "test_ratio": 0.3,
+  "cross_validation_folds": 3,
+  "best_model": "Random Forest",
+  "deployment_model": "Random Forest",
+  "trained_models": [
+    "Random Forest",
+    "Logistic Regression",
+    "KNN",
+    "Decision Tree",
+    "Naive Bayes",
+    "SVM",
+    "ANN",
+    "RNN",
+    "LSTM",
+    "LightGBM"
+  ],
+  "full_data_models": [
+    "Random Forest",
+    "Logistic Regression",
+    "KNN",
+    "Decision Tree",
+    "Naive Bayes",
+    "SVM",
+    "ANN",
+    "RNN",
+    "LSTM",
+    "LightGBM"
+  ],
+  "skipped_models": {},
+  "shap_explanations": [
+    {
+      "feature": "requests_per_night",
+      "mean_abs_shap": 0.06344902047961744,
+      "correlation_with_risk": -0.7610845783239203,
+      "explanation": "Higher values tend to reduce cancellation risk."
+    },
+    {
+      "feature": "customer_type_Transient",
+      "mean_abs_shap": 0.0529755816447125,
+      "correlation_with_risk": 0.8515349491256478,
+      "explanation": "Higher values tend to increase cancellation risk."
+    },
+    {
+      "feature": "total_of_special_requests",
+      "mean_abs_shap": 0.03843393530295304,
+      "correlation_with_risk": -0.7679041952727012,
+      "explanation": "Higher values tend to reduce cancellation risk."
+    }
+  ],
+  "segmentation_summary_rows": [
+    {
+      "segment": 0,
+      "lead_time": 47.4,
+      "adr": 86.91,
+      "total_nights": 2.63,
+      "total_guests": 1.72,
+      "previous_cancellations": 0.04
+    },
+    {
+      "segment": 1,
+      "lead_time": 239.61,
+      "adr": 88.12,
+      "total_nights": 4.75,
+      "total_guests": 1.93,
+      "previous_cancellations": 0.12
+    },
+    {
+      "segment": 2,
+      "lead_time": 193.96,
+      "adr": 62.05,
+      "total_nights": 3.47,
+      "total_guests": 1.97,
+      "previous_cancellations": 19.84
+    },
+    {
+      "segment": 3,
+      "lead_time": 76.46,
+      "adr": 173.52,
+      "total_nights": 3.97,
+      "total_guests": 2.85,
+      "previous_cancellations": 0.01
+    }
+  ],
+  "tensorflow_version": "2.21.0",
+  "benchmark_phase_wall_clock_sec": 850.0009137000889,
+  "shap_phase_wall_clock_sec": 36.59615619992837,
+  "full_retrain_phase_wall_clock_sec": 244.18373359995894,
+  "artifact_finalize_wall_clock_sec": 5.634531200164929,
+  "total_pipeline_wall_clock_sec": 1142.1620686999522,
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
+  "deployment_model_note": "Random Forest is deployed in Honest Prediction mode so the secondary mode keeps a realistic future-booking prediction path with the strongest honest benchmark model.",
+  "mode_summary": "Secondary honest prediction mode using future-booking-safe features for realistic pre-arrival scoring."
+}

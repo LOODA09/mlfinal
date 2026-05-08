@@ -16,8 +16,8 @@ from plotly.subplots import make_subplots
 from hotel_app.ml import HotelDataProcessor, SHAPAnalyzer, _positive_probabilities
 
 
-ARTIFACTS_DIR = Path("artifacts_hotel_booking") if Path("artifacts_hotel_booking").exists() else Path("artifacts")
-LEAKY_ARTIFACTS_DIR = Path("artifacts_leaky")
+HIGH_SCORE_ARTIFACTS_DIR = Path("artifacts")
+HONEST_ARTIFACTS_DIR = Path("artifacts_honest")
 DATA_PATH = Path("hotel_booking.csv") if Path("hotel_booking.csv").exists() else Path("hotel_bookings.csv")
 EXCLUDED_FEATURES = {"arrival_date_year"}
 
@@ -540,7 +540,7 @@ class DashboardStyle:
                 <div class="hero-topline">Benchmark Dashboard | Prediction Console | SHAP Explainability</div>
                 <h1>Hotel Cancellation Intelligence</h1>
                 <p>
-                    Professional dashboard for comparing all trained models, reviewing honest holdout and
+                    Professional dashboard for comparing all trained models, reviewing saved holdout and
                     5-fold validation metrics, inspecting confusion matrices and SHAP explanations, and
                     running live booking predictions from the saved deployment model.
                 </p>
@@ -596,10 +596,11 @@ class DashboardStyle:
 
 
 class PredictionApp:
-    def __init__(self, artifacts_dir: Path = ARTIFACTS_DIR) -> None:
+    def __init__(self, artifacts_dir: Path = HIGH_SCORE_ARTIFACTS_DIR) -> None:
         self.artifacts_dir = artifacts_dir
         self.processor = HotelDataProcessor()
-        self.remove_leakage_features = True
+        self.active_mode = "high_score"
+        self.feature_preset = "high_score"
 
     @staticmethod
     def file_version(path: Path) -> int:
@@ -649,21 +650,23 @@ class PredictionApp:
             time.sleep(2.8)
             st.rerun()
 
-        st.sidebar.title("Evaluation Mode")
-        requested_remove_leakage = st.sidebar.toggle(
-            "Remove leakage features",
-            value=True,
-            help="When enabled, fields like reservation_status are excluded for an honest future-booking benchmark. When disabled, those leakage fields remain and reported accuracy will be much higher.",
+        st.sidebar.title("Experience Mode")
+        mode_label = st.sidebar.radio(
+            "Open benchmark mode",
+            ["High-Score Benchmark", "Honest Prediction"],
+            index=0,
+            help="High-Score Benchmark reproduces the notebook-style high-accuracy setup. Honest Prediction uses future-booking-safe features.",
         )
-        requested_artifacts_dir = ARTIFACTS_DIR if requested_remove_leakage else LEAKY_ARTIFACTS_DIR
+        requested_mode = "high_score" if mode_label == "High-Score Benchmark" else "honest"
+        requested_artifacts_dir = HIGH_SCORE_ARTIFACTS_DIR if requested_mode == "high_score" else HONEST_ARTIFACTS_DIR
         if requested_artifacts_dir.exists():
             self.artifacts_dir = requested_artifacts_dir
-            self.remove_leakage_features = requested_remove_leakage
+            self.active_mode = requested_mode
         else:
-            self.artifacts_dir = ARTIFACTS_DIR
-            self.remove_leakage_features = True
-            if not requested_remove_leakage:
-                st.sidebar.warning("Leakage-enabled artifacts are not available yet, so the app fell back to leakage-removed mode.")
+            self.artifacts_dir = HIGH_SCORE_ARTIFACTS_DIR
+            self.active_mode = "high_score"
+            if requested_mode == "honest":
+                st.sidebar.warning("Honest prediction artifacts are not available yet, so the app fell back to the high-score benchmark mode.")
 
         metadata_path = self.artifacts_dir / "reports" / "metadata.json"
         confusion_path = self.artifacts_dir / "reports" / "confusion_matrices.json"
@@ -697,13 +700,16 @@ class PredictionApp:
         holdout = self.normalize_holdout_frame(holdout)
         cv_results = self.normalize_cv_frame(cv_results)
         holdout = self.add_complexity_tiers(holdout)
+        self.feature_preset = str(metadata.get("feature_preset", self.active_mode))
 
         DashboardStyle.hero(metadata)
-        if self.remove_leakage_features:
-            st.caption("Current mode: Leakage Removed. Metrics and predictions exclude future-only leakage fields such as `reservation_status`.")
+        if self.active_mode == "high_score":
+            st.info(
+                "Current mode: High-Score Benchmark. This default mode mirrors the notebook-style benchmark setup and is optimized for the visible >90% comparison results."
+            )
         else:
-            st.warning(
-                "Current mode: Leakage Allowed. This mode keeps future-only leakage fields such as `reservation_status`, so the reported accuracy is higher but not valid for real future-booking prediction."
+            st.caption(
+                "Current mode: Honest Prediction. Metrics and predictions use future-booking-safe features, so accuracy is lower but the scores are realistic for true pre-arrival prediction."
             )
 
         overview_tab, models_tab, segment_tab, explain_tab, predict_tab = st.tabs(
@@ -805,7 +811,7 @@ class PredictionApp:
     ) -> None:
         self.render_section_header(
             "Performance Overview",
-            "This section summarizes the honest test performance, validation consistency, timing behavior, and guest segmentation outputs generated from terminal training.",
+            "This section summarizes the saved benchmark for the active mode, including holdout metrics, validation consistency, timing behavior, and guest segmentation outputs.",
         )
 
         top_model = holdout.sort_values("f1", ascending=False).iloc[0]
@@ -816,7 +822,7 @@ class PredictionApp:
                 f"""
                 <div class="insight-box">
                     <strong>Best holdout performer</strong>
-                    <span>{top_model['model']} leads the honest 30% test split with accuracy {top_model['accuracy']:.4f}, F1 {top_model['f1']:.4f}, and ROC-AUC {top_model['roc_auc']:.4f}.</span>
+                    <span>{top_model['model']} leads the active 30% test split with accuracy {top_model['accuracy']:.4f}, F1 {top_model['f1']:.4f}, and ROC-AUC {top_model['roc_auc']:.4f}.</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -997,12 +1003,12 @@ class PredictionApp:
     ) -> None:
         self.render_section_header(
             "Prediction Console",
-            "Use the deployed cloud model to score a booking manually. The UI only predicts; all training and benchmarking are loaded from saved terminal artifacts.",
+            "Use the deployed model for the active mode to score a booking manually. The form, saved metrics, and loaded model all come from the same artifact set.",
         )
-        if self.remove_leakage_features:
-            st.info("Prediction mode uses leakage-removed features only, so the score is suitable for future-booking style inputs.")
+        if self.active_mode == "honest":
+            st.info("This form is using the honest future-booking feature set, so the score is suitable for realistic pre-arrival prediction.")
         else:
-            st.warning("Prediction mode is using leakage-enabled features. Inputs like reservation status are only known after the booking outcome unfolds, so this mode is for comparison only.")
+            st.warning("This form is using the notebook-style high-score benchmark feature set. It may ask for outcome-adjacent fields and is intended for benchmark comparison, not real future-booking deployment.")
         left, right = st.columns([1.2, 0.8], gap="large")
 
         with left:
@@ -1016,11 +1022,12 @@ class PredictionApp:
         with right:
             st.markdown("### Deployment Snapshot")
             deployment_name = metadata.get("deployment_model", metadata.get("best_model", "N/A"))
+            deployment_note = metadata.get("deployment_model_note", "")
             st.markdown(
                 f"""
                 <div class="insight-box">
                     <strong>Cloud deployment model</strong>
-                    <span>{deployment_name} is the lightweight model shipped with the app. The benchmark leader may differ when larger ensembles are too heavy for cloud deployment.</span>
+                    <span>{deployment_name} is the active deployed model for this mode. {deployment_note}</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1083,7 +1090,7 @@ class PredictionApp:
         model_name: str,
         examples: pd.DataFrame,
     ) -> None:
-        model_input = self.processor.add_engineered_features(raw_input.copy())
+        model_input = self.processor.add_engineered_features(raw_input.copy(), feature_preset=self.feature_preset)
 
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
@@ -1137,7 +1144,8 @@ class PredictionApp:
         try:
             analyzer = SHAPAnalyzer()
             background = self.processor.add_engineered_features(
-                examples.head(min(80, len(examples))).copy()
+                examples.head(min(80, len(examples))).copy(),
+                feature_preset=self.feature_preset,
             )
             shap_values = analyzer.explain(model, background, model_input, max_background=80)
             feature_names = list(shap_values.feature_names)

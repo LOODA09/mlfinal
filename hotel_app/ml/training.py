@@ -55,11 +55,16 @@ class ModelTrainer:
         data_path: str = "hotel_bookings.csv",
         sample_size: Optional[int] = None,
         remove_leakage_features: bool = True,
+        feature_preset: Optional[str] = None,
     ):
         data = self.processor.load_data(data_path)
         if sample_size and sample_size < len(data):
             data = data.sample(sample_size, random_state=self.random_state)
-        return self.processor.build_features(data, remove_leakage_features=remove_leakage_features)
+        return self.processor.build_features(
+            data,
+            remove_leakage_features=remove_leakage_features,
+            feature_preset=feature_preset,
+        )
 
     def split_data(self, x_data: pd.DataFrame, y_data: pd.Series):
         return train_test_split(
@@ -255,6 +260,7 @@ class TerminalTrainingRunner:
         shap_rows: int = 250,
         selected_models: Optional[Sequence[str]] = None,
         remove_leakage_features: bool = True,
+        feature_preset: Optional[str] = None,
     ) -> Dict[str, Any]:
         from .testing import ModelTester
 
@@ -262,13 +268,19 @@ class TerminalTrainingRunner:
         tester = ModelTester()
         artifacts = TrainingArtifacts(output_dir)
         raw_data = self.processor.load_data(data_path)
+        resolved_preset = self.processor.resolve_feature_preset(
+            remove_leakage_features=remove_leakage_features,
+            feature_preset=feature_preset,
+        )
         prediction_inputs = self.processor.build_raw_prediction_inputs(
             raw_data,
             remove_leakage_features=remove_leakage_features,
+            feature_preset=resolved_preset,
         )
         x_data, y_data = self.processor.build_features(
             raw_data,
             remove_leakage_features=remove_leakage_features,
+            feature_preset=resolved_preset,
         )
         x_train, x_test, y_train, y_test = self.trainer.split_data(x_data, y_data)
         models = self.default_models(
@@ -383,7 +395,8 @@ class TerminalTrainingRunner:
         metadata = {
             "data_path": str(Path(data_path).resolve()),
             "remove_leakage_features": remove_leakage_features,
-            "evaluation_mode": "Leakage Removed" if remove_leakage_features else "Leakage Allowed",
+            "feature_preset": resolved_preset,
+            "evaluation_mode": "Honest Prediction" if resolved_preset == "honest" else "High-Score Benchmark",
             "python_version": sys.version.split()[0],
             "train_rows": int(len(x_train)),
             "test_rows": int(len(x_test)),

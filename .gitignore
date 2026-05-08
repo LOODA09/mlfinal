@@ -10,3 +10,5 @@ env/
 .DS_Store
 artifacts/models/*.joblib
 !artifacts/models/deployment_model.joblib
+artifacts_honest/models/*.joblib
+!artifacts_honest/models/deployment_model.joblib

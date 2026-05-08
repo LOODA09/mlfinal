@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import re
-from typing import Any, Optional, Sequence, Tuple
+from typing import Any, Literal, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -26,6 +26,8 @@ MONTH_ORDER = [
     "November",
     "December",
 ]
+
+FeaturePreset = Literal["honest", "high_score"]
 
 def _one_hot_encoder() -> OneHotEncoder:
     try:
@@ -103,6 +105,15 @@ class HotelDataProcessor:
         default_factory=lambda: ("reservation_status", "reservation_status_date")
     )
 
+    def resolve_feature_preset(
+        self,
+        remove_leakage_features: bool = True,
+        feature_preset: Optional[FeaturePreset] = None,
+    ) -> FeaturePreset:
+        if feature_preset is not None:
+            return feature_preset
+        return "honest" if remove_leakage_features else "high_score"
+
     def load_data(self, path: str = "hotel_bookings.csv") -> pd.DataFrame:
         return pd.read_csv(path)
 
@@ -128,11 +139,21 @@ class HotelDataProcessor:
         self,
         data: pd.DataFrame,
         remove_leakage_features: bool = True,
+        feature_preset: Optional[FeaturePreset] = None,
     ) -> Tuple[pd.DataFrame, pd.Series]:
         df = self.clean_data(data)
         y = df[self.target_column].astype(int)
+        resolved_preset = self.resolve_feature_preset(
+            remove_leakage_features=remove_leakage_features,
+            feature_preset=feature_preset,
+        )
         x_data = self.add_engineered_features(
-            self.build_raw_prediction_inputs(df, remove_leakage_features=remove_leakage_features)
+            self.build_raw_prediction_inputs(
+                df,
+                remove_leakage_features=remove_leakage_features,
+                feature_preset=resolved_preset,
+            ),
+            feature_preset=resolved_preset,
         )
         return x_data, y
 
@@ -140,30 +161,81 @@ class HotelDataProcessor:
         self,
         data: pd.DataFrame,
         remove_leakage_features: bool = True,
+        feature_preset: Optional[FeaturePreset] = None,
     ) -> pd.DataFrame:
         df = self.clean_data(data)
-        if not remove_leakage_features and "reservation_status_date" in df.columns:
-            reservation_date = pd.to_datetime(df["reservation_status_date"], errors="coerce")
-            df["reservation_status_year"] = reservation_date.dt.year.fillna(0).astype(int)
-            df["reservation_status_month"] = reservation_date.dt.month.fillna(0).astype(int)
-            df["reservation_status_day"] = reservation_date.dt.day.fillna(0).astype(int)
-            df = df.drop(columns=["reservation_status_date"])
+        resolved_preset = self.resolve_feature_preset(
+            remove_leakage_features=remove_leakage_features,
+            feature_preset=feature_preset,
+        )
+        if resolved_preset == "high_score":
+            return self._build_high_score_inputs(df)
         drop_columns = list(self.dropped_low_signal_columns)
         drop_columns.extend(self.dropped_behavior_columns)
-        if remove_leakage_features:
+        if resolved_preset == "honest":
             drop_columns.extend(self.leakage_columns)
         drop_columns.append(self.target_column)
         year_columns = [col for col in df.columns if col.endswith("_year")]
         drop_columns.extend(year_columns)
         return df.drop(columns=[col for col in drop_columns if col in df.columns], errors="ignore")
 
-    def add_engineered_features(self, x_data: pd.DataFrame) -> pd.DataFrame:
+    def _build_high_score_inputs(self, df: pd.DataFrame) -> pd.DataFrame:
+        features = df.copy()
+        if {"arrival_date_year", "arrival_date_month", "arrival_date_day_of_month"}.issubset(features.columns):
+            arrival_date = pd.to_datetime(
+                {
+                    "year": pd.to_numeric(features["arrival_date_year"], errors="coerce").fillna(2016).astype(int),
+                    "month": features["arrival_date_month"].map({name: i + 1 for i, name in enumerate(MONTH_ORDER)}).fillna(1).astype(int),
+                    "day": pd.to_numeric(features["arrival_date_day_of_month"], errors="coerce").fillna(1).astype(int),
+                },
+                errors="coerce",
+            )
+            features["arrival_date"] = arrival_date
+        if {"assigned_room_type", "reserved_room_type"}.issubset(features.columns):
+            features["change_in_room"] = (features["assigned_room_type"].astype(str) != features["reserved_room_type"].astype(str)).astype(int)
+        if {"children", "babies"}.issubset(features.columns):
+            features["offspring"] = (
+                pd.to_numeric(features["children"], errors="coerce").fillna(0)
+                + pd.to_numeric(features["babies"], errors="coerce").fillna(0)
+            ).astype(int)
+        if {"previous_cancellations", "previous_bookings_not_canceled"}.issubset(features.columns):
+            features["total_bookings"] = (
+                pd.to_numeric(features["previous_cancellations"], errors="coerce").fillna(0)
+                + pd.to_numeric(features["previous_bookings_not_canceled"], errors="coerce").fillna(0)
+            )
+        if "country" in features.columns:
+            country = features["country"].astype(str).fillna("Unknown")
+            features["country_grouped"] = np.where(country.eq("PRT"), "PRT", np.where(country.eq("GBR"), "GBR", "Other"))
+        if {"reservation_status_date", "arrival_date"}.issubset(features.columns):
+            status_date = pd.to_datetime(features["reservation_status_date"], errors="coerce")
+            arrival_date = pd.to_datetime(features["arrival_date"], errors="coerce")
+            stay_duration = ((status_date - arrival_date) / np.timedelta64(1, "D")).fillna(-1)
+            features["stay_duration"] = stay_duration.astype(int).clip(lower=-1)
+        drop_columns = [
+            self.target_column,
+            "name",
+            "email",
+            "phone-number",
+            "credit_card",
+            "country",
+            "arrival_date",
+            "arrival_date_year",
+            "reservation_status_date",
+        ]
+        return features.drop(columns=[col for col in drop_columns if col in features.columns], errors="ignore")
+
+    def add_engineered_features(
+        self,
+        x_data: pd.DataFrame,
+        feature_preset: Optional[FeaturePreset] = None,
+    ) -> pd.DataFrame:
+        resolved_preset = feature_preset or "honest"
         features = x_data.copy()
-        if "agent" in features.columns:
+        if resolved_preset == "honest" and "agent" in features.columns:
             agent_numeric = pd.to_numeric(features["agent"], errors="coerce").fillna(0)
             features["has_agent"] = (agent_numeric > 0).astype(int)
             features = features.drop(columns=["agent"])
-        if "company" in features.columns:
+        if resolved_preset == "honest" and "company" in features.columns:
             company_numeric = pd.to_numeric(features["company"], errors="coerce").fillna(0)
             features["has_company"] = (company_numeric > 0).astype(int)
             features = features.drop(columns=["company"])

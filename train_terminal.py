@@ -20,6 +20,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--lstm-epochs", type=int, default=10, help="LSTM epochs when TensorFlow is available.")
     parser.add_argument("--shap-rows", type=int, default=250, help="Rows to use for SHAP plots.")
     parser.add_argument(
+        "--feature-preset",
+        choices=["honest", "high_score"],
+        default=None,
+        help="Feature preset to use for training artifacts.",
+    )
+    parser.add_argument(
         "--keep-leakage-features",
         action="store_true",
         help="Keep leakage features such as reservation_status in training and prediction artifacts.",
@@ -46,6 +52,7 @@ def main() -> None:
         shap_rows=args.shap_rows,
         selected_models=args.models,
         remove_leakage_features=not args.keep_leakage_features,
+        feature_preset=args.feature_preset,
     )
 
     holdout = results["holdout_summary"].copy()

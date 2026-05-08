@@ -1,5 +1,8 @@
 {
   "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_booking.csv",
+  "remove_leakage_features": true,
+  "feature_preset": "high_score",
+  "evaluation_mode": "High-Score Benchmark",
   "python_version": "3.11.9",
   "train_rows": 83446,
   "test_rows": 35763,
@@ -10,6 +13,7 @@
   "best_model": "Random Forest",
   "deployment_model": "Random Forest",
   "trained_models": [
+    "Random Forest",
     "Logistic Regression",
     "KNN",
     "Decision Tree",
@@ -18,10 +22,10 @@
     "ANN",
     "RNN",
     "LSTM",
-    "Random Forest",
     "LightGBM"
   ],
   "full_data_models": [
+    "Random Forest",
     "Logistic Regression",
     "KNN",
     "Decision Tree",
@@ -30,27 +34,26 @@
     "ANN",
     "RNN",
     "LSTM",
-    "Random Forest",
     "LightGBM"
   ],
   "skipped_models": {},
   "shap_explanations": [
     {
-      "feature": "requests_per_night",
-      "mean_abs_shap": 0.05947116774338566,
-      "correlation_with_risk": -0.6903688594229167,
+      "feature": "reservation_status_Check-Out",
+      "mean_abs_shap": 0.3001692708333336,
+      "correlation_with_risk": -0.9996376075759514,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
-      "feature": "customer_type_Transient",
-      "mean_abs_shap": 0.03855625335578099,
-      "correlation_with_risk": 0.856460339654142,
-      "explanation": "Higher values tend to increase cancellation risk."
+      "feature": "stay_duration",
+      "mean_abs_shap": 0.09390028208145274,
+      "correlation_with_risk": -0.7992825050274565,
+      "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
-      "feature": "lead_time_log",
-      "mean_abs_shap": 0.0328958460756009,
-      "correlation_with_risk": 0.8458652475687133,
+      "feature": "reservation_status_Canceled",
+      "mean_abs_shap": 0.0645527513522883,
+      "correlation_with_risk": 0.9983527376305281,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
@@ -89,11 +92,12 @@
     }
   ],
   "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1184.415174299851,
-  "shap_phase_wall_clock_sec": 238.73787309997715,
-  "full_retrain_phase_wall_clock_sec": 295.7754645999521,
-  "artifact_finalize_wall_clock_sec": 8.535546500002965,
-  "total_pipeline_wall_clock_sec": 1734.8638307999354,
+  "benchmark_phase_wall_clock_sec": 1015.467836599797,
+  "shap_phase_wall_clock_sec": 33.18439699988812,
+  "full_retrain_phase_wall_clock_sec": 271.77290929993615,
+  "artifact_finalize_wall_clock_sec": 5.442447500070557,
+  "total_pipeline_wall_clock_sec": 1334.4437444000505,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The live app now uses a compact Random Forest retrained on the current visible booking-form feature set. This keeps web predictions aligned with the form inputs and makes the deployed model GitHub-safe, while still preserving strong benchmark performance."
+  "deployment_model_note": "Random Forest is deployed in the default High-Score Benchmark mode so the visible app metrics and live benchmark predictions stay aligned with the notebook-style high-accuracy setup.",
+  "mode_summary": "Default high-score benchmark mode using notebook-matched leakage-heavy features for demo and comparison."
 }

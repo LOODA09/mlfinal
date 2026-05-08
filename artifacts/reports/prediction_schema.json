@@ -84,6 +84,34 @@
       ]
     },
     {
+      "name": "assigned_room_type",
+      "type": "categorical",
+      "default": "A",
+      "options": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "K",
+        "L"
+      ]
+    },
+    {
+      "name": "deposit_type",
+      "type": "categorical",
+      "default": "No Deposit",
+      "options": [
+        "No Deposit",
+        "Non Refund",
+        "Refundable"
+      ]
+    },
+    {
       "name": "customer_type",
       "type": "categorical",
       "default": "Transient",
@@ -92,6 +120,26 @@
         "Group",
         "Transient",
         "Transient-Party"
+      ]
+    },
+    {
+      "name": "reservation_status",
+      "type": "categorical",
+      "default": "Check-Out",
+      "options": [
+        "Canceled",
+        "Check-Out",
+        "No-Show"
+      ]
+    },
+    {
+      "name": "country_grouped",
+      "type": "categorical",
+      "default": "Other",
+      "options": [
+        "GBR",
+        "Other",
+        "PRT"
       ]
     },
     {
@@ -223,11 +271,51 @@
       "step": 0.1
     },
     {
+      "name": "required_car_parking_spaces",
+      "type": "numeric",
+      "default": 0.0,
+      "min": 0.0,
+      "max": 8.0,
+      "step": 1.0
+    },
+    {
       "name": "total_of_special_requests",
       "type": "numeric",
       "default": 0.0,
       "min": 0.0,
       "max": 5.0,
+      "step": 1.0
+    },
+    {
+      "name": "change_in_room",
+      "type": "numeric",
+      "default": 0.0,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 1.0
+    },
+    {
+      "name": "offspring",
+      "type": "numeric",
+      "default": 0.0,
+      "min": 0.0,
+      "max": 10.0,
+      "step": 1.0
+    },
+    {
+      "name": "total_bookings",
+      "type": "numeric",
+      "default": 0.0,
+      "min": 0.0,
+      "max": 78.0,
+      "step": 1.0
+    },
+    {
+      "name": "stay_duration",
+      "type": "numeric",
+      "default": 1.0,
+      "min": -1.0,
+      "max": 69.0,
       "step": 1.0
     }
   ]
