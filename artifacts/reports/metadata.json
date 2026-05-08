@@ -3,57 +3,53 @@
   "remove_leakage_features": true,
   "feature_preset": "high_score",
   "evaluation_mode": "High-Score Benchmark",
-  "python_version": "3.11.9",
+  "python_version": "3.14.3",
   "train_rows": 83446,
   "test_rows": 35763,
   "total_rows": 119209,
   "train_ratio": 0.7,
   "test_ratio": 0.3,
   "cross_validation_folds": 3,
-  "best_model": "Random Forest",
-  "deployment_model": "Random Forest",
+  "best_model": "Logistic Regression",
+  "deployment_model": "Logistic Regression",
   "trained_models": [
-    "Random Forest",
     "Logistic Regression",
     "KNN",
     "Decision Tree",
     "Naive Bayes",
     "SVM",
     "ANN",
-    "RNN",
-    "LSTM",
-    "LightGBM"
+    "Random Forest"
   ],
   "full_data_models": [
-    "Random Forest",
     "Logistic Regression",
     "KNN",
     "Decision Tree",
     "Naive Bayes",
     "SVM",
     "ANN",
-    "RNN",
-    "LSTM",
-    "LightGBM"
+    "Random Forest"
   ],
-  "skipped_models": {},
+  "skipped_models": {
+    "LightGBM": "LightGBM is required for LightGBMModel. Install it with `pip install lightgbm` or remove LightGBM from the selected models."
+  },
   "shap_explanations": [
     {
-      "feature": "reservation_status_Check-Out",
-      "mean_abs_shap": 0.3001692708333336,
-      "correlation_with_risk": -0.9996376075759514,
+      "feature": "stay_duration",
+      "mean_abs_shap": 0.20604875400569259,
+      "correlation_with_risk": -0.8288932713410992,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
-      "feature": "stay_duration",
-      "mean_abs_shap": 0.09390028208145274,
-      "correlation_with_risk": -0.7992825050274565,
+      "feature": "reservation_status_Check-Out",
+      "mean_abs_shap": 0.14061915209107242,
+      "correlation_with_risk": -0.8561064774594005,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
       "feature": "reservation_status_Canceled",
-      "mean_abs_shap": 0.0645527513522883,
-      "correlation_with_risk": 0.9983527376305281,
+      "mean_abs_shap": 0.08225785790127023,
+      "correlation_with_risk": 0.7284395582400138,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
@@ -91,13 +87,11 @@
       "previous_cancellations": 0.01
     }
   ],
-  "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1015.467836599797,
-  "shap_phase_wall_clock_sec": 33.18439699988812,
-  "full_retrain_phase_wall_clock_sec": 271.77290929993615,
-  "artifact_finalize_wall_clock_sec": 5.442447500070557,
-  "total_pipeline_wall_clock_sec": 1334.4437444000505,
-  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "Random Forest is deployed in the default High-Score Benchmark mode so the visible app metrics and live benchmark predictions stay aligned with the notebook-style high-accuracy setup.",
-  "mode_summary": "Default high-score benchmark mode using notebook-matched leakage-heavy features for demo and comparison."
+  "tensorflow_version": null,
+  "benchmark_phase_wall_clock_sec": 887.6168448999524,
+  "shap_phase_wall_clock_sec": 41.187960100127384,
+  "full_retrain_phase_wall_clock_sec": 310.567717500031,
+  "artifact_finalize_wall_clock_sec": 5.414914299966767,
+  "total_pipeline_wall_clock_sec": 1246.8478014001157,
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run."
 }

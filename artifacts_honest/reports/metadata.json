@@ -3,7 +3,7 @@
   "remove_leakage_features": true,
   "feature_preset": "honest",
   "evaluation_mode": "Honest Prediction",
-  "python_version": "3.11.9",
+  "python_version": "3.14.3",
   "train_rows": 83446,
   "test_rows": 35763,
   "total_rows": 119209,
@@ -13,47 +13,43 @@
   "best_model": "Random Forest",
   "deployment_model": "Random Forest",
   "trained_models": [
-    "Random Forest",
     "Logistic Regression",
     "KNN",
     "Decision Tree",
     "Naive Bayes",
     "SVM",
     "ANN",
-    "RNN",
-    "LSTM",
-    "LightGBM"
+    "Random Forest"
   ],
   "full_data_models": [
-    "Random Forest",
     "Logistic Regression",
     "KNN",
     "Decision Tree",
     "Naive Bayes",
     "SVM",
     "ANN",
-    "RNN",
-    "LSTM",
-    "LightGBM"
+    "Random Forest"
   ],
-  "skipped_models": {},
+  "skipped_models": {
+    "LightGBM": "LightGBM is required for LightGBMModel. Install it with `pip install lightgbm` or remove LightGBM from the selected models."
+  },
   "shap_explanations": [
     {
-      "feature": "requests_per_night",
-      "mean_abs_shap": 0.06344902047961744,
-      "correlation_with_risk": -0.7610845783239203,
-      "explanation": "Higher values tend to reduce cancellation risk."
-    },
-    {
       "feature": "customer_type_Transient",
-      "mean_abs_shap": 0.0529755816447125,
-      "correlation_with_risk": 0.8515349491256478,
+      "mean_abs_shap": 0.033930399610170976,
+      "correlation_with_risk": 0.9041034035529145,
       "explanation": "Higher values tend to increase cancellation risk."
     },
     {
       "feature": "total_of_special_requests",
-      "mean_abs_shap": 0.03843393530295304,
-      "correlation_with_risk": -0.7679041952727012,
+      "mean_abs_shap": 0.03299737962846142,
+      "correlation_with_risk": -0.8302046566698275,
+      "explanation": "Higher values tend to reduce cancellation risk."
+    },
+    {
+      "feature": "requests_per_night",
+      "mean_abs_shap": 0.03283691986046388,
+      "correlation_with_risk": -0.7431905085966733,
       "explanation": "Higher values tend to reduce cancellation risk."
     }
   ],
@@ -91,13 +87,11 @@
       "previous_cancellations": 0.01
     }
   ],
-  "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 850.0009137000889,
-  "shap_phase_wall_clock_sec": 36.59615619992837,
-  "full_retrain_phase_wall_clock_sec": 244.18373359995894,
-  "artifact_finalize_wall_clock_sec": 5.634531200164929,
-  "total_pipeline_wall_clock_sec": 1142.1620686999522,
-  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "Random Forest is deployed in Honest Prediction mode so the secondary mode keeps a realistic future-booking prediction path with the strongest honest benchmark model.",
-  "mode_summary": "Secondary honest prediction mode using future-booking-safe features for realistic pre-arrival scoring."
+  "tensorflow_version": null,
+  "benchmark_phase_wall_clock_sec": 2315.293806000147,
+  "shap_phase_wall_clock_sec": 133.511206000112,
+  "full_retrain_phase_wall_clock_sec": 791.9545529000461,
+  "artifact_finalize_wall_clock_sec": 6.132917300099507,
+  "total_pipeline_wall_clock_sec": 3248.56327360007,
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run."
 }
