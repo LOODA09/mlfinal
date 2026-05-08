@@ -62,6 +62,8 @@ def _safe_float(value: Any) -> float:
 def _count_model_complexity(estimator: Any) -> int:
     if hasattr(estimator, "estimator_"):
         return _count_model_complexity(estimator.estimator_)
+    if hasattr(estimator, "best_estimator_"):
+        return _count_model_complexity(estimator.best_estimator_)
     if hasattr(estimator, "tree_"):
         return int(getattr(estimator.tree_, "node_count", 0))
     if hasattr(estimator, "estimators_"):
@@ -254,6 +256,7 @@ class HotelDataProcessor:
             features["adults_only"] = ((features["adults"] > 0) & (features["children"] + features["babies"] == 0)).astype(int)
         if {"previous_cancellations", "previous_bookings_not_canceled"}.issubset(features.columns):
             previous_total = features["previous_cancellations"] + features["previous_bookings_not_canceled"]
+            features["total_bookings"] = previous_total
             features["previous_cancel_rate"] = (
                 features["previous_cancellations"] / previous_total.replace(0, 1)
             ).fillna(0)
@@ -266,6 +269,10 @@ class HotelDataProcessor:
             features["requests_per_night"] = (
                 features["total_of_special_requests"] / features["total_nights"].replace(0, 1)
             ).fillna(0)
+        if {"total_of_special_requests", "total_guests"}.issubset(features.columns):
+            features["requests_per_guest"] = (
+                features["total_of_special_requests"] / features["total_guests"].replace(0, 1)
+            ).fillna(0)
         if {"adr", "total_guests"}.issubset(features.columns):
             features["adr_per_guest"] = (
                 features["adr"] / features["total_guests"].replace(0, 1)
@@ -273,6 +280,15 @@ class HotelDataProcessor:
         if {"adr", "total_nights"}.issubset(features.columns):
             features["booking_value"] = features["adr"] * features["total_nights"]
             features["adr_per_night_log"] = np.log1p(features["adr"].clip(lower=0))
+        if {"booking_value", "total_guests", "total_nights"}.issubset(features.columns):
+            features["value_per_guest_night"] = (
+                features["booking_value"]
+                / (features["total_guests"].replace(0, 1) * features["total_nights"].replace(0, 1))
+            ).fillna(0)
+        if {"total_guests", "total_nights"}.issubset(features.columns):
+            features["guests_per_night"] = (
+                features["total_guests"] / features["total_nights"].replace(0, 1)
+            ).fillna(0)
         if {"lead_time", "total_nights"}.issubset(features.columns):
             features["lead_time_per_night"] = (
                 features["lead_time"] / features["total_nights"].replace(0, 1)
