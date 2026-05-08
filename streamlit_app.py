@@ -602,6 +602,16 @@ class PredictionApp:
         self.active_mode = "high_score"
         self.feature_preset = "high_score"
 
+    def add_engineered_features_compat(self, frame: pd.DataFrame) -> pd.DataFrame:
+        """Handle both current and older processor method signatures."""
+        try:
+            return self.processor.add_engineered_features(
+                frame,
+                feature_preset=self.feature_preset,
+            )
+        except TypeError:
+            return self.processor.add_engineered_features(frame)
+
     @staticmethod
     def file_version(path: Path) -> int:
         if not path.exists():
@@ -1090,7 +1100,7 @@ class PredictionApp:
         model_name: str,
         examples: pd.DataFrame,
     ) -> None:
-        model_input = self.processor.add_engineered_features(raw_input.copy(), feature_preset=self.feature_preset)
+        model_input = self.add_engineered_features_compat(raw_input.copy())
 
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
@@ -1143,9 +1153,8 @@ class PredictionApp:
 
         try:
             analyzer = SHAPAnalyzer()
-            background = self.processor.add_engineered_features(
-                examples.head(min(80, len(examples))).copy(),
-                feature_preset=self.feature_preset,
+            background = self.add_engineered_features_compat(
+                examples.head(min(80, len(examples))).copy()
             )
             shap_values = analyzer.explain(model, background, model_input, max_background=80)
             feature_names = list(shap_values.feature_names)
