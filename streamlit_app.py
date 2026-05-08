@@ -17,6 +17,7 @@ from hotel_app.ml import HotelDataProcessor, SHAPAnalyzer, _positive_probabiliti
 
 
 ARTIFACTS_DIR = Path("artifacts_hotel_booking") if Path("artifacts_hotel_booking").exists() else Path("artifacts")
+LEAKY_ARTIFACTS_DIR = Path("artifacts_leaky")
 DATA_PATH = Path("hotel_booking.csv") if Path("hotel_booking.csv").exists() else Path("hotel_bookings.csv")
 EXCLUDED_FEATURES = {"arrival_date_year"}
 
@@ -598,6 +599,7 @@ class PredictionApp:
     def __init__(self, artifacts_dir: Path = ARTIFACTS_DIR) -> None:
         self.artifacts_dir = artifacts_dir
         self.processor = HotelDataProcessor()
+        self.remove_leakage_features = True
 
     @staticmethod
     def file_version(path: Path) -> int:
@@ -643,6 +645,22 @@ class PredictionApp:
             time.sleep(2.8)
             st.rerun()
 
+        st.sidebar.title("Evaluation Mode")
+        requested_remove_leakage = st.sidebar.toggle(
+            "Remove leakage features",
+            value=True,
+            help="When enabled, fields like reservation_status are excluded for an honest future-booking benchmark. When disabled, those leakage fields remain and reported accuracy will be much higher.",
+        )
+        requested_artifacts_dir = ARTIFACTS_DIR if requested_remove_leakage else LEAKY_ARTIFACTS_DIR
+        if requested_artifacts_dir.exists():
+            self.artifacts_dir = requested_artifacts_dir
+            self.remove_leakage_features = requested_remove_leakage
+        else:
+            self.artifacts_dir = ARTIFACTS_DIR
+            self.remove_leakage_features = True
+            if not requested_remove_leakage:
+                st.sidebar.warning("Leakage-enabled artifacts are not available yet, so the app fell back to leakage-removed mode.")
+
         metadata_path = self.artifacts_dir / "reports" / "metadata.json"
         confusion_path = self.artifacts_dir / "reports" / "confusion_matrices.json"
         schema_path = self.artifacts_dir / "reports" / "prediction_schema.json"
@@ -673,6 +691,12 @@ class PredictionApp:
         holdout = self.add_complexity_tiers(holdout)
 
         DashboardStyle.hero(metadata)
+        if self.remove_leakage_features:
+            st.caption("Current mode: Leakage Removed. Metrics and predictions exclude future-only leakage fields such as `reservation_status`.")
+        else:
+            st.warning(
+                "Current mode: Leakage Allowed. This mode keeps future-only leakage fields such as `reservation_status`, so the reported accuracy is higher but not valid for real future-booking prediction."
+            )
 
         overview_tab, models_tab, segment_tab, explain_tab, predict_tab = st.tabs(
             ["Overview", "Model Comparison", "Guest Segmentation", "Explainability", "Prediction"]
@@ -967,6 +991,10 @@ class PredictionApp:
             "Prediction Console",
             "Use the deployed cloud model to score a booking manually. The UI only predicts; all training and benchmarking are loaded from saved terminal artifacts.",
         )
+        if self.remove_leakage_features:
+            st.info("Prediction mode uses leakage-removed features only, so the score is suitable for future-booking style inputs.")
+        else:
+            st.warning("Prediction mode is using leakage-enabled features. Inputs like reservation status are only known after the booking outcome unfolds, so this mode is for comparison only.")
         left, right = st.columns([1.2, 0.8], gap="large")
 
         with left:

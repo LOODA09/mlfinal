@@ -1,0 +1,103 @@
+{
+  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_booking.csv",
+  "remove_leakage_features": false,
+  "evaluation_mode": "Leakage Allowed",
+  "python_version": "3.11.9",
+  "train_rows": 83446,
+  "test_rows": 35763,
+  "total_rows": 119209,
+  "train_ratio": 0.7,
+  "test_ratio": 0.3,
+  "cross_validation_folds": 3,
+  "best_model": "Logistic Regression",
+  "deployment_model": "Logistic Regression",
+  "trained_models": [
+    "Logistic Regression",
+    "KNN",
+    "Decision Tree",
+    "Naive Bayes",
+    "SVM",
+    "ANN",
+    "RNN",
+    "LSTM",
+    "Random Forest",
+    "XGBoost",
+    "LightGBM"
+  ],
+  "full_data_models": [
+    "Logistic Regression",
+    "KNN",
+    "Decision Tree",
+    "Naive Bayes",
+    "SVM",
+    "ANN",
+    "RNN",
+    "LSTM",
+    "Random Forest",
+    "XGBoost",
+    "LightGBM"
+  ],
+  "skipped_models": {},
+  "shap_explanations": [
+    {
+      "feature": "reservation_status_Check-Out",
+      "mean_abs_shap": 0.3314067019635024,
+      "correlation_with_risk": -0.9948749755240551,
+      "explanation": "Higher values tend to reduce cancellation risk."
+    },
+    {
+      "feature": "reservation_status_Canceled",
+      "mean_abs_shap": 0.1004447977091882,
+      "correlation_with_risk": 0.977050814670273,
+      "explanation": "Higher values tend to increase cancellation risk."
+    },
+    {
+      "feature": "previous_cancel_rate",
+      "mean_abs_shap": 0.012589103486433186,
+      "correlation_with_risk": 0.8513279399133588,
+      "explanation": "Higher values tend to increase cancellation risk."
+    }
+  ],
+  "segmentation_summary_rows": [
+    {
+      "segment": 0,
+      "lead_time": 47.4,
+      "adr": 86.91,
+      "total_nights": 2.63,
+      "total_guests": 1.72,
+      "previous_cancellations": 0.04
+    },
+    {
+      "segment": 1,
+      "lead_time": 239.61,
+      "adr": 88.12,
+      "total_nights": 4.75,
+      "total_guests": 1.93,
+      "previous_cancellations": 0.12
+    },
+    {
+      "segment": 2,
+      "lead_time": 193.96,
+      "adr": 62.05,
+      "total_nights": 3.47,
+      "total_guests": 1.97,
+      "previous_cancellations": 19.84
+    },
+    {
+      "segment": 3,
+      "lead_time": 76.46,
+      "adr": 173.52,
+      "total_nights": 3.97,
+      "total_guests": 2.85,
+      "previous_cancellations": 0.01
+    }
+  ],
+  "tensorflow_version": "2.21.0",
+  "benchmark_phase_wall_clock_sec": 1037.0674631998409,
+  "shap_phase_wall_clock_sec": 19.371940799988806,
+  "full_retrain_phase_wall_clock_sec": 287.1430148999207,
+  "artifact_finalize_wall_clock_sec": 5.705934800207615,
+  "total_pipeline_wall_clock_sec": 1357.2333711998072,
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
+  "deployment_model_note": "Leakage-enabled mode keeps future-only fields such as reservation_status. This produces much higher benchmark accuracy, but it is not valid for real future-booking prediction."
+}

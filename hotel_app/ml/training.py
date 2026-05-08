@@ -258,6 +258,7 @@ class TerminalTrainingRunner:
         lstm_epochs: int = 10,
         shap_rows: int = 250,
         selected_models: Optional[Sequence[str]] = None,
+        remove_leakage_features: bool = True,
     ) -> Dict[str, Any]:
         from .testing import ModelTester
 
@@ -265,8 +266,14 @@ class TerminalTrainingRunner:
         tester = ModelTester()
         artifacts = TrainingArtifacts(output_dir)
         raw_data = self.processor.load_data(data_path)
-        prediction_inputs = self.processor.build_raw_prediction_inputs(raw_data, remove_leakage_features=True)
-        x_data, y_data = self.processor.build_features(raw_data, remove_leakage_features=True)
+        prediction_inputs = self.processor.build_raw_prediction_inputs(
+            raw_data,
+            remove_leakage_features=remove_leakage_features,
+        )
+        x_data, y_data = self.processor.build_features(
+            raw_data,
+            remove_leakage_features=remove_leakage_features,
+        )
         x_train, x_test, y_train, y_test = self.trainer.split_data(x_data, y_data)
         models = self.default_models(
             ann_epochs=ann_epochs,
@@ -379,6 +386,8 @@ class TerminalTrainingRunner:
         artifact_finalize_wall_clock_sec = time.perf_counter() - artifact_finalize_start
         metadata = {
             "data_path": str(Path(data_path).resolve()),
+            "remove_leakage_features": remove_leakage_features,
+            "evaluation_mode": "Leakage Removed" if remove_leakage_features else "Leakage Allowed",
             "python_version": sys.version.split()[0],
             "train_rows": int(len(x_train)),
             "test_rows": int(len(x_test)),
