@@ -60,6 +60,8 @@ def _safe_float(value: Any) -> float:
 
 
 def _count_model_complexity(estimator: Any) -> int:
+    if hasattr(estimator, "estimator_"):
+        return _count_model_complexity(estimator.estimator_)
     if hasattr(estimator, "tree_"):
         return int(getattr(estimator.tree_, "node_count", 0))
     if hasattr(estimator, "estimators_"):

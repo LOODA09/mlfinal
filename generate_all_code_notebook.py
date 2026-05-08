@@ -70,7 +70,7 @@ def build_notebook(root: Path) -> dict:
             "Preprocessing notes:\n"
             "- numeric features are normalized with `StandardScaler`\n"
             "- categorical features are one-hot encoded after imputation\n"
-            "- class balancing is applied in the applicable models, including class-weighted deep learning fits\n"
+            "- class balancing is applied across the model set through native class weights, balanced sample weights, oversampling wrappers, and class-weighted deep learning fits\n"
             "- the project supports both a notebook-matched high-score benchmark mode and an honest future-booking mode\n\n"
             "Contents:\n"
             "- reporting and terminal scripts\n"
