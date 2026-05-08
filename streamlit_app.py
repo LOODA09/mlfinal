@@ -631,9 +631,11 @@ class PredictionApp:
         models_dir = artifacts_dir / "models"
         if not models_dir.exists():
             return models
+        deployment_path = models_dir / "deployment_model.joblib"
         slug_name = deployment_model_name.lower().replace(" ", "_")
         preferred_path = models_dir / f"{slug_name}.joblib"
-        deployment_path = preferred_path if preferred_path.exists() else models_dir / "deployment_model.joblib"
+        if not deployment_path.exists() and preferred_path.exists():
+            deployment_path = preferred_path
         if deployment_path.exists():
             models["Deployment Model"] = joblib.load(deployment_path)
         return models

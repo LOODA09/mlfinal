@@ -95,5 +95,5 @@
   "artifact_finalize_wall_clock_sec": 8.535546500002965,
   "total_pipeline_wall_clock_sec": 1734.8638307999354,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "The live app/report use the refreshed hotel_booking.csv benchmark that includes ANN, RNN, LSTM, SVM, and LightGBM. Random Forest is both the best benchmark model and the deployed prediction model in this run."
+  "deployment_model_note": "The live app now uses a compact Random Forest retrained on the current visible booking-form feature set. This keeps web predictions aligned with the form inputs and makes the deployed model GitHub-safe, while still preserving strong benchmark performance."
 }
