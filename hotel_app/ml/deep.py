@@ -5,6 +5,7 @@ import importlib
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.utils.class_weight import compute_class_weight
 
 
 class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
@@ -65,10 +66,14 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         if hasattr(x_data, "toarray"):
             x_data = x_data.toarray()
         array = np.asarray(x_data, dtype=np.float32)
+        y_array = np.asarray(y_data, dtype=np.int32)
         self.classes_ = np.array([0, 1])
         self.n_features_in_ = array.shape[1]
         self.model_ = self._build_model(self.n_features_in_)
         tf = importlib.import_module("tensorflow")
+        present_classes = np.unique(y_array)
+        class_weights = compute_class_weight(class_weight="balanced", classes=present_classes, y=y_array)
+        class_weight_map = {int(label): float(weight) for label, weight in zip(present_classes, class_weights)}
         callbacks = [
             tf.keras.callbacks.EarlyStopping(
                 monitor="val_loss",
@@ -84,11 +89,12 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         ]
         self.history_ = self.model_.fit(
             self._reshape(array),
-            np.asarray(y_data, dtype=np.float32),
+            y_array.astype(np.float32),
             epochs=self.epochs,
             batch_size=self.batch_size,
             validation_split=0.1,
             callbacks=callbacks,
+            class_weight=class_weight_map,
             verbose=self.verbose,
         )
         return self
