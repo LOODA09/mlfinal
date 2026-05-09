@@ -26,9 +26,14 @@ This project now uses a terminal-first ML workflow:
 pip install -r requirements.txt
 ```
 
-For TensorFlow-based ANN and RNN, use Python `3.11`.
+For TensorFlow-based ANN, RNN, and LSTM, use Python `3.11`.
 
-This repo now includes `.python-version` set to `3.11.9` for local tooling. On Streamlit Community Cloud, set the Python version in the app's Advanced settings to `3.11`.
+This repo now pins Python `3.11.9` in both:
+
+- `.python-version` for local tooling
+- `runtime.txt` for Streamlit Community Cloud deployment
+
+If Streamlit Cloud was previously running on Python `3.14`, redeploy or reboot the app so it rebuilds on `3.11.9` and installs TensorFlow.
 
 ## Train from terminal
 
