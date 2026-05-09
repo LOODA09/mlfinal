@@ -4,6 +4,14 @@ from hotel_app.ml.models.base import BaseHotelModel, BalancedClassifierWrapper
 
 
 class KNNModel(BaseHotelModel):
+    """Tuned K-nearest neighbors classifier on scaled features.
+
+    Doctor-facing notes:
+    - estimator: ``KNeighborsClassifier``
+    - probability path: native neighbor vote probabilities
+    - balancing: oversampling wrapper before fit
+    - tuning: ``GridSearchCV`` over neighbors, distance weighting, and metric
+    """
     name = "KNN"
 
     def get_estimator(self) -> GridSearchCV:

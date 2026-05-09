@@ -206,6 +206,7 @@ class TerminalTrainingRunner:
     ) -> List[BaseHotelModel]:
         default_order = [
             "ANN",
+            "Logistic Regression",
             "KNN",
             "Decision Tree",
             "Random Forest",
@@ -317,7 +318,7 @@ class TerminalTrainingRunner:
                 trained_model = self.trainer.train_model(model_spec, x_train, y_train)
                 training_time = time.perf_counter() - training_start
                 inference_start = time.perf_counter()
-                detail = tester.test_model(model_spec.name, trained_model, x_test, y_test)
+                detail = tester.test_model(model_spec.name, trained_model, x_train, y_train, x_test, y_test)
                 inference_time = time.perf_counter() - inference_start
                 metrics = detail["metrics"].copy()
                 metrics.update(

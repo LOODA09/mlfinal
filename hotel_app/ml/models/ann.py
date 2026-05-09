@@ -6,6 +6,15 @@ from hotel_app.ml.deep import KerasTabularClassifier
 
 
 class ANNModel(BaseHotelModel):
+    """Feed-forward neural network for dense tabular classification.
+
+    Doctor-facing notes:
+    - estimator: TensorFlow ``KerasTabularClassifier`` in ANN mode, with an
+      ``MLPClassifier`` fallback when TensorFlow is unavailable
+    - probability path: final dense layer uses ``sigmoid`` activation
+    - balancing: class-weighted TensorFlow fit or oversampling fallback
+    - tuning: architecture and epochs are controlled from the training runner
+    """
     name = "ANN"
 
     def __init__(self, epochs: int = 120, batch_size: int = 192) -> None:

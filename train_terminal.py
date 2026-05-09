@@ -63,7 +63,7 @@ def main() -> None:
     pd.set_option("display.width", 220)
 
     print("\nTraining complete.\n")
-    print("Holdout summary (30% test split):")
+    print("Holdout summary (30% test split plus benchmark-train metrics):")
     print(holdout.round(4).to_string(index=False))
 
     print("\n5-fold cross-validation means:")

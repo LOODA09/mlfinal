@@ -5,6 +5,15 @@ from hotel_app.ml.models.base import BaseHotelModel
 
 
 class SVMModel(BaseHotelModel):
+    """Linear support vector machine with calibrated probabilities.
+
+    Doctor-facing notes:
+    - estimator: ``LinearSVC`` wrapped by ``CalibratedClassifierCV``
+    - probability path: calibrated probabilities; raw scores can also be
+      converted with the shared sigmoid helper in ``hotel_app.ml.data``
+    - balancing: ``class_weight='balanced'``
+    - tuning: ``GridSearchCV`` over the margin penalty ``C``
+    """
     name = "SVM"
 
     def get_estimator(self) -> GridSearchCV:

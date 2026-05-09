@@ -4,6 +4,14 @@ from hotel_app.ml.models.base import BaseHotelModel
 
 
 class DecisionTreeModel(BaseHotelModel):
+    """Single-tree classifier tuned for an interpretable baseline.
+
+    Doctor-facing notes:
+    - estimator: ``DecisionTreeClassifier``
+    - probability path: native leaf-class probabilities
+    - balancing: ``class_weight='balanced'``
+    - tuning: ``GridSearchCV`` over depth and split/leaf controls
+    """
     name = "Decision Tree"
 
     def get_estimator(self) -> GridSearchCV:

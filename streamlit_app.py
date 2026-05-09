@@ -747,6 +747,11 @@ class PredictionApp:
         defaults = {
             "complexity_score": np.nan,
             "model_size_mb": np.nan,
+            "train_accuracy": np.nan,
+            "train_precision": np.nan,
+            "train_recall": np.nan,
+            "train_f1": np.nan,
+            "train_roc_auc": np.nan,
             "transformed_feature_count": np.nan,
             "training_time_sec": np.nan,
             "benchmark_training_time_sec": np.nan,
@@ -832,7 +837,7 @@ class PredictionApp:
                 f"""
                 <div class="insight-box">
                     <strong>Best holdout performer</strong>
-                    <span>{top_model['model']} leads the active 30% test split with accuracy {top_model['accuracy']:.4f}, F1 {top_model['f1']:.4f}, and ROC-AUC {top_model['roc_auc']:.4f}.</span>
+                    <span>{top_model['model']} leads the active 30% test split with accuracy {top_model['accuracy']:.4f}, F1 {top_model['f1']:.4f}, ROC-AUC {top_model['roc_auc']:.4f}, and benchmark train accuracy {top_model.get('train_accuracy', np.nan):.4f}.</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -920,7 +925,7 @@ class PredictionApp:
 
         metric = st.selectbox(
             "Comparison metric",
-            ["f1", "accuracy", "roc_auc", "precision", "recall", "training_time_sec", "inference_ms_per_row"],
+            ["f1", "accuracy", "train_accuracy", "roc_auc", "precision", "recall", "training_time_sec", "inference_ms_per_row"],
             index=0,
             key="comparison_metric",
         )
@@ -937,11 +942,16 @@ class PredictionApp:
         styled = styled[
             [
                 "model",
+                "train_accuracy",
                 "accuracy",
+                "train_precision",
                 "precision",
+                "train_recall",
                 "recall",
+                "train_f1",
                 "f1",
                 "balanced_accuracy",
+                "train_roc_auc",
                 "roc_auc",
                 "average_precision",
                 "benchmark_training_time_sec",
@@ -956,7 +966,7 @@ class PredictionApp:
             styled.style.format({column: "{:.4f}" for column in numeric_columns}),
             use_container_width=True,
         )
-        st.caption("`benchmark_training_time_sec` is the 70/30 holdout benchmark fit time, `full_data_training_time_sec` is the deployment retrain on the full dataset, and `training_time_sec` is their combined saved run cost. `complexity_tier` is derived from measured training time, inference time, and transformed feature count.")
+        st.caption("`accuracy`, `precision`, `recall`, `f1`, and `roc_auc` are holdout test metrics from the 30% benchmark split. The `train_*` columns are benchmark training-split metrics for the same fitted model. `benchmark_training_time_sec` is the 70/30 holdout benchmark fit time, `full_data_training_time_sec` is the deployment retrain on the full dataset, and `training_time_sec` is their combined saved run cost. `complexity_tier` is derived from measured training time, inference time, and transformed feature count.")
 
         cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
         if not cv_mean.empty:

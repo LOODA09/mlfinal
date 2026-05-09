@@ -4,6 +4,14 @@ from hotel_app.ml.models.base import BaseHotelModel
 
 
 class LogisticRegressionModel(BaseHotelModel):
+    """Tuned logistic baseline with native sigmoid probabilities.
+
+    Doctor-facing notes:
+    - estimator: ``LogisticRegression``
+    - probability path: native ``predict_proba`` from logistic sigmoid
+    - balancing: ``class_weight='balanced'``
+    - tuning: ``GridSearchCV`` over the regularization strength ``C``
+    """
     name = "Logistic Regression"
 
     def get_estimator(self) -> GridSearchCV:

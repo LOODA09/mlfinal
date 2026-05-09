@@ -14,6 +14,7 @@ MODEL_DESCRIPTIONS = {
     "LSTM": "Long short-term memory network trained on reshaped tabular sequences with TensorFlow.",
     "KNN": "Distance-based classifier that predicts from nearby training examples.",
     "Decision Tree": "Rule-based tree learner that splits bookings into cancellation patterns.",
+    "Logistic Regression": "Linear probabilistic baseline using the logistic sigmoid for binary classification.",
     "Random Forest": "Bagged ensemble of decision trees with randomized feature selection.",
     "Naive Bayes": "Probabilistic classifier with conditional independence assumptions.",
     "SVM": "Margin-based classifier calibrated for probability-style output.",
@@ -92,10 +93,15 @@ class BenchmarkPdfBuilder:
             c
             for c in [
                 "model",
+                "train_accuracy",
                 "accuracy",
+                "train_precision",
                 "precision",
+                "train_recall",
                 "recall",
+                "train_f1",
                 "f1",
+                "train_roc_auc",
                 "roc_auc",
                 "benchmark_training_time_sec",
                 "full_data_training_time_sec",
@@ -143,9 +149,9 @@ class BenchmarkPdfBuilder:
         for row in holdout.itertuples(index=False):
             description = MODEL_DESCRIPTIONS.get(row.model, "Model description not available.")
             line = (
-                f"{row.model}: {description} Holdout accuracy {row.accuracy:.4f}, "
-                f"precision {row.precision:.4f}, recall {row.recall:.4f}, F1 {row.f1:.4f}, "
-                f"ROC-AUC {row.roc_auc:.4f}, benchmark fit {getattr(row, 'benchmark_training_time_sec', float('nan')):.2f}s, "
+                f"{row.model}: {description} Benchmark train accuracy {getattr(row, 'train_accuracy', float('nan')):.4f}, "
+                f"holdout accuracy {row.accuracy:.4f}, precision {row.precision:.4f}, recall {row.recall:.4f}, "
+                f"F1 {row.f1:.4f}, ROC-AUC {row.roc_auc:.4f}, benchmark fit {getattr(row, 'benchmark_training_time_sec', float('nan')):.2f}s, "
                 f"full-data retrain {getattr(row, 'full_data_training_time_sec', float('nan')):.2f}s, total saved run cost {row.training_time_sec:.2f}s, "
                 f"inference {row.inference_ms_per_row:.4f} ms/row."
             )

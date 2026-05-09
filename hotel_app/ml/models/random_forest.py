@@ -4,6 +4,14 @@ from hotel_app.ml.models.base import BaseHotelModel
 
 
 class RandomForestModel(BaseHotelModel):
+    """Random forest with search-based tuning for the strongest tabular baseline.
+
+    Doctor-facing notes:
+    - estimator: ``RandomForestClassifier``
+    - probability path: averaged tree probabilities
+    - balancing: ``class_weight='balanced_subsample'``
+    - tuning: ``RandomizedSearchCV`` over tree count, depth, and split controls
+    """
     name = "Random Forest"
 
     def get_estimator(self) -> RandomizedSearchCV:

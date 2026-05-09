@@ -42,6 +42,73 @@ FILES = [
     "hotel_app/ml/models/stacking.py",
 ]
 
+MODEL_REFERENCE = [
+    {
+        "name": "Logistic Regression",
+        "path": "hotel_app/ml/models/logistic.py",
+        "estimator": "LogisticRegression inside GridSearchCV",
+        "balancing": "class_weight='balanced'",
+        "probability": "native logistic sigmoid via predict_proba",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
+        "name": "KNN",
+        "path": "hotel_app/ml/models/knn.py",
+        "estimator": "KNeighborsClassifier inside GridSearchCV",
+        "balancing": "BalancedClassifierWrapper with oversampling",
+        "probability": "native neighbor vote probabilities",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
+        "name": "Decision Tree",
+        "path": "hotel_app/ml/models/decision_tree.py",
+        "estimator": "DecisionTreeClassifier inside GridSearchCV",
+        "balancing": "class_weight='balanced'",
+        "probability": "native tree leaf probabilities",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
+        "name": "Random Forest",
+        "path": "hotel_app/ml/models/random_forest.py",
+        "estimator": "RandomForestClassifier inside RandomizedSearchCV",
+        "balancing": "class_weight='balanced_subsample'",
+        "probability": "average positive-class probability over trees",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
+        "name": "SVM",
+        "path": "hotel_app/ml/models/svm.py",
+        "estimator": "LinearSVC wrapped by CalibratedClassifierCV and GridSearchCV",
+        "balancing": "class_weight='balanced'",
+        "probability": "calibrated predict_proba; fallback sigmoid helper in hotel_app/ml/data.py",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
+        "name": "ANN",
+        "path": "hotel_app/ml/models/ann.py",
+        "estimator": "TensorFlow KerasTabularClassifier or MLP fallback",
+        "balancing": "class weights in TensorFlow, oversampling in fallback",
+        "probability": "final sigmoid output layer in hotel_app/ml/deep.py",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
+        "name": "RNN",
+        "path": "hotel_app/ml/models/rnn.py",
+        "estimator": "TensorFlow KerasTabularClassifier in rnn mode",
+        "balancing": "class-weighted TensorFlow fit",
+        "probability": "final sigmoid output layer in hotel_app/ml/deep.py",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
+        "name": "LSTM",
+        "path": "hotel_app/ml/models/lstm.py",
+        "estimator": "TensorFlow KerasTabularClassifier in lstm mode",
+        "balancing": "class-weighted TensorFlow fit",
+        "probability": "final sigmoid output layer in hotel_app/ml/deep.py",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+]
+
 
 def markdown_cell(text: str) -> dict:
     return {
@@ -62,6 +129,15 @@ def code_cell(source: str) -> dict:
 
 
 def build_notebook(root: Path) -> dict:
+    reference_lines = [
+        "| Model | Class File | Estimator / Search | Balancing | Probability / Sigmoid Path | Metrics Saved |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    for item in MODEL_REFERENCE:
+        reference_lines.append(
+            f"| {item['name']} | `{item['path']}` | {item['estimator']} | {item['balancing']} | {item['probability']} | {item['training_metrics']} |"
+        )
+
     cells = [
         markdown_cell(
             "# Hotel Booking Cancellation Project: All Code in One Notebook\n\n"
@@ -74,6 +150,12 @@ def build_notebook(root: Path) -> dict:
             "- class balancing is applied across the model set through native class weights, balanced sample weights, oversampling wrappers, and class-weighted deep learning fits\n"
             "- engineered ratio features such as `requests_per_night`, `requests_per_guest`, `adr_per_guest`, `value_per_guest_night`, and `guests_per_night` are added to expose stronger booking patterns\n"
             "- the project supports both a notebook-matched high-score benchmark mode and an honest future-booking mode\n\n"
+            "Where key answers live:\n"
+            "- core model classes: `hotel_app/ml/models/`\n"
+            "- sigmoid / probability helper for non-probability estimators: `hotel_app/ml/data.py::_positive_probabilities`\n"
+            "- TensorFlow sigmoid output for ANN/RNN/LSTM: `hotel_app/ml/deep.py`\n"
+            "- train/test metric generation: `hotel_app/ml/testing.py` and `hotel_app/ml/training.py`\n"
+            "- saved metric tables: `artifacts*/reports/holdout_summary.csv`\n\n"
             "Contents:\n"
             "- reporting and terminal scripts\n"
             "- Streamlit dashboard\n"
@@ -81,7 +163,13 @@ def build_notebook(root: Path) -> dict:
             "- machine learning pipeline\n"
             "- all model classes\n\n"
             "Each section below shows the source of one project file.\n"
-        )
+        ),
+        markdown_cell(
+            "## Model Reference Map\n\n"
+            "This table is meant to answer the common doctor / examiner questions about where each model lives, "
+            "how it is balanced, where its probability output comes from, and where the training metrics are saved.\n\n"
+            + "\n".join(reference_lines)
+        ),
     ]
 
     for relative_path in FILES:

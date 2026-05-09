@@ -12,6 +12,13 @@ from sklearn.utils.class_weight import compute_sample_weight
 
 
 class BaseHotelModel:
+    """Base interface for every project model class.
+
+    Each concrete model class is responsible for returning a configured
+    estimator or search object through ``get_estimator()``. The shared
+    pipeline then prepends the project preprocessor so every model is
+    trained on the same transformed feature space.
+    """
     name = "Base Model"
 
     def get_estimator(self) -> Any:
@@ -22,6 +29,13 @@ class BaseHotelModel:
 
 
 class BalancedClassifierWrapper(BaseEstimator, ClassifierMixin):
+    """Apply consistent balancing for models that need wrapper support.
+
+    Some estimators support ``sample_weight`` natively, while others need
+    simple oversampling to avoid the majority class dominating training.
+    This wrapper keeps that logic in one place so the individual model
+    classes stay small and readable.
+    """
     def __init__(self, estimator: Any, strategy: str = "sample_weight", random_state: int = 42) -> None:
         self.estimator = estimator
         self.strategy = strategy

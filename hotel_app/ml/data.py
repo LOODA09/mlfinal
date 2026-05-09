@@ -37,6 +37,14 @@ def _one_hot_encoder() -> OneHotEncoder:
 
 
 def _positive_probabilities(model: Any, x_data: pd.DataFrame) -> Optional[np.ndarray]:
+    """Return positive-class probabilities for any fitted classifier.
+
+    Most classifiers in this project expose ``predict_proba`` directly.
+    For score-based estimators that only expose ``decision_function``,
+    such as a linear SVM before calibration, we convert scores with the
+    logistic sigmoid function ``1 / (1 + exp(-score))`` so downstream
+    metrics and dashboards can work with probability-style outputs.
+    """
     if hasattr(model, "predict_proba"):
         probabilities = model.predict_proba(x_data)
         if probabilities.ndim == 2 and probabilities.shape[1] > 1:
