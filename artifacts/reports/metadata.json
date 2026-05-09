@@ -1,9 +1,8 @@
 {
   "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_booking.csv",
-  "remove_leakage_features": true,
-  "feature_preset": "high_score",
+  "remove_leakage_features": false,
   "evaluation_mode": "High-Score Benchmark",
-  "python_version": "3.14.3",
+  "python_version": "3.11.9",
   "train_rows": 83446,
   "test_rows": 35763,
   "total_rows": 119209,
@@ -19,7 +18,10 @@
     "Naive Bayes",
     "SVM",
     "ANN",
-    "Random Forest"
+    "RNN",
+    "LSTM",
+    "Random Forest",
+    "LightGBM"
   ],
   "full_data_models": [
     "Logistic Regression",
@@ -28,28 +30,29 @@
     "Naive Bayes",
     "SVM",
     "ANN",
-    "Random Forest"
+    "RNN",
+    "LSTM",
+    "Random Forest",
+    "LightGBM"
   ],
-  "skipped_models": {
-    "LightGBM": "LightGBM is required for LightGBMModel. Install it with `pip install lightgbm` or remove LightGBM from the selected models."
-  },
+  "skipped_models": {},
   "shap_explanations": [
     {
-      "feature": "stay_duration",
-      "mean_abs_shap": 0.20604875400569259,
-      "correlation_with_risk": -0.8288932713410992,
-      "explanation": "Higher values tend to reduce cancellation risk."
-    },
-    {
       "feature": "reservation_status_Check-Out",
-      "mean_abs_shap": 0.14061915209107242,
-      "correlation_with_risk": -0.8561064774594005,
+      "mean_abs_shap": 0.3314067019635024,
+      "correlation_with_risk": -0.9948749755240551,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
       "feature": "reservation_status_Canceled",
-      "mean_abs_shap": 0.08225785790127023,
-      "correlation_with_risk": 0.7284395582400138,
+      "mean_abs_shap": 0.1004447977091882,
+      "correlation_with_risk": 0.977050814670273,
+      "explanation": "Higher values tend to increase cancellation risk."
+    },
+    {
+      "feature": "previous_cancel_rate",
+      "mean_abs_shap": 0.012589103486433186,
+      "correlation_with_risk": 0.8513279399133588,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
@@ -87,11 +90,14 @@
       "previous_cancellations": 0.01
     }
   ],
-  "tensorflow_version": null,
-  "benchmark_phase_wall_clock_sec": 887.6168448999524,
-  "shap_phase_wall_clock_sec": 41.187960100127384,
-  "full_retrain_phase_wall_clock_sec": 310.567717500031,
-  "artifact_finalize_wall_clock_sec": 5.414914299966767,
-  "total_pipeline_wall_clock_sec": 1246.8478014001157,
-  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run."
+  "tensorflow_version": "2.21.0",
+  "benchmark_phase_wall_clock_sec": 1037.0674631998409,
+  "shap_phase_wall_clock_sec": 19.371940799988806,
+  "full_retrain_phase_wall_clock_sec": 287.1430148999207,
+  "artifact_finalize_wall_clock_sec": 5.705934800207615,
+  "total_pipeline_wall_clock_sec": 1357.2333711998072,
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
+  "deployment_model_note": "Logistic Regression is deployed in the default high-score mode because it preserves the TensorFlow-backed benchmark table while keeping the shipped deployment artifact tiny and GitHub-safe.",
+  "mode_summary": "Default high-score benchmark mode restored from the TensorFlow-backed leakage-enabled benchmark so ANN, RNN, and LSTM appear again in the active report tables.",
+  "feature_preset": "high_score"
 }
