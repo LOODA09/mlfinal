@@ -613,6 +613,91 @@ class PredictionApp:
             return self.processor.add_engineered_features(frame)
 
     @staticmethod
+    def get_expected_columns(model: Any) -> List[str]:
+        try:
+            preprocessor = model.named_steps["preprocessor"]
+            feature_names = getattr(preprocessor, "feature_names_in_", None)
+            if feature_names is None:
+                return []
+            return list(feature_names)
+        except Exception:
+            return []
+
+    @staticmethod
+    def get_preprocessor_column_groups(model: Any) -> tuple[set[str], set[str]]:
+        numeric_columns: set[str] = set()
+        categorical_columns: set[str] = set()
+        try:
+            preprocessor = model.named_steps["preprocessor"]
+            for name, _transformer, columns in getattr(preprocessor, "transformers_", []):
+                if isinstance(columns, str):
+                    continue
+                if name == "numeric":
+                    numeric_columns.update(columns)
+                elif name == "categorical":
+                    categorical_columns.update(columns)
+        except Exception:
+            pass
+        return numeric_columns, categorical_columns
+
+    def align_input_to_model(
+        self,
+        engineered_input: pd.DataFrame,
+        raw_input: pd.DataFrame,
+        model: Any,
+        examples: pd.DataFrame,
+    ) -> pd.DataFrame:
+        expected_columns = self.get_expected_columns(model)
+        if not expected_columns:
+            return engineered_input
+
+        numeric_columns, categorical_columns = self.get_preprocessor_column_groups(model)
+        aligned = engineered_input.copy()
+
+        # Backfill a few known engineered aliases that older artifact sets still expect.
+        if "has_agent" in expected_columns and "has_agent" not in aligned.columns and "agent" in raw_input.columns:
+            agent_values = pd.to_numeric(raw_input["agent"], errors="coerce").fillna(0)
+            aligned["has_agent"] = (agent_values > 0).astype(int)
+        if "has_company" in expected_columns and "has_company" not in aligned.columns and "company" in raw_input.columns:
+            company_values = pd.to_numeric(raw_input["company"], errors="coerce").fillna(0)
+            aligned["has_company"] = (company_values > 0).astype(int)
+        if "country_grouped" in expected_columns and "country_grouped" not in aligned.columns and "country" in raw_input.columns:
+            country = raw_input["country"].astype(str).fillna("Unknown")
+            aligned["country_grouped"] = np.where(
+                country.eq("PRT"),
+                "PRT",
+                np.where(country.eq("GBR"), "GBR", "Other"),
+            )
+
+        for column in expected_columns:
+            if column in aligned.columns:
+                continue
+            if column in raw_input.columns:
+                aligned[column] = raw_input[column]
+                continue
+            if column in examples.columns and not examples.empty:
+                sample = examples[column]
+                if column in numeric_columns:
+                    aligned[column] = pd.to_numeric(sample, errors="coerce").fillna(0).median()
+                else:
+                    mode = sample.astype(str).mode(dropna=True)
+                    aligned[column] = mode.iloc[0] if not mode.empty else "Unknown"
+                continue
+            aligned[column] = 0 if column in numeric_columns else "Unknown"
+
+        aligned = aligned.reindex(columns=expected_columns)
+        for column in aligned.columns:
+            if column in numeric_columns:
+                aligned[column] = pd.to_numeric(aligned[column], errors="coerce").fillna(0)
+            elif column in categorical_columns:
+                aligned[column] = aligned[column].astype(str).fillna("Unknown")
+        return aligned
+
+    def build_model_input(self, raw_input: pd.DataFrame, model: Any, examples: pd.DataFrame) -> pd.DataFrame:
+        engineered = self.add_engineered_features_compat(raw_input.copy())
+        return self.align_input_to_model(engineered, raw_input, model, examples)
+
+    @staticmethod
     def file_version(path: Path) -> int:
         if not path.exists():
             return 0
@@ -1110,7 +1195,7 @@ class PredictionApp:
         model_name: str,
         examples: pd.DataFrame,
     ) -> None:
-        model_input = self.add_engineered_features_compat(raw_input.copy())
+        model_input = self.build_model_input(raw_input, model, examples)
 
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
@@ -1163,9 +1248,8 @@ class PredictionApp:
 
         try:
             analyzer = SHAPAnalyzer()
-            background = self.add_engineered_features_compat(
-                examples.head(min(80, len(examples))).copy()
-            )
+            background_raw = examples.head(min(80, len(examples))).copy()
+            background = self.build_model_input(background_raw, model, examples)
             shap_values = analyzer.explain(model, background, model_input, max_background=80)
             feature_names = list(shap_values.feature_names)
             shap_row = np.asarray(shap_values.values[0], dtype=float)
