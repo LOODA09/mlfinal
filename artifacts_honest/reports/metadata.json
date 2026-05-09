@@ -1,56 +1,47 @@
 {
   "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_booking.csv",
+  "remove_leakage_features": true,
+  "feature_preset": "honest",
+  "evaluation_mode": "Honest Prediction",
   "python_version": "3.11.9",
   "train_rows": 83446,
   "test_rows": 35763,
   "total_rows": 119209,
   "train_ratio": 0.7,
   "test_ratio": 0.3,
-  "cross_validation_folds": 3,
+  "cross_validation_folds": 2,
   "best_model": "Random Forest",
-  "deployment_model": "ANN",
+  "deployment_model": "Random Forest",
   "trained_models": [
-    "Logistic Regression",
-    "KNN",
-    "Decision Tree",
-    "Naive Bayes",
-    "SVM",
     "ANN",
     "RNN",
     "LSTM",
-    "Random Forest",
-    "XGBoost"
+    "Random Forest"
   ],
   "full_data_models": [
-    "Logistic Regression",
-    "KNN",
-    "Decision Tree",
-    "Naive Bayes",
-    "SVM",
     "ANN",
     "RNN",
     "LSTM",
-    "Random Forest",
-    "XGBoost"
+    "Random Forest"
   ],
   "skipped_models": {},
   "shap_explanations": [
     {
-      "feature": "requests_per_night",
-      "mean_abs_shap": 0.06125041658394002,
-      "correlation_with_risk": -0.7727052730694688,
-      "explanation": "Higher values tend to reduce cancellation risk."
-    },
-    {
-      "feature": "customer_type_Transient",
-      "mean_abs_shap": 0.04286053156138628,
-      "correlation_with_risk": 0.8548519959754106,
+      "feature": "country_grouped_PRT",
+      "mean_abs_shap": 0.0888970484822425,
+      "correlation_with_risk": 0.9352465226845662,
       "explanation": "Higher values tend to increase cancellation risk."
     },
     {
-      "feature": "previous_cancel_rate",
-      "mean_abs_shap": 0.03662803809127528,
-      "correlation_with_risk": 0.9943964541656655,
+      "feature": "country_grouped_Other",
+      "mean_abs_shap": 0.03806693262103298,
+      "correlation_with_risk": -0.9068100153548297,
+      "explanation": "Higher values tend to reduce cancellation risk."
+    },
+    {
+      "feature": "market_segment_Online TA",
+      "mean_abs_shap": 0.03447112495652925,
+      "correlation_with_risk": 0.8865937998780288,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
@@ -89,12 +80,12 @@
     }
   ],
   "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1227.8947417000309,
-  "shap_phase_wall_clock_sec": 45.8742656998802,
-  "full_retrain_phase_wall_clock_sec": 298.8061573000159,
-  "artifact_finalize_wall_clock_sec": 17.672270099865273,
-  "total_pipeline_wall_clock_sec": 1598.10177389998,
+  "benchmark_phase_wall_clock_sec": 3311.1183889000677,
+  "shap_phase_wall_clock_sec": 34.32638610014692,
+  "full_retrain_phase_wall_clock_sec": 985.8218914000317,
+  "artifact_finalize_wall_clock_sec": 9.82403470017016,
+  "total_pipeline_wall_clock_sec": 4348.3838421001565,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "ANN is deployed in honest mode because it is TensorFlow-backed and small enough to ship safely, while Random Forest remains the strongest benchmark model in the honest evaluation table.",
-  "mode_summary": "Honest prediction mode restored from the TensorFlow-backed hotel_booking benchmark so ANN, RNN, and LSTM appear again in the active report tables."
+  "deployment_model_note": "Random Forest is deployed in honest mode using a compressed joblib artifact so the live honest predictor stays on the strongest realistic model while remaining GitHub-safe.",
+  "mode_summary": "Honest prediction mode refreshed from a new TensorFlow-backed tuning run covering ANN, RNN, LSTM, and Random Forest."
 }

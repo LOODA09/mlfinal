@@ -1,501 +1,501 @@
-hotel,lead_time,arrival_date_month,arrival_date_week_number,arrival_date_day_of_month,stays_in_weekend_nights,stays_in_week_nights,adults,children,babies,meal,market_segment,distribution_channel,is_repeated_guest,previous_cancellations,previous_bookings_not_canceled,reserved_room_type,booking_changes,agent,company,days_in_waiting_list,customer_type,adr,total_of_special_requests
-Resort Hotel,342,July,27,1,0,0,2,0.0,0,BB,Direct,Direct,0,0,0,C,3,0.0,0.0,0,Transient,0.0,0
-Resort Hotel,737,July,27,1,0,0,2,0.0,0,BB,Direct,Direct,0,0,0,C,4,0.0,0.0,0,Transient,0.0,0
-Resort Hotel,7,July,27,1,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,75.0,0
-Resort Hotel,13,July,27,1,0,1,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,304.0,0.0,0,Transient,75.0,0
-Resort Hotel,14,July,27,1,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,1
-Resort Hotel,14,July,27,1,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,1
-Resort Hotel,0,July,27,1,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,C,0,0.0,0.0,0,Transient,107.0,0
-Resort Hotel,9,July,27,1,0,2,2,0.0,0,FB,Direct,Direct,0,0,0,C,0,303.0,0.0,0,Transient,103.0,1
-Resort Hotel,85,July,27,1,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,1
-Resort Hotel,75,July,27,1,0,3,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,105.5,0
-Resort Hotel,23,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,35,July,27,1,0,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,145.0,0
-Resort Hotel,68,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,3
-Resort Hotel,18,July,27,1,0,4,2,1.0,0,HB,Online TA,TA/TO,0,0,0,G,1,241.0,0.0,0,Transient,154.77,1
-Resort Hotel,37,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,241.0,0.0,0,Transient,94.71,0
-Resort Hotel,68,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,3
-Resort Hotel,37,July,27,1,0,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,8.0,0.0,0,Contract,97.5,0
-Resort Hotel,12,July,27,1,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0
-Resort Hotel,0,July,27,1,0,1,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,107.42,0
-Resort Hotel,7,July,27,1,0,4,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,153.0,1
-Resort Hotel,37,July,27,1,1,4,1,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,97.29,1
-Resort Hotel,72,July,27,1,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,1,250.0,0.0,0,Transient,84.67,1
-Resort Hotel,72,July,27,1,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,1,250.0,0.0,0,Transient,84.67,1
-Resort Hotel,72,July,27,1,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient,99.67,1
-Resort Hotel,127,July,27,1,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,115.0,0.0,0,Contract,94.95,1
-Resort Hotel,78,July,27,1,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,63.6,0
-Resort Hotel,48,July,27,1,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,79.5,0
-Resort Hotel,60,July,27,1,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,2
-Resort Hotel,77,July,27,1,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,94.0,0
-Resort Hotel,99,July,27,1,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,1
-Resort Hotel,118,July,27,1,4,10,1,0.0,0,BB,Direct,Direct,0,0,0,A,2,0.0,0.0,0,Transient,62.0,2
-Resort Hotel,95,July,27,1,4,11,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,63.86,0
-Resort Hotel,96,July,27,1,2,8,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,0.0,0.0,0,Transient,108.3,2
-Resort Hotel,69,July,27,2,2,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,65.5,0
-Resort Hotel,45,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,1
-Resort Hotel,40,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,1
-Resort Hotel,15,July,27,2,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,0
-Resort Hotel,36,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,1
-Resort Hotel,43,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,0
-Resort Hotel,70,July,27,2,2,3,2,0.0,0,HB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,137.0,1
-Resort Hotel,45,July,27,2,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,0
-Resort Hotel,45,July,27,2,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,79.5,0
-Resort Hotel,16,July,27,2,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,F,0,0.0,0.0,0,Transient,123.0,0
-Resort Hotel,70,July,27,2,2,3,2,0.0,0,HB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,137.0,1
-Resort Hotel,107,July,27,2,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.7,2
-Resort Hotel,47,July,27,2,2,5,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0
-Resort Hotel,96,July,27,2,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient,58.95,1
-Resort Hotel,113,July,27,2,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,156.0,0.0,0,Transient-Party,82.88,2
-Resort Hotel,90,July,27,2,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,1,243.0,0.0,0,Contract,82.35,0
-Resort Hotel,50,July,27,2,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,1,241.0,0.0,0,Transient,119.35,1
-Resort Hotel,113,July,27,2,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Transient-Party,67.58,2
-Resort Hotel,93,July,27,2,3,8,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,156.0,0.0,0,Contract,56.01,0
-Resort Hotel,76,July,27,2,4,10,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Contract,110.7,0
-Resort Hotel,3,July,27,2,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0
-Resort Hotel,1,July,27,2,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,147.0,0
-Resort Hotel,1,July,27,2,0,1,2,2.0,0,BB,Direct,Direct,0,0,0,C,0,0.0,0.0,0,Transient,107.0,2
-Resort Hotel,0,July,27,2,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,H,0,0.0,0.0,0,Transient,147.0,0
-Resort Hotel,0,July,27,2,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.9,2
-Resort Hotel,0,July,27,2,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,0.0,0.0,0,Transient,123.0,0
-Resort Hotel,14,July,27,2,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,98.0,1
-Resort Hotel,10,July,27,2,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,0
-Resort Hotel,5,July,27,2,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,135.0,2
-Resort Hotel,17,July,27,2,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,F,0,250.0,0.0,0,Transient,133.0,1
-Resort Hotel,93,July,27,2,0,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,115.0,0.0,0,Contract,58.95,0
-Resort Hotel,3,July,27,2,0,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,136.33,2
-Resort Hotel,10,July,27,3,0,2,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0
-Resort Hotel,3,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.5,0
-Resort Hotel,51,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,242.0,0.0,0,Transient,97.0,0
-Resort Hotel,71,July,27,3,0,2,3,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,110.3,2
-Resort Hotel,63,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2
-Resort Hotel,62,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,1
-Resort Hotel,101,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,2,July,27,3,0,2,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,3.0,0.0,0,Transient,91.5,0
-Resort Hotel,15,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.5,0
-Resort Hotel,51,July,27,3,0,2,3,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,110.3,0
-Resort Hotel,3,July,27,3,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,90.9,0
-Resort Hotel,48,July,27,3,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,2,July,27,3,2,2,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,122.0,0
-Resort Hotel,72,July,27,3,2,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,105.0,0.0,0,Transient,110.7,0
-Resort Hotel,81,July,27,3,2,6,3,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,85.86,0
-Resort Hotel,99,July,27,3,2,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,58.95,0
-Resort Hotel,368,July,27,3,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,55.68,0
-Resort Hotel,364,July,27,3,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,55.68,0
-Resort Hotel,81,July,27,3,3,7,2,0.0,0,HB,Direct,Direct,0,0,0,A,2,250.0,0.0,0,Transient,124.0,1
-Resort Hotel,99,July,27,3,3,7,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,115.0,0.0,0,Contract,111.15,0
-Resort Hotel,324,July,27,3,4,10,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,40.0,0.0,0,Contract,134.73,0
-Resort Hotel,69,July,27,3,4,10,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,1,241.0,0.0,0,Transient,92.45,1
-Resort Hotel,79,July,27,3,6,15,2,1.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,108.73,2
-Resort Hotel,12,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,0
-Resort Hotel,9,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,2
-Resort Hotel,1,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1
-Resort Hotel,21,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,9,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,241.0,0.0,0,Transient,94.71,0
-Resort Hotel,109,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,2
-Resort Hotel,109,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,1
-Resort Hotel,72,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,63,July,27,3,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,242.0,0.0,0,Transient,117.0,1
-Resort Hotel,63,July,27,3,2,5,3,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,105.0,0.0,0,Transient,196.54,1
-Resort Hotel,101,July,27,3,2,5,2,1.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,99.3,2
-Resort Hotel,102,July,27,3,2,5,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,90.95,0
-Resort Hotel,4,July,27,4,2,1,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,92.67,1
-Resort Hotel,98,July,27,4,2,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Transient,71.55,0
-Resort Hotel,92,July,27,4,2,4,1,2.0,0,BB,Offline TA/TO,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,96.49,2
-Resort Hotel,95,July,27,4,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,85.8,2
-Resort Hotel,102,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,96.3,1
-Resort Hotel,26,July,27,4,2,5,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,163.0,0
-Resort Hotel,73,July,27,4,2,5,3,0.0,0,HB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,172.0,1
-Resort Hotel,102,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.7,1
-Resort Hotel,115,July,27,4,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient,58.95,1
-Resort Hotel,102,July,27,4,2,5,2,0.0,1,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,2
-Resort Hotel,86,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,2
-Resort Hotel,78,July,27,4,2,5,2,0.0,1,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,139.0,2
-Resort Hotel,52,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,67.24,0
-Resort Hotel,29,July,27,4,2,6,3,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,241.0,0.0,0,Transient,116.5,1
-Resort Hotel,101,July,27,4,2,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,96.3,1
-Resort Hotel,109,July,27,4,2,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,1
-Resort Hotel,92,July,27,4,4,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,71.55,1
-Resort Hotel,92,July,27,4,4,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,71.55,1
-Resort Hotel,79,July,27,4,4,6,2,1.0,0,HB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient,149.0,1
-Resort Hotel,2,July,27,4,0,1,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,1,240.0,0.0,0,Transient,163.0,0
-Resort Hotel,30,July,27,4,0,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,79.5,0
-Resort Hotel,51,July,27,4,0,1,1,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,105.0,0
-Resort Hotel,36,July,27,4,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,E,1,250.0,0.0,0,Transient,123.0,0
-Resort Hotel,73,July,27,4,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,2
-Resort Hotel,33,July,27,4,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,113.0,0
-Resort Hotel,32,July,27,4,0,1,4,0.0,0,FB,Complementary,Direct,0,0,0,H,2,0.0,0.0,0,Transient,0.0,1
-Resort Hotel,8,July,27,4,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,100,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,73.8,1
-Resort Hotel,1,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.5,0
-Resort Hotel,100,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,73.8,2
-Resort Hotel,100,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,73.8,1
-Resort Hotel,9,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,1
-Resort Hotel,5,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,0
-Resort Hotel,0,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,1,306.0,0.0,0,Transient,85.1,0
-Resort Hotel,9,July,28,5,1,0,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,184.0,0.0,0,Transient,89.0,0
-Resort Hotel,2,July,28,5,1,0,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,80.1,0
-Resort Hotel,2,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,0
-Resort Hotel,9,July,28,5,1,0,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,184.0,0.0,0,Transient,101.0,0
-Resort Hotel,5,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,0
-Resort Hotel,2,July,28,5,1,0,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,0.0,0.0,0,Transient,167.0,1
-Resort Hotel,44,July,28,5,2,0,3,0.0,0,HB,Online TA,TA/TO,0,0,0,G,3,240.0,0.0,0,Transient,225.0,0
-Resort Hotel,80,July,28,5,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,0
-Resort Hotel,97,July,28,5,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,2
-Resort Hotel,109,July,28,5,2,3,2,1.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,85.59,2
-Resort Hotel,30,July,28,5,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,64,July,28,5,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,0
-Resort Hotel,39,July,28,5,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,163.0,0
-Resort Hotel,90,July,28,5,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,0
-Resort Hotel,34,July,28,5,2,4,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,163.0,0
-Resort Hotel,93,July,28,5,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,105.5,0
-Resort Hotel,97,July,28,5,2,5,2,2.0,0,HB,Direct,Direct,0,0,0,C,1,250.0,0.0,0,Transient,164.2,1
-Resort Hotel,29,July,28,5,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,97.29,1
-Resort Hotel,101,July,28,5,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.0,1
-Resort Hotel,27,July,28,5,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,175.0,0.0,0,Transient,98.4,0
-Resort Hotel,8,July,28,5,4,5,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,1,240.0,0.0,0,Transient,175.0,1
-Resort Hotel,82,July,28,5,4,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,63.6,2
-Resort Hotel,94,July,28,5,4,6,3,0.0,0,BB,Direct,Direct,0,0,0,D,3,0.0,0.0,0,Transient,124.45,1
-Resort Hotel,110,July,28,5,4,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,110.7,0
-Resort Hotel,96,July,28,5,4,10,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,74.07,0
-Resort Hotel,79,July,28,5,4,10,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Contract,134.1,0
-Resort Hotel,115,July,28,6,1,4,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,1,240.0,0.0,0,Transient,167.0,0
-Resort Hotel,111,July,28,6,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,2
-Resort Hotel,51,July,28,6,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,2
-Resort Hotel,94,July,28,6,1,3,3,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,96.0,0.0,0,Transient,171.32,1
-Resort Hotel,81,July,28,6,1,3,2,2.0,0,HB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,210.0,0
-Resort Hotel,84,July,28,6,1,3,2,0.0,1,BB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,97.0,2
-Resort Hotel,51,July,28,6,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,2
-Resort Hotel,111,July,28,6,0,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,0.0,2
-Resort Hotel,0,July,28,6,0,0,1,0.0,0,BB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,0.0,0
-Resort Hotel,2,July,28,6,1,0,2,1.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,131.0,0
-Resort Hotel,7,July,28,6,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,2
-Resort Hotel,98,July,28,6,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,1
-Resort Hotel,95,July,28,6,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,1
-Resort Hotel,48,July,28,6,1,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,167.0,0
-Resort Hotel,66,July,28,6,1,3,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,91.5,0
-Resort Hotel,104,July,28,6,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,28,July,28,6,1,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,34,July,28,6,1,4,2,0.0,0,HB,Direct,Direct,0,0,0,F,0,250.0,0.0,0,Transient,175.0,0
-Resort Hotel,98,July,28,6,1,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.8,1
-Resort Hotel,104,July,28,6,1,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,117.63,0
-Resort Hotel,68,July,28,6,2,5,2,2.0,0,HB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,185.0,0
-Resort Hotel,86,July,28,6,2,5,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,71.0,1
-Resort Hotel,258,July,28,6,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,2.0,0.0,0,Contract,47.25,0
-Resort Hotel,111,July,28,6,3,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,151.0,1
-Resort Hotel,94,July,28,6,3,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,0
-Resort Hotel,112,July,28,6,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,120.6,1
-Resort Hotel,100,July,28,6,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,1,241.0,0.0,0,Transient,63.86,1
-Resort Hotel,33,July,28,6,3,7,2,0.0,0,HB,Direct,Direct,0,0,0,F,5,250.0,0.0,0,Transient,157.1,1
-Resort Hotel,97,July,28,6,3,7,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,91.37,2
-Resort Hotel,80,July,28,6,3,8,1,0.0,0,BB,Direct,Direct,0,0,0,A,1,0.0,0.0,0,Transient,73.0,0
-Resort Hotel,90,July,28,6,4,10,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,110.7,0
-Resort Hotel,111,July,28,6,4,10,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,93.6,0
-Resort Hotel,65,July,28,6,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,127.0,0.0,0,Transient,83.5,0
-Resort Hotel,67,July,28,7,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,55,July,28,7,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2
-Resort Hotel,21,July,28,7,0,3,2,1.0,0,HB,Direct,Direct,0,0,0,F,0,250.0,0.0,0,Transient,185.5,1
-Resort Hotel,8,July,28,7,0,0,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,0.0,1
-Resort Hotel,8,July,28,7,0,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,0.0,1
-Resort Hotel,0,July,28,7,0,1,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,109.8,3
-Resort Hotel,0,July,28,7,0,1,3,0.0,0,HB,Direct,Direct,0,0,0,C,0,0.0,0.0,0,Transient,195.0,0
-Resort Hotel,0,July,28,7,0,1,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,109.8,3
-Resort Hotel,8,July,28,7,0,4,3,2.0,0,BB,Online TA,TA/TO,0,0,0,H,2,240.0,0.0,0,Transient,193.0,1
-Resort Hotel,66,July,28,7,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,2
-Resort Hotel,88,July,28,7,0,4,3,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,95.0,0.0,0,Transient,150.0,1
-Resort Hotel,0,July,28,7,0,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,2,0.0,0.0,0,Transient,98.0,0
-Resort Hotel,43,July,28,7,0,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient,91.5,0
-Resort Hotel,88,July,28,7,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,139.0,2
-Resort Hotel,54,July,28,7,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Transient,79.5,0
-Resort Hotel,292,July,28,7,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,2.0,0.0,0,Contract,47.25,0
-Resort Hotel,112,July,28,7,4,10,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,126.65,1
-Resort Hotel,68,July,28,8,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,1
-Resort Hotel,7,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,2
-Resort Hotel,1,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1
-Resort Hotel,113,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,1
-Resort Hotel,5,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,146.0,1
-Resort Hotel,83,July,28,8,0,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,105.0,0.0,0,Transient,110.7,1
-Resort Hotel,105,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,0,July,28,8,0,1,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,146.0,0.0,0,Transient,61.0,0
-Resort Hotel,1,July,28,8,0,1,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,104.72,1
-Resort Hotel,1,July,28,8,0,1,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,104.72,1
-Resort Hotel,1,July,28,8,0,2,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,104.72,1
-Resort Hotel,102,July,28,8,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,9.0,0.0,0,Transient,66.42,1
-Resort Hotel,113,July,28,8,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,E,1,250.0,0.0,0,Transient,77.96,1
-Resort Hotel,280,July,28,8,2,5,2,1.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,112.0,1
-Resort Hotel,96,July,28,8,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,1
-Resort Hotel,394,July,28,8,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,89.68,0
-Resort Hotel,33,July,28,8,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,155.0,0
-Resort Hotel,82,July,28,8,2,6,3,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,112.0,1
-Resort Hotel,100,July,28,8,2,7,3,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient-Party,130.1,3
-Resort Hotel,100,July,28,8,2,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient-Party,100.1,2
-Resort Hotel,17,July,28,9,0,1,2,2.0,0,BB,Online TA,TA/TO,0,0,0,C,0,242.0,0.0,0,Transient,123.0,3
-Resort Hotel,68,July,28,9,0,2,3,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,124.0,1
-Resort Hotel,12,July,28,9,0,2,2,2.0,0,BB,Direct,Direct,0,0,0,H,2,0.0,0.0,0,Transient,146.0,0
-Resort Hotel,77,July,28,9,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,97.0,0
-Resort Hotel,24,July,28,9,0,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,C,0,242.0,0.0,0,Transient,123.0,1
-Resort Hotel,44,July,28,9,0,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0
-Resort Hotel,78,July,28,9,0,3,2,0.0,1,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2
-Resort Hotel,17,July,28,9,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,105.08,0
-Resort Hotel,103,July,28,9,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,65.42,0
-Resort Hotel,16,July,28,9,1,3,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,98.0,1
-Resort Hotel,14,July,28,9,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,75.46,1
-Resort Hotel,77,July,28,9,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,177.0,0.0,0,Transient,65.5,0
-Resort Hotel,90,July,28,9,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,6.0,0.0,0,Transient,90.95,0
-Resort Hotel,90,July,28,9,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,93.6,0
-Resort Hotel,90,July,28,9,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,143.0,0.0,0,Contract,119.25,0
-Resort Hotel,366,July,28,9,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,40.0,0.0,0,Contract,134.73,0
-Resort Hotel,249,July,28,9,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,112.0,1
-Resort Hotel,69,July,28,9,2,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,118.13,2
-Resort Hotel,10,July,28,10,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,131.0,0
-Resort Hotel,22,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0
-Resort Hotel,91,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,23,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,0
-Resort Hotel,11,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.5,1
-Resort Hotel,3,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1
-Resort Hotel,13,July,28,10,0,2,2,1.0,0,HB,Online TA,TA/TO,0,0,0,G,2,240.0,0.0,0,Transient,185.0,1
-Resort Hotel,108,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,87.3,2
-Resort Hotel,91,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,37,July,28,10,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,105.0,0.0,0,Transient,120.0,1
-Resort Hotel,21,July,28,10,1,2,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,98.0,1
-Resort Hotel,106,July,28,10,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,96.3,2
-Resort Hotel,30,July,28,10,2,2,2,0.0,0,FB,Direct,Direct,0,0,0,F,0,0.0,0.0,0,Transient-Party,197.0,1
-Resort Hotel,30,July,28,10,2,2,2,0.0,0,FB,Direct,Direct,0,0,0,F,0,0.0,0.0,0,Transient-Party,197.0,1
-Resort Hotel,51,July,28,10,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,79,July,28,10,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2
-Resort Hotel,21,July,28,10,2,3,2,0.0,2,HB,Direct,Direct,0,0,0,C,1,250.0,0.0,0,Transient,165.0,3
-Resort Hotel,35,July,28,10,2,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,149.4,0
-Resort Hotel,78,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,106.84,2
-Resort Hotel,31,July,28,10,2,5,2,0.0,0,HB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient,161.0,1
-Resort Hotel,78,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,134.43,2
-Resort Hotel,78,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,144.43,2
-Resort Hotel,44,July,28,10,2,5,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,2,244.0,0.0,0,Transient,152.0,0
-Resort Hotel,34,July,28,10,2,5,2,1.0,0,HB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,125.54,3
-Resort Hotel,87,July,28,10,2,5,2,1.0,1,FB,Offline TA/TO,TA/TO,0,0,0,C,0,5.0,0.0,0,Transient,133.83,2
-Resort Hotel,11,July,28,10,2,6,3,1.0,0,BB,Direct,Direct,0,0,0,C,0,250.0,0.0,0,Transient,159.75,0
-Resort Hotel,115,July,28,10,2,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,2
-Resort Hotel,86,July,28,10,3,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,112.2,0
-Resort Hotel,41,July,28,10,4,7,2,0.0,1,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,110.6,0
-Resort Hotel,32,July,28,10,4,9,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,241.0,0.0,0,Transient,105.9,0
-Resort Hotel,34,July,28,10,2,5,2,1.0,0,HB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,95.27,3
-Resort Hotel,34,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,108.83,1
-Resort Hotel,100,July,28,11,2,3,2,1.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,149.0,0.0,0,Transient,153.96,0
-Resort Hotel,44,July,28,11,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,0
-Resort Hotel,304,July,28,11,2,4,2,0.0,1,BB,Direct,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,90.67,1
-Resort Hotel,36,July,28,11,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,126.67,0
-Resort Hotel,117,July,28,11,2,4,3,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,144.4,1
-Resort Hotel,70,July,28,11,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,99.5,2
-Resort Hotel,110,July,28,11,2,5,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,139.4,1
-Resort Hotel,109,July,28,11,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,33,July,28,11,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,241.0,0.0,0,Transient,89.97,1
-Resort Hotel,33,July,28,11,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,33,July,28,11,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,0,July,28,11,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,123.0,0
-Resort Hotel,0,July,28,11,0,1,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,144.9,1
-Resort Hotel,0,July,28,11,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,0.0,0.0,0,Transient,153.0,0
-Resort Hotel,0,July,28,11,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1
-Resort Hotel,84,July,28,11,1,1,2,0.0,0,HB,Corporate,Corporate,0,0,0,A,0,0.0,113.0,0,Transient,100.0,0
-Resort Hotel,71,July,28,11,1,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,65.5,0
-Resort Hotel,16,July,28,11,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,242.0,0.0,0,Transient,123.0,1
-Resort Hotel,54,July,28,11,2,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,8,July,28,11,2,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,0
-Resort Hotel,36,July,28,11,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,104.68,0
-Resort Hotel,40,July,28,11,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,166.0,0
-Resort Hotel,59,July,28,11,2,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,111.25,2
-Resort Hotel,79,July,28,11,2,6,2,2.0,0,HB,Direct,Direct,0,0,0,G,1,250.0,0.0,0,Transient,213.75,0
-Resort Hotel,32,July,28,11,4,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,178.0,0
-Resort Hotel,110,July,28,11,2,5,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,113.9,1
-Resort Hotel,33,July,28,11,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,129.29,0
-Resort Hotel,53,July,29,12,1,0,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0
-Resort Hotel,2,July,29,12,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,2
-Resort Hotel,8,July,29,12,2,4,2,1.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,169.0,2
-Resort Hotel,72,July,29,12,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,93.0,2
-Resort Hotel,12,July,29,12,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,132.29,0
-Resort Hotel,48,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,1
-Resort Hotel,90,July,29,12,2,5,2,0.0,0,FB,Offline TA/TO,TA/TO,0,0,0,A,0,5.0,0.0,0,Transient-Party,117.22,1
-Resort Hotel,34,July,29,12,2,5,2,0.0,1,HB,Offline TA/TO,TA/TO,0,0,0,D,1,156.0,0.0,0,Transient,149.0,1
-Resort Hotel,58,July,29,12,2,5,3,1.0,0,BB,Direct,Direct,0,0,0,C,0,250.0,0.0,0,Transient,164.57,1
-Resort Hotel,59,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,115.0,0.0,0,Contract,107.0,0
-Resort Hotel,90,July,29,12,2,5,2,0.0,1,FB,Offline TA/TO,TA/TO,0,0,0,A,0,5.0,0.0,0,Transient-Party,117.22,2
-Resort Hotel,116,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,40.0,0.0,0,Contract,119.25,0
-Resort Hotel,31,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,0
-Resort Hotel,51,July,29,12,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,105.71,0
-Resort Hotel,48,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,1
-Resort Hotel,59,July,29,12,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,144.43,2
-Resort Hotel,97,July,29,12,3,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,126.0,1
-Resort Hotel,12,July,29,12,4,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,148.3,2
-Resort Hotel,64,July,29,12,4,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,125.22,1
-Resort Hotel,31,July,29,12,4,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,0
-Resort Hotel,59,July,29,12,4,7,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,243.0,0.0,0,Contract,130.0,1
-Resort Hotel,55,July,29,12,4,10,2,10.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,2,8.0,0.0,0,Contract,133.16,1
-Resort Hotel,81,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,78.84,0
-Resort Hotel,1,July,29,12,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,80.1,0
-Resort Hotel,34,July,29,12,2,0,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,193.0,1
-Resort Hotel,13,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0
-Resort Hotel,40,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,90.71,0
-Resort Hotel,1,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.5,1
-Resort Hotel,34,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.2,1
-Resort Hotel,88,July,29,12,2,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,1,8.0,0.0,0,Contract,79.5,0
-Resort Hotel,9,July,29,12,2,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.9,3
-Resort Hotel,24,July,29,12,2,1,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,128.0,0
-Resort Hotel,97,July,29,12,2,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,6.0,0.0,0,Transient,90.95,0
-Resort Hotel,60,July,29,12,2,2,2,0.0,1,BB,Online TA,TA/TO,0,0,0,E,2,240.0,0.0,0,Transient,107.0,2
-Resort Hotel,100,July,29,12,2,2,2,2.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,130.05,1
-Resort Hotel,50,July,29,12,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,123.0,0
-Resort Hotel,47,July,29,12,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,103.8,0
-Resort Hotel,8,July,29,12,2,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,196.0,1
-Resort Hotel,34,July,29,12,2,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,149.4,0
-Resort Hotel,47,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,175.71,0
-Resort Hotel,115,July,29,13,2,5,2,0.0,1,HB,Offline TA/TO,TA/TO,0,0,0,A,1,134.0,0.0,0,Transient-Party,119.7,2
-Resort Hotel,79,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.86,1
-Resort Hotel,91,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.86,0
-Resort Hotel,98,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,82.0,3
-Resort Hotel,109,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1
-Resort Hotel,0,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.9,0
-Resort Hotel,98,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,82.0,3
-Resort Hotel,0,July,29,13,1,1,4,0.0,0,BB,Direct,Direct,0,0,0,L,0,0.0,0.0,0,Transient,150.0,0
-Resort Hotel,9,July,29,13,1,1,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,161.0,2
-Resort Hotel,62,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,64.0,2
-Resort Hotel,45,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0
-Resort Hotel,42,July,29,13,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,110.0,0
-Resort Hotel,54,July,29,13,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,1
-Resort Hotel,51,July,29,13,1,2,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,130.0,0
-Resort Hotel,54,July,29,13,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,1
-Resort Hotel,58,July,29,13,1,2,2,0.0,0,HB,Direct,Direct,0,0,0,E,2,250.0,0.0,0,Transient,165.0,1
-Resort Hotel,0,July,29,13,1,3,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,167.0,0.0,0,Transient,114.0,0
-Resort Hotel,60,July,29,13,1,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,79.5,0
-Resort Hotel,321,July,29,13,1,4,2,0.0,0,HB,Direct,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,132.8,1
-Resort Hotel,40,July,29,13,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,120.0,2
-Resort Hotel,51,July,29,13,1,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,79.5,0
-Resort Hotel,38,July,29,13,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,0.0,0.0,0,Transient,120.0,0
-Resort Hotel,75,July,29,13,1,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,144.2,1
-Resort Hotel,101,July,29,13,1,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,107.2,0
-Resort Hotel,42,July,29,13,1,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,120.0,0
-Resort Hotel,40,July,29,13,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,120.0,2
-Resort Hotel,109,July,29,13,1,4,3,0.0,0,HB,Direct,Direct,0,0,0,E,0,0.0,0.0,0,Transient,163.8,1
-Resort Hotel,81,July,29,13,1,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.5,2
-Resort Hotel,98,July,29,13,1,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,130.5,0
-Resort Hotel,32,July,29,13,1,5,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,2,300.0,0.0,0,Transient,153.0,0
-Resort Hotel,72,July,29,13,1,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.5,2
-Resort Hotel,115,July,29,13,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient-Party,119.7,2
-Resort Hotel,118,July,29,13,2,5,2,0.0,0,FB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,184.6,1
-Resort Hotel,81,July,29,13,2,5,2,1.0,0,HB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,181.22,2
-Resort Hotel,95,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.86,1
-Resort Hotel,16,July,29,13,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.2,3
-Resort Hotel,56,July,29,13,1,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,134.25,0
-Resort Hotel,88,July,29,13,3,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,8.0,0.0,0,Contract,96.3,0
-Resort Hotel,41,July,29,13,3,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,147.0,0.0,0,Transient,83.09,2
-Resort Hotel,40,July,29,14,0,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,171.0,0.0,0,Transient,105.5,0
-Resort Hotel,1,July,29,14,0,1,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,270.0,0,Transient,134.0,0
-Resort Hotel,1,July,29,14,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,2,240.0,0.0,0,Transient,8.0,1
-Resort Hotel,1,July,29,14,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,146.0,1
-Resort Hotel,76,July,29,14,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,126.0,2
-Resort Hotel,0,July,29,14,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,111.15,1
-Resort Hotel,49,July,29,14,0,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,136.2,2
-Resort Hotel,76,July,29,14,0,5,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,101.8,0
-Resort Hotel,73,July,29,14,1,5,2,0.0,0,HB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient-Party,127.0,1
-Resort Hotel,73,July,29,14,1,5,2,1.0,0,HB,Direct,Direct,0,0,0,E,0,0.0,0.0,0,Transient-Party,161.5,2
-Resort Hotel,317,July,29,14,1,5,2,2.0,0,HB,Direct,TA/TO,0,0,0,H,1,240.0,0.0,0,Transient,230.67,2
-Resort Hotel,112,July,29,14,2,5,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,65.7,1
-Resort Hotel,6,July,29,14,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,180.0,2
-Resort Hotel,8,July,29,14,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,168.57,1
-Resort Hotel,96,July,29,14,2,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,107.67,1
-Resort Hotel,96,July,29,14,2,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,96.9,1
-Resort Hotel,99,July,29,14,2,7,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,107.0,1
-Resort Hotel,66,July,29,14,2,9,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,73.41,0
-Resort Hotel,38,July,29,14,4,10,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,109.9,2
-Resort Hotel,38,July,29,14,4,10,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,1,241.0,0.0,0,Transient,109.9,2
-Resort Hotel,113,July,29,14,4,11,3,0.0,0,BB,Direct,Direct,0,0,0,H,1,0.0,0.0,0,Transient,187.5,3
-Resort Hotel,0,July,29,14,0,1,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,0.0,0,Transient,134.0,0
-Resort Hotel,62,July,29,15,0,3,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,171.0,0.0,0,Transient,91.5,0
-Resort Hotel,39,July,29,15,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,132.44,0
-Resort Hotel,37,July,29,15,2,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,106.9,0
-Resort Hotel,58,July,29,15,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,131.86,0
-Resort Hotel,37,July,29,15,2,6,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,216.13,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0
-Resort Hotel,83,July,29,15,2,7,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,190.33,1
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0
-Resort Hotel,57,July,29,15,0,2,1,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,94.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,0.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,98.75,0
-Resort Hotel,57,July,29,15,0,2,3,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,148.23,0
-Resort Hotel,57,July,29,15,0,2,1,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,94.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0
-Resort Hotel,57,July,29,15,0,2,3,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,148.23,0
-Resort Hotel,57,July,29,15,0,2,1,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,0.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,98.75,0
-Resort Hotel,66,July,29,16,0,2,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,195.0,1
-Resort Hotel,13,July,29,16,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,1
-Resort Hotel,50,July,29,16,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,123.2,0
-Resort Hotel,48,July,29,16,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,146.0,0.0,0,Transient,112.0,0
-Resort Hotel,0,July,29,16,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,123.2,0
-Resort Hotel,7,July,29,16,0,1,2,2.0,0,BB,Online TA,TA/TO,0,0,0,C,1,242.0,0.0,0,Transient,169.0,1
-Resort Hotel,0,July,29,16,0,2,2,2.0,0,BB,Direct,Direct,0,0,0,H,1,0.0,0.0,0,Transient,198.0,0
-Resort Hotel,66,July,29,16,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,103.5,1
-Resort Hotel,13,July,29,16,0,2,2,1.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,135.6,1
-Resort Hotel,66,July,29,16,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,103.5,1
-Resort Hotel,10,July,29,16,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,184.0,0
-Resort Hotel,10,July,29,16,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,134.0,0
-Resort Hotel,58,July,29,16,0,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,147.0,0
-Resort Hotel,17,July,29,16,0,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,151.33,0
-Resort Hotel,19,July,29,16,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,121.33,1
-Resort Hotel,10,July,29,16,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient-Party,150.2,1
-Resort Hotel,12,July,29,16,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,0.0,178.0,0,Transient,139.0,0
-Resort Hotel,10,July,29,16,2,3,1,0.0,0,BB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient-Party,150.2,1
-Resort Hotel,63,July,29,16,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,75.44,1
-Resort Hotel,35,July,29,16,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,135.0,0
-Resort Hotel,113,July,29,16,2,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,166.0,1
-Resort Hotel,35,July,29,16,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,135.0,0
-Resort Hotel,68,July,29,16,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,243.0,0.0,0,Contract,130.0,0
-Resort Hotel,113,July,29,16,2,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,1,67.0,0.0,0,Transient,96.3,0
-Resort Hotel,21,July,29,16,4,10,1,0.0,0,HB,Direct,Direct,0,0,0,E,1,0.0,0.0,0,Transient,160.0,0
-Resort Hotel,6,July,29,17,0,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,0.0,1
-Resort Hotel,7,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,127.25,1
-Resort Hotel,17,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,164.0,2
-Resort Hotel,1,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,144.5,0
-Resort Hotel,2,July,29,17,0,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,196.0,0.0,0,Transient,112.0,0
-Resort Hotel,15,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,134.0,1
-Resort Hotel,7,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,127.25,1
-Resort Hotel,11,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,155.5,0
-Resort Hotel,6,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,110.5,1
-Resort Hotel,1,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,0.0,0.0,0,Transient,144.5,0
-Resort Hotel,1,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,144.5,0
-Resort Hotel,48,July,29,17,0,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,196.0,0.0,0,Transient,123.0,0
-Resort Hotel,15,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,1
-Resort Hotel,3,July,29,17,0,2,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,5.0,0.0,0,Transient,107.6,0
-Resort Hotel,23,July,29,17,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,1
-Resort Hotel,53,July,29,17,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,53,July,29,17,2,3,2,1.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,133.75,0
-Resort Hotel,94,July,29,17,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,103.5,0
-Resort Hotel,64,July,29,17,2,3,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient-Party,84.8,1
-Resort Hotel,53,July,29,17,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,53,July,29,17,2,3,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,64,July,29,17,2,3,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient-Party,84.8,1
-Resort Hotel,53,July,29,17,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0
-Resort Hotel,24,July,29,17,2,3,3,1.0,0,BB,Direct,Direct,0,0,0,G,1,0.0,0.0,0,Transient,195.0,1
-Resort Hotel,24,July,29,17,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,164.0,0
-Resort Hotel,23,July,29,17,2,5,2,2.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,195.0,0
-Resort Hotel,53,July,29,17,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,125.0,2
-Resort Hotel,23,July,29,17,2,5,2,2.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,195.0,0
-Resort Hotel,90,July,29,17,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,132.3,3
-Resort Hotel,79,July,29,17,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,145.0,2
-Resort Hotel,43,July,29,17,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,142.0,0.0,0,Transient,92.0,0
-Resort Hotel,90,July,29,17,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,132.3,3
-Resort Hotel,65,July,29,17,2,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,147.0,2
-Resort Hotel,65,July,29,17,2,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,167.0,2
-Resort Hotel,99,July,29,17,2,6,3,0.0,0,BB,Direct,Direct,0,0,0,H,0,250.0,0.0,0,Transient,210.0,1
-Resort Hotel,25,July,29,17,3,7,2,0.0,0,HB,Direct,Direct,0,0,0,F,1,0.0,0.0,0,Transient,194.9,2
-Resort Hotel,92,July,29,17,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,3,240.0,0.0,0,Transient,103.5,3
-Resort Hotel,91,July,29,17,1,2,2,1.0,0,BB,Online TA,TA/TO,0,0,0,A,3,240.0,0.0,0,Transient,118.5,3
-Resort Hotel,38,July,29,17,1,2,2,1.0,0,HB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,192.0,1
-Resort Hotel,6,July,29,17,1,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,142.0,0.0,0,Contract,128.27,0
-Resort Hotel,38,July,29,17,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,135.0,0
+hotel,lead_time,arrival_date_month,arrival_date_week_number,arrival_date_day_of_month,stays_in_weekend_nights,stays_in_week_nights,adults,children,babies,meal,market_segment,distribution_channel,is_repeated_guest,previous_cancellations,previous_bookings_not_canceled,reserved_room_type,booking_changes,agent,company,days_in_waiting_list,customer_type,adr,total_of_special_requests,country_grouped,needs_parking
+Resort Hotel,342,July,27,1,0,0,2,0.0,0,BB,Direct,Direct,0,0,0,C,3,0.0,0.0,0,Transient,0.0,0,PRT,0
+Resort Hotel,737,July,27,1,0,0,2,0.0,0,BB,Direct,Direct,0,0,0,C,4,0.0,0.0,0,Transient,0.0,0,PRT,0
+Resort Hotel,7,July,27,1,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,75.0,0,GBR,0
+Resort Hotel,13,July,27,1,0,1,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,304.0,0.0,0,Transient,75.0,0,GBR,0
+Resort Hotel,14,July,27,1,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,1,GBR,0
+Resort Hotel,14,July,27,1,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,1,GBR,0
+Resort Hotel,0,July,27,1,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,C,0,0.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,9,July,27,1,0,2,2,0.0,0,FB,Direct,Direct,0,0,0,C,0,303.0,0.0,0,Transient,103.0,1,PRT,0
+Resort Hotel,85,July,27,1,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,1,PRT,0
+Resort Hotel,75,July,27,1,0,3,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,105.5,0,PRT,0
+Resort Hotel,23,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,35,July,27,1,0,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,145.0,0,PRT,0
+Resort Hotel,68,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,3,Other,0
+Resort Hotel,18,July,27,1,0,4,2,1.0,0,HB,Online TA,TA/TO,0,0,0,G,1,241.0,0.0,0,Transient,154.77,1,Other,0
+Resort Hotel,37,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,241.0,0.0,0,Transient,94.71,0,PRT,0
+Resort Hotel,68,July,27,1,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,3,Other,0
+Resort Hotel,37,July,27,1,0,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,8.0,0.0,0,Contract,97.5,0,PRT,0
+Resort Hotel,12,July,27,1,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0,Other,0
+Resort Hotel,0,July,27,1,0,1,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,107.42,0,Other,0
+Resort Hotel,7,July,27,1,0,4,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,153.0,1,GBR,0
+Resort Hotel,37,July,27,1,1,4,1,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,97.29,1,GBR,0
+Resort Hotel,72,July,27,1,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,1,250.0,0.0,0,Transient,84.67,1,PRT,0
+Resort Hotel,72,July,27,1,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,1,250.0,0.0,0,Transient,84.67,1,PRT,0
+Resort Hotel,72,July,27,1,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient,99.67,1,PRT,0
+Resort Hotel,127,July,27,1,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,115.0,0.0,0,Contract,94.95,1,GBR,0
+Resort Hotel,78,July,27,1,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,63.6,0,PRT,1
+Resort Hotel,48,July,27,1,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,79.5,0,Other,0
+Resort Hotel,60,July,27,1,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,2,PRT,0
+Resort Hotel,77,July,27,1,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,94.0,0,PRT,0
+Resort Hotel,99,July,27,1,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,1,PRT,1
+Resort Hotel,118,July,27,1,4,10,1,0.0,0,BB,Direct,Direct,0,0,0,A,2,0.0,0.0,0,Transient,62.0,2,Other,0
+Resort Hotel,95,July,27,1,4,11,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,63.86,0,GBR,0
+Resort Hotel,96,July,27,1,2,8,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,0.0,0.0,0,Transient,108.3,2,PRT,0
+Resort Hotel,69,July,27,2,2,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,65.5,0,Other,0
+Resort Hotel,45,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,1,PRT,0
+Resort Hotel,40,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,1,PRT,0
+Resort Hotel,15,July,27,2,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,0,Other,0
+Resort Hotel,36,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,1,PRT,0
+Resort Hotel,43,July,27,2,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,108.8,0,PRT,0
+Resort Hotel,70,July,27,2,2,3,2,0.0,0,HB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,137.0,1,Other,0
+Resort Hotel,45,July,27,2,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,0,PRT,0
+Resort Hotel,45,July,27,2,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,79.5,0,Other,0
+Resort Hotel,16,July,27,2,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,F,0,0.0,0.0,0,Transient,123.0,0,Other,0
+Resort Hotel,70,July,27,2,2,3,2,0.0,0,HB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,137.0,1,Other,0
+Resort Hotel,107,July,27,2,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.7,2,PRT,0
+Resort Hotel,47,July,27,2,2,5,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0,PRT,0
+Resort Hotel,96,July,27,2,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient,58.95,1,Other,0
+Resort Hotel,113,July,27,2,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,156.0,0.0,0,Transient-Party,82.88,2,Other,0
+Resort Hotel,90,July,27,2,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,1,243.0,0.0,0,Contract,82.35,0,GBR,0
+Resort Hotel,50,July,27,2,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,1,241.0,0.0,0,Transient,119.35,1,Other,0
+Resort Hotel,113,July,27,2,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Transient-Party,67.58,2,Other,0
+Resort Hotel,93,July,27,2,3,8,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,156.0,0.0,0,Contract,56.01,0,Other,0
+Resort Hotel,76,July,27,2,4,10,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Contract,110.7,0,Other,0
+Resort Hotel,3,July,27,2,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0,Other,1
+Resort Hotel,1,July,27,2,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,147.0,0,Other,1
+Resort Hotel,1,July,27,2,0,1,2,2.0,0,BB,Direct,Direct,0,0,0,C,0,0.0,0.0,0,Transient,107.0,2,Other,1
+Resort Hotel,0,July,27,2,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,H,0,0.0,0.0,0,Transient,147.0,0,PRT,0
+Resort Hotel,0,July,27,2,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.9,2,PRT,0
+Resort Hotel,0,July,27,2,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,0.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,14,July,27,2,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,98.0,1,Other,0
+Resort Hotel,10,July,27,2,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,0,PRT,0
+Resort Hotel,5,July,27,2,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,135.0,2,Other,1
+Resort Hotel,17,July,27,2,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,F,0,250.0,0.0,0,Transient,133.0,1,Other,0
+Resort Hotel,93,July,27,2,0,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,115.0,0.0,0,Contract,58.95,0,Other,0
+Resort Hotel,3,July,27,2,0,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,136.33,2,PRT,0
+Resort Hotel,10,July,27,3,0,2,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0,Other,1
+Resort Hotel,3,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.5,0,Other,0
+Resort Hotel,51,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,242.0,0.0,0,Transient,97.0,0,Other,0
+Resort Hotel,71,July,27,3,0,2,3,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,110.3,2,PRT,0
+Resort Hotel,63,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2,PRT,0
+Resort Hotel,62,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,1,PRT,0
+Resort Hotel,101,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,2,July,27,3,0,2,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,3.0,0.0,0,Transient,91.5,0,PRT,0
+Resort Hotel,15,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.5,0,Other,0
+Resort Hotel,51,July,27,3,0,2,3,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,110.3,0,PRT,0
+Resort Hotel,3,July,27,3,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,90.9,0,Other,1
+Resort Hotel,48,July,27,3,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,2,July,27,3,2,2,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,122.0,0,PRT,0
+Resort Hotel,72,July,27,3,2,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,105.0,0.0,0,Transient,110.7,0,Other,1
+Resort Hotel,81,July,27,3,2,6,3,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,85.86,0,PRT,0
+Resort Hotel,99,July,27,3,2,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,58.95,0,Other,0
+Resort Hotel,368,July,27,3,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,55.68,0,PRT,0
+Resort Hotel,364,July,27,3,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,55.68,0,GBR,0
+Resort Hotel,81,July,27,3,3,7,2,0.0,0,HB,Direct,Direct,0,0,0,A,2,250.0,0.0,0,Transient,124.0,1,PRT,0
+Resort Hotel,99,July,27,3,3,7,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,115.0,0.0,0,Contract,111.15,0,GBR,0
+Resort Hotel,324,July,27,3,4,10,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,40.0,0.0,0,Contract,134.73,0,GBR,0
+Resort Hotel,69,July,27,3,4,10,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,1,241.0,0.0,0,Transient,92.45,1,GBR,0
+Resort Hotel,79,July,27,3,6,15,2,1.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,108.73,2,PRT,0
+Resort Hotel,12,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,0,GBR,0
+Resort Hotel,9,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,2,PRT,1
+Resort Hotel,1,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1,Other,0
+Resort Hotel,21,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,9,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,241.0,0.0,0,Transient,94.71,0,Other,0
+Resort Hotel,109,July,27,3,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,2,Other,0
+Resort Hotel,109,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,1,PRT,0
+Resort Hotel,72,July,27,3,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,63,July,27,3,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,242.0,0.0,0,Transient,117.0,1,PRT,0
+Resort Hotel,63,July,27,3,2,5,3,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,105.0,0.0,0,Transient,196.54,1,Other,0
+Resort Hotel,101,July,27,3,2,5,2,1.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,99.3,2,PRT,1
+Resort Hotel,102,July,27,3,2,5,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,90.95,0,Other,0
+Resort Hotel,4,July,27,4,2,1,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,92.67,1,Other,0
+Resort Hotel,98,July,27,4,2,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Transient,71.55,0,Other,1
+Resort Hotel,92,July,27,4,2,4,1,2.0,0,BB,Offline TA/TO,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,96.49,2,Other,0
+Resort Hotel,95,July,27,4,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,85.8,2,PRT,1
+Resort Hotel,102,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,96.3,1,PRT,0
+Resort Hotel,26,July,27,4,2,5,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,163.0,0,PRT,0
+Resort Hotel,73,July,27,4,2,5,3,0.0,0,HB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,172.0,1,PRT,0
+Resort Hotel,102,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.7,1,PRT,0
+Resort Hotel,115,July,27,4,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient,58.95,1,PRT,0
+Resort Hotel,102,July,27,4,2,5,2,0.0,1,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,2,PRT,0
+Resort Hotel,86,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,2,Other,0
+Resort Hotel,78,July,27,4,2,5,2,0.0,1,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,139.0,2,PRT,0
+Resort Hotel,52,July,27,4,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,67.24,0,GBR,0
+Resort Hotel,29,July,27,4,2,6,3,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,241.0,0.0,0,Transient,116.5,1,PRT,0
+Resort Hotel,101,July,27,4,2,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,96.3,1,PRT,0
+Resort Hotel,109,July,27,4,2,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,1,PRT,0
+Resort Hotel,92,July,27,4,4,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,71.55,1,GBR,0
+Resort Hotel,92,July,27,4,4,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,71.55,1,PRT,0
+Resort Hotel,79,July,27,4,4,6,2,1.0,0,HB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient,149.0,1,PRT,0
+Resort Hotel,2,July,27,4,0,1,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,1,240.0,0.0,0,Transient,163.0,0,PRT,1
+Resort Hotel,30,July,27,4,0,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,79.5,0,PRT,0
+Resort Hotel,51,July,27,4,0,1,1,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,105.0,0,PRT,0
+Resort Hotel,36,July,27,4,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,E,1,250.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,73,July,27,4,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,2,PRT,0
+Resort Hotel,33,July,27,4,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,113.0,0,PRT,0
+Resort Hotel,32,July,27,4,0,1,4,0.0,0,FB,Complementary,Direct,0,0,0,H,2,0.0,0.0,0,Transient,0.0,1,PRT,0
+Resort Hotel,8,July,27,4,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,Other,0
+Resort Hotel,100,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,73.8,1,Other,1
+Resort Hotel,1,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.5,0,PRT,0
+Resort Hotel,100,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,73.8,2,Other,0
+Resort Hotel,100,July,27,4,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,73.8,1,Other,0
+Resort Hotel,9,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,1,Other,0
+Resort Hotel,5,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,0,PRT,0
+Resort Hotel,0,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,1,306.0,0.0,0,Transient,85.1,0,Other,0
+Resort Hotel,9,July,28,5,1,0,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,184.0,0.0,0,Transient,89.0,0,Other,0
+Resort Hotel,2,July,28,5,1,0,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,80.1,0,PRT,0
+Resort Hotel,2,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,0,PRT,0
+Resort Hotel,9,July,28,5,1,0,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,184.0,0.0,0,Transient,101.0,0,Other,1
+Resort Hotel,5,July,28,5,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,0,PRT,0
+Resort Hotel,2,July,28,5,1,0,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,0.0,0.0,0,Transient,167.0,1,PRT,0
+Resort Hotel,44,July,28,5,2,0,3,0.0,0,HB,Online TA,TA/TO,0,0,0,G,3,240.0,0.0,0,Transient,225.0,0,PRT,1
+Resort Hotel,80,July,28,5,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,0,Other,1
+Resort Hotel,97,July,28,5,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,2,Other,0
+Resort Hotel,109,July,28,5,2,3,2,1.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,85.59,2,Other,1
+Resort Hotel,30,July,28,5,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,Other,0
+Resort Hotel,64,July,28,5,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,39,July,28,5,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,163.0,0,Other,0
+Resort Hotel,90,July,28,5,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,0,PRT,0
+Resort Hotel,34,July,28,5,2,4,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,163.0,0,PRT,0
+Resort Hotel,93,July,28,5,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,105.5,0,PRT,0
+Resort Hotel,97,July,28,5,2,5,2,2.0,0,HB,Direct,Direct,0,0,0,C,1,250.0,0.0,0,Transient,164.2,1,PRT,1
+Resort Hotel,29,July,28,5,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,97.29,1,Other,0
+Resort Hotel,101,July,28,5,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.0,1,PRT,0
+Resort Hotel,27,July,28,5,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,175.0,0.0,0,Transient,98.4,0,Other,0
+Resort Hotel,8,July,28,5,4,5,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,1,240.0,0.0,0,Transient,175.0,1,Other,1
+Resort Hotel,82,July,28,5,4,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,63.6,2,PRT,1
+Resort Hotel,94,July,28,5,4,6,3,0.0,0,BB,Direct,Direct,0,0,0,D,3,0.0,0.0,0,Transient,124.45,1,PRT,1
+Resort Hotel,110,July,28,5,4,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,110.7,0,GBR,0
+Resort Hotel,96,July,28,5,4,10,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,74.07,0,GBR,0
+Resort Hotel,79,July,28,5,4,10,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Contract,134.1,0,GBR,0
+Resort Hotel,115,July,28,6,1,4,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,1,240.0,0.0,0,Transient,167.0,0,PRT,0
+Resort Hotel,111,July,28,6,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,2,PRT,0
+Resort Hotel,51,July,28,6,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,2,Other,1
+Resort Hotel,94,July,28,6,1,3,3,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,96.0,0.0,0,Transient,171.32,1,Other,0
+Resort Hotel,81,July,28,6,1,3,2,2.0,0,HB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,210.0,0,Other,1
+Resort Hotel,84,July,28,6,1,3,2,0.0,1,BB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,97.0,2,PRT,0
+Resort Hotel,51,July,28,6,1,3,3,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,241.0,0.0,0,Transient,117.81,2,Other,0
+Resort Hotel,111,July,28,6,0,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,0.0,2,PRT,0
+Resort Hotel,0,July,28,6,0,0,1,0.0,0,BB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,0.0,0,PRT,0
+Resort Hotel,2,July,28,6,1,0,2,1.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,131.0,0,PRT,0
+Resort Hotel,7,July,28,6,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,2,PRT,0
+Resort Hotel,98,July,28,6,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,1,Other,1
+Resort Hotel,95,July,28,6,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,1,Other,0
+Resort Hotel,48,July,28,6,1,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,167.0,0,PRT,0
+Resort Hotel,66,July,28,6,1,3,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,91.5,0,PRT,0
+Resort Hotel,104,July,28,6,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,28,July,28,6,1,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,34,July,28,6,1,4,2,0.0,0,HB,Direct,Direct,0,0,0,F,0,250.0,0.0,0,Transient,175.0,0,PRT,1
+Resort Hotel,98,July,28,6,1,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.8,1,Other,1
+Resort Hotel,104,July,28,6,1,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,117.63,0,PRT,0
+Resort Hotel,68,July,28,6,2,5,2,2.0,0,HB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,185.0,0,PRT,0
+Resort Hotel,86,July,28,6,2,5,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,71.0,1,PRT,0
+Resort Hotel,258,July,28,6,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,2.0,0.0,0,Contract,47.25,0,GBR,0
+Resort Hotel,111,July,28,6,3,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,151.0,1,PRT,0
+Resort Hotel,94,July,28,6,3,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,87.3,0,PRT,0
+Resort Hotel,112,July,28,6,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,120.6,1,GBR,0
+Resort Hotel,100,July,28,6,3,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,1,241.0,0.0,0,Transient,63.86,1,GBR,0
+Resort Hotel,33,July,28,6,3,7,2,0.0,0,HB,Direct,Direct,0,0,0,F,5,250.0,0.0,0,Transient,157.1,1,PRT,0
+Resort Hotel,97,July,28,6,3,7,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,91.37,2,GBR,0
+Resort Hotel,80,July,28,6,3,8,1,0.0,0,BB,Direct,Direct,0,0,0,A,1,0.0,0.0,0,Transient,73.0,0,Other,0
+Resort Hotel,90,July,28,6,4,10,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Contract,110.7,0,Other,0
+Resort Hotel,111,July,28,6,4,10,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,93.6,0,GBR,0
+Resort Hotel,65,July,28,6,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,127.0,0.0,0,Transient,83.5,0,PRT,0
+Resort Hotel,67,July,28,7,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,55,July,28,7,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2,Other,1
+Resort Hotel,21,July,28,7,0,3,2,1.0,0,HB,Direct,Direct,0,0,0,F,0,250.0,0.0,0,Transient,185.5,1,PRT,0
+Resort Hotel,8,July,28,7,0,0,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,0.0,1,PRT,0
+Resort Hotel,8,July,28,7,0,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,0.0,1,PRT,0
+Resort Hotel,0,July,28,7,0,1,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,109.8,3,GBR,0
+Resort Hotel,0,July,28,7,0,1,3,0.0,0,HB,Direct,Direct,0,0,0,C,0,0.0,0.0,0,Transient,195.0,0,PRT,1
+Resort Hotel,0,July,28,7,0,1,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,109.8,3,GBR,0
+Resort Hotel,8,July,28,7,0,4,3,2.0,0,BB,Online TA,TA/TO,0,0,0,H,2,240.0,0.0,0,Transient,193.0,1,Other,0
+Resort Hotel,66,July,28,7,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,97.0,2,PRT,0
+Resort Hotel,88,July,28,7,0,4,3,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,95.0,0.0,0,Transient,150.0,1,Other,0
+Resort Hotel,0,July,28,7,0,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,2,0.0,0.0,0,Transient,98.0,0,Other,0
+Resort Hotel,43,July,28,7,0,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient,91.5,0,PRT,0
+Resort Hotel,88,July,28,7,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,139.0,2,PRT,0
+Resort Hotel,54,July,28,7,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,8.0,0.0,0,Transient,79.5,0,Other,0
+Resort Hotel,292,July,28,7,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,2.0,0.0,0,Contract,47.25,0,PRT,0
+Resort Hotel,112,July,28,7,4,10,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,126.65,1,Other,0
+Resort Hotel,68,July,28,8,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,1,GBR,0
+Resort Hotel,7,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,2,PRT,1
+Resort Hotel,1,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1,Other,1
+Resort Hotel,113,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,123.0,1,PRT,0
+Resort Hotel,5,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,146.0,1,Other,0
+Resort Hotel,83,July,28,8,0,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,105.0,0.0,0,Transient,110.7,1,PRT,0
+Resort Hotel,105,July,28,8,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,0,July,28,8,0,1,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,146.0,0.0,0,Transient,61.0,0,PRT,0
+Resort Hotel,1,July,28,8,0,1,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,104.72,1,PRT,0
+Resort Hotel,1,July,28,8,0,1,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,104.72,1,PRT,0
+Resort Hotel,1,July,28,8,0,2,2,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,110.0,0,Transient,104.72,1,Other,1
+Resort Hotel,102,July,28,8,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,9.0,0.0,0,Transient,66.42,1,PRT,0
+Resort Hotel,113,July,28,8,2,4,2,0.0,0,BB,Direct,Direct,0,0,0,E,1,250.0,0.0,0,Transient,77.96,1,PRT,1
+Resort Hotel,280,July,28,8,2,5,2,1.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,112.0,1,PRT,0
+Resort Hotel,96,July,28,8,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,107.0,1,GBR,0
+Resort Hotel,394,July,28,8,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,40.0,0.0,0,Contract,89.68,0,GBR,0
+Resort Hotel,33,July,28,8,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,155.0,0,PRT,0
+Resort Hotel,82,July,28,8,2,6,3,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,112.0,1,Other,0
+Resort Hotel,100,July,28,8,2,7,3,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient-Party,130.1,3,Other,0
+Resort Hotel,100,July,28,8,2,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient-Party,100.1,2,Other,0
+Resort Hotel,17,July,28,9,0,1,2,2.0,0,BB,Online TA,TA/TO,0,0,0,C,0,242.0,0.0,0,Transient,123.0,3,PRT,0
+Resort Hotel,68,July,28,9,0,2,3,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,124.0,1,Other,1
+Resort Hotel,12,July,28,9,0,2,2,2.0,0,BB,Direct,Direct,0,0,0,H,2,0.0,0.0,0,Transient,146.0,0,PRT,1
+Resort Hotel,77,July,28,9,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,97.0,0,PRT,0
+Resort Hotel,24,July,28,9,0,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,C,0,242.0,0.0,0,Transient,123.0,1,PRT,0
+Resort Hotel,44,July,28,9,0,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0,PRT,0
+Resort Hotel,78,July,28,9,0,3,2,0.0,1,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2,PRT,0
+Resort Hotel,17,July,28,9,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,105.08,0,PRT,0
+Resort Hotel,103,July,28,9,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,65.42,0,PRT,0
+Resort Hotel,16,July,28,9,1,3,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,98.0,1,Other,0
+Resort Hotel,14,July,28,9,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,75.46,1,Other,1
+Resort Hotel,77,July,28,9,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,177.0,0.0,0,Transient,65.5,0,Other,0
+Resort Hotel,90,July,28,9,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,6.0,0.0,0,Transient,90.95,0,Other,0
+Resort Hotel,90,July,28,9,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,40.0,0.0,0,Contract,93.6,0,GBR,0
+Resort Hotel,90,July,28,9,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,143.0,0.0,0,Contract,119.25,0,GBR,0
+Resort Hotel,366,July,28,9,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,0,40.0,0.0,0,Contract,134.73,0,GBR,0
+Resort Hotel,249,July,28,9,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,112.0,1,PRT,0
+Resort Hotel,69,July,28,9,2,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,118.13,2,PRT,0
+Resort Hotel,10,July,28,10,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,131.0,0,Other,0
+Resort Hotel,22,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0,PRT,0
+Resort Hotel,91,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,23,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,0,PRT,0
+Resort Hotel,11,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,110.5,1,PRT,0
+Resort Hotel,3,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1,PRT,0
+Resort Hotel,13,July,28,10,0,2,2,1.0,0,HB,Online TA,TA/TO,0,0,0,G,2,240.0,0.0,0,Transient,185.0,1,PRT,1
+Resort Hotel,108,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,87.3,2,PRT,0
+Resort Hotel,91,July,28,10,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,37,July,28,10,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,105.0,0.0,0,Transient,120.0,1,GBR,0
+Resort Hotel,21,July,28,10,1,2,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,98.0,1,Other,0
+Resort Hotel,106,July,28,10,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,96.3,2,GBR,0
+Resort Hotel,30,July,28,10,2,2,2,0.0,0,FB,Direct,Direct,0,0,0,F,0,0.0,0.0,0,Transient-Party,197.0,1,PRT,0
+Resort Hotel,30,July,28,10,2,2,2,0.0,0,FB,Direct,Direct,0,0,0,F,0,0.0,0.0,0,Transient-Party,197.0,1,PRT,0
+Resort Hotel,51,July,28,10,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,79,July,28,10,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,82.0,2,Other,0
+Resort Hotel,21,July,28,10,2,3,2,0.0,2,HB,Direct,Direct,0,0,0,C,1,250.0,0.0,0,Transient,165.0,3,PRT,1
+Resort Hotel,35,July,28,10,2,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,149.4,0,Other,0
+Resort Hotel,78,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,106.84,2,PRT,1
+Resort Hotel,31,July,28,10,2,5,2,0.0,0,HB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient,161.0,1,PRT,1
+Resort Hotel,78,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,134.43,2,PRT,0
+Resort Hotel,78,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,144.43,2,PRT,1
+Resort Hotel,44,July,28,10,2,5,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,E,2,244.0,0.0,0,Transient,152.0,0,Other,0
+Resort Hotel,34,July,28,10,2,5,2,1.0,0,HB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,125.54,3,GBR,0
+Resort Hotel,87,July,28,10,2,5,2,1.0,1,FB,Offline TA/TO,TA/TO,0,0,0,C,0,5.0,0.0,0,Transient,133.83,2,PRT,0
+Resort Hotel,11,July,28,10,2,6,3,1.0,0,BB,Direct,Direct,0,0,0,C,0,250.0,0.0,0,Transient,159.75,0,PRT,1
+Resort Hotel,115,July,28,10,2,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,2,Other,0
+Resort Hotel,86,July,28,10,3,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,112.2,0,PRT,0
+Resort Hotel,41,July,28,10,4,7,2,0.0,1,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,110.6,0,GBR,0
+Resort Hotel,32,July,28,10,4,9,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,241.0,0.0,0,Transient,105.9,0,Other,0
+Resort Hotel,34,July,28,10,2,5,2,1.0,0,HB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,95.27,3,GBR,0
+Resort Hotel,34,July,28,10,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,108.83,1,GBR,0
+Resort Hotel,100,July,28,11,2,3,2,1.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,149.0,0.0,0,Transient,153.96,0,PRT,0
+Resort Hotel,44,July,28,11,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,0,Other,0
+Resort Hotel,304,July,28,11,2,4,2,0.0,1,BB,Direct,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,90.67,1,PRT,0
+Resort Hotel,36,July,28,11,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,126.67,0,PRT,0
+Resort Hotel,117,July,28,11,2,4,3,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,144.4,1,PRT,0
+Resort Hotel,70,July,28,11,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,99.5,2,Other,1
+Resort Hotel,110,July,28,11,2,5,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,139.4,1,PRT,0
+Resort Hotel,109,July,28,11,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,PRT,0
+Resort Hotel,33,July,28,11,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,241.0,0.0,0,Transient,89.97,1,GBR,0
+Resort Hotel,33,July,28,11,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,33,July,28,11,2,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,123.0,0,Other,0
+Resort Hotel,0,July,28,11,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,123.0,0,GBR,0
+Resort Hotel,0,July,28,11,0,1,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,144.9,1,Other,0
+Resort Hotel,0,July,28,11,0,1,2,0.0,0,BB,Direct,Direct,0,0,0,G,0,0.0,0.0,0,Transient,153.0,0,Other,0
+Resort Hotel,0,July,28,11,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,1,Other,0
+Resort Hotel,84,July,28,11,1,1,2,0.0,0,HB,Corporate,Corporate,0,0,0,A,0,0.0,113.0,0,Transient,100.0,0,PRT,1
+Resort Hotel,71,July,28,11,1,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient,65.5,0,Other,0
+Resort Hotel,16,July,28,11,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,C,0,242.0,0.0,0,Transient,123.0,1,Other,0
+Resort Hotel,54,July,28,11,2,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,8,July,28,11,2,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,131.0,0,Other,0
+Resort Hotel,36,July,28,11,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,5.0,0.0,0,Transient,104.68,0,PRT,1
+Resort Hotel,40,July,28,11,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,166.0,0,PRT,0
+Resort Hotel,59,July,28,11,2,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,111.25,2,PRT,0
+Resort Hotel,79,July,28,11,2,6,2,2.0,0,HB,Direct,Direct,0,0,0,G,1,250.0,0.0,0,Transient,213.75,0,PRT,0
+Resort Hotel,32,July,28,11,4,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,178.0,0,PRT,1
+Resort Hotel,110,July,28,11,2,5,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,113.9,1,PRT,0
+Resort Hotel,33,July,28,11,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,129.29,0,PRT,1
+Resort Hotel,53,July,29,12,1,0,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,153.0,0,Other,1
+Resort Hotel,2,July,29,12,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.0,2,PRT,1
+Resort Hotel,8,July,29,12,2,4,2,1.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,169.0,2,PRT,1
+Resort Hotel,72,July,29,12,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,93.0,2,PRT,0
+Resort Hotel,12,July,29,12,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,132.29,0,GBR,0
+Resort Hotel,48,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,1,Other,0
+Resort Hotel,90,July,29,12,2,5,2,0.0,0,FB,Offline TA/TO,TA/TO,0,0,0,A,0,5.0,0.0,0,Transient-Party,117.22,1,PRT,0
+Resort Hotel,34,July,29,12,2,5,2,0.0,1,HB,Offline TA/TO,TA/TO,0,0,0,D,1,156.0,0.0,0,Transient,149.0,1,Other,0
+Resort Hotel,58,July,29,12,2,5,3,1.0,0,BB,Direct,Direct,0,0,0,C,0,250.0,0.0,0,Transient,164.57,1,PRT,0
+Resort Hotel,59,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,115.0,0.0,0,Contract,107.0,0,GBR,0
+Resort Hotel,90,July,29,12,2,5,2,0.0,1,FB,Offline TA/TO,TA/TO,0,0,0,A,0,5.0,0.0,0,Transient-Party,117.22,2,PRT,1
+Resort Hotel,116,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,E,0,40.0,0.0,0,Contract,119.25,0,PRT,0
+Resort Hotel,31,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,0,GBR,0
+Resort Hotel,51,July,29,12,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,105.71,0,PRT,0
+Resort Hotel,48,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,1,GBR,0
+Resort Hotel,59,July,29,12,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,144.43,2,Other,1
+Resort Hotel,97,July,29,12,3,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,126.0,1,PRT,0
+Resort Hotel,12,July,29,12,4,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,148.3,2,Other,1
+Resort Hotel,64,July,29,12,4,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,125.22,1,PRT,0
+Resort Hotel,31,July,29,12,4,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,243.0,0.0,0,Transient,123.0,0,GBR,0
+Resort Hotel,59,July,29,12,4,7,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,243.0,0.0,0,Contract,130.0,1,GBR,1
+Resort Hotel,55,July,29,12,4,10,2,10.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,2,8.0,0.0,0,Contract,133.16,1,PRT,0
+Resort Hotel,81,July,29,12,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,78.84,0,GBR,0
+Resort Hotel,1,July,29,12,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,80.1,0,PRT,0
+Resort Hotel,34,July,29,12,2,0,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,193.0,1,Other,0
+Resort Hotel,13,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,0,Other,0
+Resort Hotel,40,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,90.71,0,Other,0
+Resort Hotel,1,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,114.5,1,Other,0
+Resort Hotel,34,July,29,12,2,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.2,1,Other,0
+Resort Hotel,88,July,29,12,2,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,1,8.0,0.0,0,Contract,79.5,0,Other,0
+Resort Hotel,9,July,29,12,2,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.9,3,Other,0
+Resort Hotel,24,July,29,12,2,1,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,128.0,0,PRT,0
+Resort Hotel,97,July,29,12,2,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,6.0,0.0,0,Transient,90.95,0,Other,0
+Resort Hotel,60,July,29,12,2,2,2,0.0,1,BB,Online TA,TA/TO,0,0,0,E,2,240.0,0.0,0,Transient,107.0,2,Other,0
+Resort Hotel,100,July,29,12,2,2,2,2.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,130.05,1,Other,1
+Resort Hotel,50,July,29,12,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,123.0,0,Other,0
+Resort Hotel,47,July,29,12,2,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,103.8,0,PRT,0
+Resort Hotel,8,July,29,12,2,3,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,196.0,1,Other,0
+Resort Hotel,34,July,29,12,2,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,149.4,0,Other,1
+Resort Hotel,47,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,175.71,0,Other,0
+Resort Hotel,115,July,29,13,2,5,2,0.0,1,HB,Offline TA/TO,TA/TO,0,0,0,A,1,134.0,0.0,0,Transient-Party,119.7,2,PRT,0
+Resort Hotel,79,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.86,1,PRT,0
+Resort Hotel,91,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.86,0,GBR,0
+Resort Hotel,98,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,82.0,3,Other,0
+Resort Hotel,109,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,73.8,1,Other,0
+Resort Hotel,0,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,117.9,0,Other,1
+Resort Hotel,98,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient-Party,82.0,3,Other,0
+Resort Hotel,0,July,29,13,1,1,4,0.0,0,BB,Direct,Direct,0,0,0,L,0,0.0,0.0,0,Transient,150.0,0,PRT,0
+Resort Hotel,9,July,29,13,1,1,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,161.0,2,Other,1
+Resort Hotel,62,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,64.0,2,Other,0
+Resort Hotel,45,July,29,13,1,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,42,July,29,13,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,110.0,0,Other,1
+Resort Hotel,54,July,29,13,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,1,PRT,1
+Resort Hotel,51,July,29,13,1,2,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,130.0,0,Other,1
+Resort Hotel,54,July,29,13,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,88.2,1,PRT,0
+Resort Hotel,58,July,29,13,1,2,2,0.0,0,HB,Direct,Direct,0,0,0,E,2,250.0,0.0,0,Transient,165.0,1,Other,1
+Resort Hotel,0,July,29,13,1,3,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,167.0,0.0,0,Transient,114.0,0,PRT,0
+Resort Hotel,60,July,29,13,1,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,15.0,0.0,0,Transient,79.5,0,PRT,0
+Resort Hotel,321,July,29,13,1,4,2,0.0,0,HB,Direct,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,132.8,1,PRT,0
+Resort Hotel,40,July,29,13,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,120.0,2,Other,0
+Resort Hotel,51,July,29,13,1,4,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,156.0,0.0,0,Contract,79.5,0,PRT,0
+Resort Hotel,38,July,29,13,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,0.0,0.0,0,Transient,120.0,0,PRT,0
+Resort Hotel,75,July,29,13,1,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,144.2,1,PRT,0
+Resort Hotel,101,July,29,13,1,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,107.2,0,PRT,0
+Resort Hotel,42,July,29,13,1,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,120.0,0,PRT,0
+Resort Hotel,40,July,29,13,1,4,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,120.0,2,Other,0
+Resort Hotel,109,July,29,13,1,4,3,0.0,0,HB,Direct,Direct,0,0,0,E,0,0.0,0.0,0,Transient,163.8,1,PRT,0
+Resort Hotel,81,July,29,13,1,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.5,2,PRT,0
+Resort Hotel,98,July,29,13,1,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,130.5,0,PRT,0
+Resort Hotel,32,July,29,13,1,5,1,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,D,2,300.0,0.0,0,Transient,153.0,0,PRT,0
+Resort Hotel,72,July,29,13,1,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,98.5,2,Other,0
+Resort Hotel,115,July,29,13,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,134.0,0.0,0,Transient-Party,119.7,2,PRT,0
+Resort Hotel,118,July,29,13,2,5,2,0.0,0,FB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,184.6,1,PRT,0
+Resort Hotel,81,July,29,13,2,5,2,1.0,0,HB,Direct,Direct,0,0,0,E,0,250.0,0.0,0,Transient,181.22,2,Other,0
+Resort Hotel,95,July,29,13,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.86,1,PRT,0
+Resort Hotel,16,July,29,13,1,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,100.2,3,Other,1
+Resort Hotel,56,July,29,13,1,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,134.25,0,Other,1
+Resort Hotel,88,July,29,13,3,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,8.0,0.0,0,Contract,96.3,0,Other,0
+Resort Hotel,41,July,29,13,3,6,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,147.0,0.0,0,Transient,83.09,2,GBR,0
+Resort Hotel,40,July,29,14,0,1,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,171.0,0.0,0,Transient,105.5,0,PRT,0
+Resort Hotel,1,July,29,14,0,1,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,270.0,0,Transient,134.0,0,PRT,0
+Resort Hotel,1,July,29,14,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,2,240.0,0.0,0,Transient,8.0,1,PRT,0
+Resort Hotel,1,July,29,14,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,1,240.0,0.0,0,Transient,146.0,1,PRT,1
+Resort Hotel,76,July,29,14,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,126.0,2,PRT,0
+Resort Hotel,0,July,29,14,0,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,111.15,1,Other,0
+Resort Hotel,49,July,29,14,0,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,136.2,2,Other,0
+Resort Hotel,76,July,29,14,0,5,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,101.8,0,PRT,0
+Resort Hotel,73,July,29,14,1,5,2,0.0,0,HB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient-Party,127.0,1,PRT,0
+Resort Hotel,73,July,29,14,1,5,2,1.0,0,HB,Direct,Direct,0,0,0,E,0,0.0,0.0,0,Transient-Party,161.5,2,PRT,0
+Resort Hotel,317,July,29,14,1,5,2,2.0,0,HB,Direct,TA/TO,0,0,0,H,1,240.0,0.0,0,Transient,230.67,2,PRT,1
+Resort Hotel,112,July,29,14,2,5,1,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,65.7,1,PRT,0
+Resort Hotel,6,July,29,14,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,180.0,2,Other,1
+Resort Hotel,8,July,29,14,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,168.57,1,Other,0
+Resort Hotel,96,July,29,14,2,7,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,242.0,0.0,0,Transient,107.67,1,PRT,0
+Resort Hotel,96,July,29,14,2,7,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,96.9,1,PRT,0
+Resort Hotel,99,July,29,14,2,7,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,107.0,1,Other,0
+Resort Hotel,66,July,29,14,2,9,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,73.41,0,Other,0
+Resort Hotel,38,July,29,14,4,10,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,109.9,2,Other,0
+Resort Hotel,38,July,29,14,4,10,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,1,241.0,0.0,0,Transient,109.9,2,Other,0
+Resort Hotel,113,July,29,14,4,11,3,0.0,0,BB,Direct,Direct,0,0,0,H,1,0.0,0.0,0,Transient,187.5,3,PRT,1
+Resort Hotel,0,July,29,14,0,1,1,0.0,0,BB,Corporate,Corporate,0,0,0,A,0,0.0,0.0,0,Transient,134.0,0,PRT,0
+Resort Hotel,62,July,29,15,0,3,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,171.0,0.0,0,Transient,91.5,0,PRT,0
+Resort Hotel,39,July,29,15,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,132.44,0,PRT,0
+Resort Hotel,37,July,29,15,2,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,241.0,0.0,0,Transient,106.9,0,Other,0
+Resort Hotel,58,July,29,15,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,131.86,0,PRT,0
+Resort Hotel,37,July,29,15,2,6,2,2.0,0,BB,Online TA,TA/TO,0,0,0,H,0,240.0,0.0,0,Transient,216.13,0,GBR,1
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,83,July,29,15,2,7,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,190.33,1,GBR,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,1,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,94.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,0.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,98.75,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,3,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,148.23,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,1,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,94.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,3,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,148.23,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,1,0.0,0,FB,Groups,Direct,0,0,0,A,1,305.0,0.0,0,Transient-Party,0.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,57,July,29,15,0,2,2,0.0,0,FB,Groups,Direct,0,0,0,A,0,305.0,0.0,0,Transient-Party,98.75,0,PRT,0
+Resort Hotel,66,July,29,16,0,2,2,2.0,0,BB,Online TA,TA/TO,0,0,0,G,0,240.0,0.0,0,Transient,195.0,1,PRT,0
+Resort Hotel,13,July,29,16,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,1,Other,0
+Resort Hotel,50,July,29,16,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,123.2,0,Other,0
+Resort Hotel,48,July,29,16,0,1,1,0.0,0,BB,Direct,Direct,0,0,0,A,0,146.0,0.0,0,Transient,112.0,0,PRT,0
+Resort Hotel,0,July,29,16,0,1,2,0.0,0,BB,Online TA,TA/TO,0,0,0,F,0,241.0,0.0,0,Transient,123.2,0,PRT,0
+Resort Hotel,7,July,29,16,0,1,2,2.0,0,BB,Online TA,TA/TO,0,0,0,C,1,242.0,0.0,0,Transient,169.0,1,Other,1
+Resort Hotel,0,July,29,16,0,2,2,2.0,0,BB,Direct,Direct,0,0,0,H,1,0.0,0.0,0,Transient,198.0,0,PRT,1
+Resort Hotel,66,July,29,16,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,103.5,1,PRT,0
+Resort Hotel,13,July,29,16,0,2,2,1.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,135.6,1,PRT,0
+Resort Hotel,66,July,29,16,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,103.5,1,Other,0
+Resort Hotel,10,July,29,16,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,184.0,0,Other,1
+Resort Hotel,10,July,29,16,0,3,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,134.0,0,PRT,0
+Resort Hotel,58,July,29,16,0,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,147.0,0,PRT,0
+Resort Hotel,17,July,29,16,0,3,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,151.33,0,PRT,0
+Resort Hotel,19,July,29,16,0,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,121.33,1,Other,0
+Resort Hotel,10,July,29,16,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient-Party,150.2,1,Other,0
+Resort Hotel,12,July,29,16,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,E,0,0.0,178.0,0,Transient,139.0,0,PRT,0
+Resort Hotel,10,July,29,16,2,3,1,0.0,0,BB,Direct,Direct,0,0,0,D,1,250.0,0.0,0,Transient-Party,150.2,1,Other,0
+Resort Hotel,63,July,29,16,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,147.0,0.0,0,Transient,75.44,1,PRT,0
+Resort Hotel,35,July,29,16,1,3,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,135.0,0,PRT,0
+Resort Hotel,113,July,29,16,2,4,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,166.0,1,PRT,0
+Resort Hotel,35,July,29,16,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,135.0,0,PRT,0
+Resort Hotel,68,July,29,16,2,5,2,0.0,0,HB,Offline TA/TO,TA/TO,0,0,0,A,0,243.0,0.0,0,Contract,130.0,0,GBR,0
+Resort Hotel,113,July,29,16,2,6,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,1,67.0,0.0,0,Transient,96.3,0,PRT,0
+Resort Hotel,21,July,29,16,4,10,1,0.0,0,HB,Direct,Direct,0,0,0,E,1,0.0,0.0,0,Transient,160.0,0,PRT,0
+Resort Hotel,6,July,29,17,0,0,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,0.0,1,PRT,0
+Resort Hotel,7,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,127.25,1,PRT,0
+Resort Hotel,17,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,164.0,2,PRT,0
+Resort Hotel,1,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,144.5,0,PRT,0
+Resort Hotel,2,July,29,17,0,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,196.0,0.0,0,Transient,112.0,0,PRT,0
+Resort Hotel,15,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,134.0,1,PRT,0
+Resort Hotel,7,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,0.0,0.0,0,Transient,127.25,1,PRT,0
+Resort Hotel,11,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,155.5,0,Other,1
+Resort Hotel,6,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,241.0,0.0,0,Transient,110.5,1,PRT,0
+Resort Hotel,1,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,0.0,0.0,0,Transient,144.5,0,PRT,0
+Resort Hotel,1,July,29,17,0,2,2,0.0,0,BB,Direct,Direct,0,0,0,D,0,250.0,0.0,0,Transient,144.5,0,Other,0
+Resort Hotel,48,July,29,17,0,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,196.0,0.0,0,Transient,123.0,0,PRT,0
+Resort Hotel,15,July,29,17,0,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,1,PRT,0
+Resort Hotel,3,July,29,17,0,2,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,5.0,0.0,0,Transient,107.6,0,PRT,0
+Resort Hotel,23,July,29,17,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,120.6,1,PRT,0
+Resort Hotel,53,July,29,17,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,53,July,29,17,2,3,2,1.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,133.75,0,PRT,1
+Resort Hotel,94,July,29,17,2,3,2,0.0,0,BB,Direct,Direct,0,0,0,A,0,250.0,0.0,0,Transient,103.5,0,Other,0
+Resort Hotel,64,July,29,17,2,3,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient-Party,84.8,1,PRT,0
+Resort Hotel,53,July,29,17,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0,PRT,0
+Resort Hotel,53,July,29,17,2,3,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0,PRT,1
+Resort Hotel,64,July,29,17,2,3,1,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,175.0,0.0,0,Transient-Party,84.8,1,PRT,0
+Resort Hotel,53,July,29,17,2,3,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,152.0,0.0,0,Transient-Party,107.0,0,PRT,1
+Resort Hotel,24,July,29,17,2,3,3,1.0,0,BB,Direct,Direct,0,0,0,G,1,0.0,0.0,0,Transient,195.0,1,PRT,0
+Resort Hotel,24,July,29,17,2,4,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,164.0,0,PRT,0
+Resort Hotel,23,July,29,17,2,5,2,2.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,195.0,0,Other,0
+Resort Hotel,53,July,29,17,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,125.0,2,Other,0
+Resort Hotel,23,July,29,17,2,5,2,2.0,0,BB,Direct,Direct,0,0,0,G,0,250.0,0.0,0,Transient,195.0,0,PRT,0
+Resort Hotel,90,July,29,17,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,132.3,3,PRT,0
+Resort Hotel,79,July,29,17,2,5,2,0.0,0,BB,Online TA,TA/TO,0,0,0,E,0,240.0,0.0,0,Transient,145.0,2,PRT,0
+Resort Hotel,43,July,29,17,2,5,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,A,0,142.0,0.0,0,Transient,92.0,0,GBR,0
+Resort Hotel,90,July,29,17,2,5,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,1,240.0,0.0,0,Transient,132.3,3,PRT,0
+Resort Hotel,65,July,29,17,2,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,A,0,240.0,0.0,0,Transient,147.0,2,Other,0
+Resort Hotel,65,July,29,17,2,6,2,0.0,0,HB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,167.0,2,Other,1
+Resort Hotel,99,July,29,17,2,6,3,0.0,0,BB,Direct,Direct,0,0,0,H,0,250.0,0.0,0,Transient,210.0,1,Other,0
+Resort Hotel,25,July,29,17,3,7,2,0.0,0,HB,Direct,Direct,0,0,0,F,1,0.0,0.0,0,Transient,194.9,2,Other,0
+Resort Hotel,92,July,29,17,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,A,3,240.0,0.0,0,Transient,103.5,3,Other,1
+Resort Hotel,91,July,29,17,1,2,2,1.0,0,BB,Online TA,TA/TO,0,0,0,A,3,240.0,0.0,0,Transient,118.5,3,Other,0
+Resort Hotel,38,July,29,17,1,2,2,1.0,0,HB,Online TA,TA/TO,0,0,0,E,1,240.0,0.0,0,Transient,192.0,1,PRT,0
+Resort Hotel,6,July,29,17,1,2,2,0.0,0,BB,Offline TA/TO,TA/TO,0,0,0,D,0,142.0,0.0,0,Contract,128.27,0,GBR,0
+Resort Hotel,38,July,29,17,1,2,2,0.0,0,BB,Online TA,TA/TO,0,0,0,D,0,240.0,0.0,0,Transient,135.0,0,Other,0

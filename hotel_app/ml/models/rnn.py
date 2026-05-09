@@ -5,7 +5,7 @@ from hotel_app.ml.deep import KerasTabularClassifier
 class RNNModel(BaseHotelModel):
     name = "RNN"
 
-    def __init__(self, epochs: int = 20, batch_size: int = 256) -> None:
+    def __init__(self, epochs: int = 45, batch_size: int = 192) -> None:
         self.epochs = epochs
         self.batch_size = batch_size
 

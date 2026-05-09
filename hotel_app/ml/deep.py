@@ -34,26 +34,54 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
                 "Install it with `pip install tensorflow` or remove deep models from the run."
             ) from exc
         tf.random.set_seed(self.random_state)
+        regularizer = tf.keras.regularizers.l2(1e-4)
         model = tf.keras.Sequential()
         if self.model_type == "rnn":
             model.add(tf.keras.layers.Input(shape=(n_features, 1)))
-            model.add(tf.keras.layers.SimpleRNN(32, activation="tanh"))
-            model.add(tf.keras.layers.Dropout(0.2))
-            model.add(tf.keras.layers.Dense(16, activation="relu"))
+            model.add(
+                tf.keras.layers.Bidirectional(
+                    tf.keras.layers.SimpleRNN(
+                        40,
+                        activation="tanh",
+                        dropout=0.1,
+                        recurrent_dropout=0.1,
+                    )
+                )
+            )
+            model.add(tf.keras.layers.BatchNormalization())
+            model.add(tf.keras.layers.Dropout(0.25))
+            model.add(tf.keras.layers.Dense(24, activation="relu", kernel_regularizer=regularizer))
         elif self.model_type == "lstm":
             model.add(tf.keras.layers.Input(shape=(n_features, 1)))
-            model.add(tf.keras.layers.LSTM(24, activation="tanh"))
-            model.add(tf.keras.layers.Dropout(0.2))
-            model.add(tf.keras.layers.Dense(16, activation="relu"))
+            model.add(
+                tf.keras.layers.Bidirectional(
+                    tf.keras.layers.LSTM(
+                        32,
+                        activation="tanh",
+                        dropout=0.1,
+                        recurrent_dropout=0.1,
+                    )
+                )
+            )
+            model.add(tf.keras.layers.BatchNormalization())
+            model.add(tf.keras.layers.Dropout(0.25))
+            model.add(tf.keras.layers.Dense(24, activation="relu", kernel_regularizer=regularizer))
         else:
             model.add(tf.keras.layers.Input(shape=(n_features,)))
-            model.add(tf.keras.layers.Dense(96, activation="relu"))
+            model.add(tf.keras.layers.Dense(128, activation="relu", kernel_regularizer=regularizer))
+            model.add(tf.keras.layers.BatchNormalization())
+            model.add(tf.keras.layers.Dropout(0.25))
+            model.add(tf.keras.layers.Dense(64, activation="relu", kernel_regularizer=regularizer))
+            model.add(tf.keras.layers.BatchNormalization())
             model.add(tf.keras.layers.Dropout(0.15))
-            model.add(tf.keras.layers.Dense(48, activation="relu"))
-            model.add(tf.keras.layers.Dense(24, activation="relu"))
+            model.add(tf.keras.layers.Dense(24, activation="relu", kernel_regularizer=regularizer))
         model.add(tf.keras.layers.Dense(1, activation="sigmoid"))
         optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate, clipnorm=1.0)
-        model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=["accuracy"])
+        model.compile(
+            optimizer=optimizer,
+            loss="binary_crossentropy",
+            metrics=["accuracy", tf.keras.metrics.AUC(name="auc")],
+        )
         return model
 
     def _reshape(self, x_data: Any) -> np.ndarray:
@@ -76,14 +104,15 @@ class KerasTabularClassifier(BaseEstimator, ClassifierMixin):
         class_weight_map = {int(label): float(weight) for label, weight in zip(present_classes, class_weights)}
         callbacks = [
             tf.keras.callbacks.EarlyStopping(
-                monitor="val_loss",
-                patience=4,
+                monitor="val_auc",
+                mode="max",
+                patience=6,
                 restore_best_weights=True,
             ),
             tf.keras.callbacks.ReduceLROnPlateau(
                 monitor="val_loss",
                 factor=0.5,
-                patience=2,
+                patience=3,
                 min_lr=1e-5,
             ),
         ]

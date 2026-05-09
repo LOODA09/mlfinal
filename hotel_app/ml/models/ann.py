@@ -8,7 +8,7 @@ from hotel_app.ml.deep import KerasTabularClassifier
 class ANNModel(BaseHotelModel):
     name = "ANN"
 
-    def __init__(self, epochs: int = 250, batch_size: int = 256) -> None:
+    def __init__(self, epochs: int = 120, batch_size: int = 192) -> None:
         self.epochs = epochs
         self.batch_size = batch_size
 

@@ -95,6 +95,16 @@
       ]
     },
     {
+      "name": "country_grouped",
+      "type": "categorical",
+      "default": "Other",
+      "options": [
+        "GBR",
+        "Other",
+        "PRT"
+      ]
+    },
+    {
       "name": "lead_time",
       "type": "numeric",
       "default": 69.0,
@@ -228,6 +238,14 @@
       "default": 0.0,
       "min": 0.0,
       "max": 5.0,
+      "step": 1.0
+    },
+    {
+      "name": "needs_parking",
+      "type": "numeric",
+      "default": 0.0,
+      "min": 0.0,
+      "max": 1.0,
       "step": 1.0
     }
   ]

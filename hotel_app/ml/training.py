@@ -165,7 +165,7 @@ class TrainingArtifacts:
 
     def save_model(self, name: str, model: Pipeline) -> Path:
         path = self.models_dir / f"{_slugify(name)}.joblib"
-        joblib.dump(model, path)
+        joblib.dump(model, path, compress=3)
         return path
 
     def save_dataframe(self, name: str, frame: pd.DataFrame) -> Path:
@@ -389,7 +389,7 @@ class TerminalTrainingRunner:
         artifact_finalize_start = time.perf_counter()
         if deployment_model_name and deployment_model_name in full_data_models:
             deployment_path = artifacts.models_dir / "deployment_model.joblib"
-            joblib.dump(full_data_models[deployment_model_name], deployment_path)
+            joblib.dump(full_data_models[deployment_model_name], deployment_path, compress=("xz", 3))
             print(f"  Deployment model saved: {deployment_model_name} -> deployment_model.joblib")
         elif trained_models:
             # Fallback: use the best available full-data model (or benchmark model if full-data failed)
@@ -397,7 +397,7 @@ class TerminalTrainingRunner:
             deployment_model_name = fallback_name
             fallback_model = (full_data_models or trained_models)[fallback_name]
             deployment_path = artifacts.models_dir / "deployment_model.joblib"
-            joblib.dump(fallback_model, deployment_path)
+            joblib.dump(fallback_model, deployment_path, compress=("xz", 3))
             print(f"  Deployment model saved (fallback): {fallback_name} -> deployment_model.joblib")
 
         segmentation = self._save_segmentation_artifacts(artifacts, x_data)
