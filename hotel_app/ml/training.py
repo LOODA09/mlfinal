@@ -11,6 +11,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.base import clone
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.model_selection import StratifiedKFold, train_test_split
@@ -79,6 +80,19 @@ class ModelTrainer:
         preprocessor = self.processor.build_preprocessor(x_train)
         pipeline = model_spec.build_pipeline(preprocessor)
         return pipeline.fit(x_train, y_train)
+
+    def retrain_from_benchmark(self, benchmark_model: Pipeline, x_data: pd.DataFrame, y_data: pd.Series) -> Pipeline:
+        preprocessor = clone(benchmark_model.named_steps["preprocessor"])
+        benchmark_estimator = benchmark_model.named_steps["model"]
+        if hasattr(benchmark_estimator, "best_params_") and hasattr(benchmark_estimator, "estimator"):
+            final_estimator = clone(benchmark_estimator.estimator)
+            final_estimator.set_params(**benchmark_estimator.best_params_)
+        elif hasattr(benchmark_estimator, "best_estimator_"):
+            final_estimator = clone(benchmark_estimator.best_estimator_)
+        else:
+            final_estimator = clone(benchmark_estimator)
+        pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("model", final_estimator)])
+        return pipeline.fit(x_data, y_data)
 
     def train_many(self, model_specs: Iterable[BaseHotelModel], x_train: pd.DataFrame, y_train: pd.Series):
         return {model.name: self.train_model(model, x_train, y_train) for model in model_specs}
@@ -356,7 +370,7 @@ class TerminalTrainingRunner:
                 continue  # skip models that failed during benchmarking
             try:
                 full_start = time.perf_counter()
-                full_model = self.trainer.train_model(model_spec, x_data, y_data)
+                full_model = self.trainer.retrain_from_benchmark(trained_models[model_spec.name], x_data, y_data)
                 full_time = time.perf_counter() - full_start
                 artifacts.save_model(model_spec.name, full_model)
                 full_data_models[model_spec.name] = full_model

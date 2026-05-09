@@ -174,6 +174,18 @@ class HotelDataProcessor:
         )
         if resolved_preset == "high_score":
             return self._build_high_score_inputs(df)
+        if resolved_preset == "honest":
+            df = df.copy()
+            if "country" in df.columns:
+                country = df["country"].astype(str).fillna("Unknown")
+                df["country_grouped"] = np.where(
+                    country.eq("PRT"),
+                    "PRT",
+                    np.where(country.eq("GBR"), "GBR", "Other"),
+                )
+            if "required_car_parking_spaces" in df.columns:
+                parking = pd.to_numeric(df["required_car_parking_spaces"], errors="coerce").fillna(0)
+                df["needs_parking"] = (parking > 0).astype(int)
         drop_columns = list(self.dropped_low_signal_columns)
         drop_columns.extend(self.dropped_behavior_columns)
         if resolved_preset == "honest":
@@ -265,6 +277,10 @@ class HotelDataProcessor:
             features["changes_per_lead_day"] = (
                 features["booking_changes"] / features["lead_time"].replace(0, 1)
             ).fillna(0)
+        if {"booking_changes", "total_nights"}.issubset(features.columns):
+            features["changes_per_night"] = (
+                features["booking_changes"] / features["total_nights"].replace(0, 1)
+            ).fillna(0)
         if {"total_of_special_requests", "total_nights"}.issubset(features.columns):
             features["requests_per_night"] = (
                 features["total_of_special_requests"] / features["total_nights"].replace(0, 1)
@@ -288,6 +304,10 @@ class HotelDataProcessor:
         if {"total_guests", "total_nights"}.issubset(features.columns):
             features["guests_per_night"] = (
                 features["total_guests"] / features["total_nights"].replace(0, 1)
+            ).fillna(0)
+        if {"lead_time", "total_guests"}.issubset(features.columns):
+            features["lead_time_per_guest"] = (
+                features["lead_time"] / features["total_guests"].replace(0, 1)
             ).fillna(0)
         if {"lead_time", "total_nights"}.issubset(features.columns):
             features["lead_time_per_night"] = (

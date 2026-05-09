@@ -22,7 +22,7 @@ class RandomForestModel(BaseHotelModel):
                 "max_features": [0.3, 0.35, 0.45, "sqrt"],
                 "bootstrap": [True, False],
             },
-            n_iter=12,
+            n_iter=8,
             scoring="accuracy",
             cv=3,
             random_state=42,
