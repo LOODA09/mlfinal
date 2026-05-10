@@ -131,13 +131,15 @@ class HotelDataProcessor:
 
     def clean_data(self, data: pd.DataFrame) -> pd.DataFrame:
         df = data.copy()
-        
-        # --- FIX DEPOSIT TYPE ANOMALY ---
-        # The raw data has a 99% cancel rate for "Non Refund", which is logically backward.
-        # Previously we hacked this here, but the user requested to remove the effect.
 
         if "adr" in df.columns:
-            df = df[df["adr"] >= 0]
+            adr = pd.to_numeric(df["adr"], errors="coerce").fillna(0)
+            adr = adr.clip(lower=0)
+            if len(adr) > 10:
+                lower_quantile = float(adr.quantile(0.01))
+                upper_quantile = float(adr.quantile(0.99))
+                adr = adr.clip(lower=lower_quantile, upper=upper_quantile)
+            df["adr"] = adr
         guest_columns = [col for col in ("children", "adults", "babies") if col in df.columns]
         if guest_columns:
             df = df[df[guest_columns].sum(axis=1) > 0]
@@ -255,14 +257,16 @@ class HotelDataProcessor:
     ) -> pd.DataFrame:
         resolved_preset = feature_preset or "honest"
         features = x_data.copy()
-        if resolved_preset == "honest" and "agent" in features.columns:
+        if "agent" in features.columns:
             agent_numeric = pd.to_numeric(features["agent"], errors="coerce").fillna(0)
             features["has_agent"] = (agent_numeric > 0).astype(int)
-            features = features.drop(columns=["agent"])
-        if resolved_preset == "honest" and "company" in features.columns:
+            if resolved_preset == "honest":
+                features = features.drop(columns=["agent"])
+        if "company" in features.columns:
             company_numeric = pd.to_numeric(features["company"], errors="coerce").fillna(0)
             features["has_company"] = (company_numeric > 0).astype(int)
-            features = features.drop(columns=["company"])
+            if resolved_preset == "honest":
+                features = features.drop(columns=["company"])
         if {"stays_in_weekend_nights", "stays_in_week_nights"}.issubset(features.columns):
             features["total_nights"] = (
                 features["stays_in_weekend_nights"] + features["stays_in_week_nights"]
@@ -270,10 +274,27 @@ class HotelDataProcessor:
             features["weekend_share"] = (
                 features["stays_in_weekend_nights"] / features["total_nights"].replace(0, 1)
             ).fillna(0)
+            features["stay_length_bucket"] = pd.cut(
+                features["total_nights"],
+                bins=[-1, 0, 3, 7, 14, np.inf],
+                labels=["Day Use", "Short Stay", "Week Stay", "Two Weeks Stay", "Long Stay"],
+            ).astype(str)
         if {"adults", "children", "babies"}.issubset(features.columns):
             features["total_guests"] = features["adults"] + features["children"] + features["babies"]
             features["family_booking"] = ((features["children"] + features["babies"]) > 0).astype(int)
             features["adults_only"] = ((features["adults"] > 0) & (features["children"] + features["babies"] == 0)).astype(int)
+            features["guest_party_type"] = np.select(
+                [
+                    features["total_guests"] <= 1,
+                    features["total_guests"] == 2,
+                    features["total_guests"] <= 4,
+                ],
+                ["Solo", "Couple", "Small Group"],
+                default="Large Group",
+            )
+        if "is_repeated_guest" in features.columns:
+            repeated_guest = pd.to_numeric(features["is_repeated_guest"], errors="coerce").fillna(0).clip(lower=0, upper=1)
+            features["first_time_visitor"] = 1 - repeated_guest
         if {"previous_cancellations", "previous_bookings_not_canceled"}.issubset(features.columns):
             previous_total = features["previous_cancellations"] + features["previous_bookings_not_canceled"]
             features["total_bookings"] = previous_total
@@ -327,6 +348,11 @@ class HotelDataProcessor:
                 features["lead_time"],
                 bins=[-1, 7, 30, 90, 180, np.inf],
                 labels=["Last Minute", "Short", "Medium", "Long", "Very Long"],
+            ).astype(str)
+            features["lead_time_band"] = pd.cut(
+                features["lead_time"],
+                bins=[-1, 1, 7, 30, 365, np.inf],
+                labels=["Same Day", "Short Notice", "Medium Term", "Long Term", "Very Long Term"],
             ).astype(str)
         if "days_in_waiting_list" in features.columns:
             features["waiting_list_log"] = np.log1p(features["days_in_waiting_list"].clip(lower=0))

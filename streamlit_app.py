@@ -698,6 +698,25 @@ class PredictionApp:
         return self.align_input_to_model(engineered, raw_input, model, examples)
 
     @staticmethod
+    def booking_profile_items(model_input: pd.DataFrame) -> List[tuple[str, str]]:
+        row = model_input.iloc[0]
+        mapping = [
+            ("lead_time_band", "Lead-Time Band"),
+            ("stay_length_bucket", "Stay Length"),
+            ("guest_party_type", "Guest Party"),
+            ("first_time_visitor", "Visitor Type"),
+        ]
+        items: List[tuple[str, str]] = []
+        for column, label in mapping:
+            if column not in row.index:
+                continue
+            value = row[column]
+            if column == "first_time_visitor":
+                value = "First-Time Visitor" if float(value) >= 0.5 else "Returning Guest"
+            items.append((label, str(value)))
+        return items
+
+    @staticmethod
     def file_version(path: Path) -> int:
         if not path.exists():
             return 0
@@ -1195,7 +1214,8 @@ class PredictionApp:
         model_name: str,
         examples: pd.DataFrame,
     ) -> None:
-        model_input = self.build_model_input(raw_input, model, examples)
+        engineered_preview = self.add_engineered_features_compat(raw_input.copy())
+        model_input = self.align_input_to_model(engineered_preview.copy(), raw_input, model, examples)
 
         prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
@@ -1220,6 +1240,13 @@ class PredictionApp:
                 else "Risk is lower, so this reservation currently looks stable."
             )
             st.info(risk_text)
+
+        profile_items = self.booking_profile_items(engineered_preview)
+        if profile_items:
+            st.markdown("### Booking Profile")
+            profile_columns = st.columns(len(profile_items))
+            for column, (label, value) in zip(profile_columns, profile_items):
+                column.metric(label, value)
 
         # K-Means Segmentation Matching
         segment_path = self.artifacts_dir / "reports" / "guest_segments.csv"
