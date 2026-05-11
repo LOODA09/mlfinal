@@ -29,11 +29,27 @@ MONTH_ORDER = [
 
 FeaturePreset = Literal["honest", "high_score"]
 
-def _one_hot_encoder() -> OneHotEncoder:
+
+def _one_hot_encoder(
+    drop_first: bool = False,
+    categories: Optional[Sequence[Sequence[Any]]] = None,
+) -> OneHotEncoder:
     try:
-        return OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.float32)
+        return OneHotEncoder(
+            handle_unknown="ignore",
+            categories=categories,
+            drop="first" if drop_first else None,
+            sparse_output=False,
+            dtype=np.float32,
+        )
     except TypeError:
-        return OneHotEncoder(handle_unknown="ignore", sparse=False, dtype=np.float32)
+        return OneHotEncoder(
+            handle_unknown="ignore",
+            categories=categories,
+            drop="first" if drop_first else None,
+            sparse=False,
+            dtype=np.float32,
+        )
 
 
 def _positive_probabilities(model: Any, x_data: pd.DataFrame) -> Optional[np.ndarray]:
@@ -68,8 +84,6 @@ def _safe_float(value: Any) -> float:
 
 
 def _count_model_complexity(estimator: Any) -> int:
-    if hasattr(estimator, "estimator_"):
-        return _count_model_complexity(estimator.estimator_)
     if hasattr(estimator, "best_estimator_"):
         return _count_model_complexity(estimator.best_estimator_)
     if hasattr(estimator, "tree_"):
@@ -82,6 +96,8 @@ def _count_model_complexity(estimator: Any) -> int:
             else:
                 total += 1
         return total
+    if hasattr(estimator, "estimator_"):
+        return _count_model_complexity(estimator.estimator_)
     if hasattr(estimator, "coef_"):
         coef = np.asarray(estimator.coef_)
         intercept = np.asarray(getattr(estimator, "intercept_", []))
@@ -116,6 +132,9 @@ class HotelDataProcessor:
     )
     leakage_columns: Sequence[str] = field(
         default_factory=lambda: ("reservation_status", "reservation_status_date")
+    )
+    reservation_guest_count_categories: Sequence[str] = field(
+        default_factory=lambda: tuple(str(value) for value in range(1, 13))
     )
 
     def resolve_feature_preset(
@@ -165,12 +184,21 @@ class HotelDataProcessor:
                 format="%m/%d/%Y",
                 errors="coerce",
             )
+            df = df.dropna(subset=["date_of_reservation"]).copy()
 
         for price_column in ("adr", "average_price"):
             if price_column in df.columns:
                 prices = pd.to_numeric(df[price_column], errors="coerce").fillna(0)
                 prices = prices.clip(lower=0)
-                if len(prices) > 10:
+                if price_column == "average_price" and self.reservation_target_column in df.columns and len(prices) > 10:
+                    q1 = float(prices.quantile(0.25))
+                    q3 = float(prices.quantile(0.75))
+                    iqr = q3 - q1
+                    lower_bound = max(0.0, q1 - 1.5 * iqr)
+                    upper_bound = q3 + 1.5 * iqr
+                    median_price = float(prices.median())
+                    prices = prices.mask((prices < lower_bound) | (prices > upper_bound), median_price)
+                elif len(prices) > 10:
                     lower_quantile = float(prices.quantile(0.01))
                     upper_quantile = float(prices.quantile(0.99))
                     prices = prices.clip(lower=lower_quantile, upper=upper_quantile)
@@ -249,26 +277,29 @@ class HotelDataProcessor:
 
     def _build_reservation_inputs(self, df: pd.DataFrame) -> pd.DataFrame:
         features = df.copy()
+        lead_time_source = pd.to_numeric(features.get("lead_time"), errors="coerce").fillna(0)
         if {"number_of_adults", "number_of_children"}.issubset(features.columns):
             total_people = (
                 pd.to_numeric(features["number_of_adults"], errors="coerce").fillna(0)
                 + pd.to_numeric(features["number_of_children"], errors="coerce").fillna(0)
             ).astype(int)
             features["number_of_children_and_adults"] = total_people
-            features["party_size_bucket"] = np.where(total_people > 5, "Group", total_people.astype(str))
         if {"number_of_weekend_nights", "number_of_week_nights"}.issubset(features.columns):
             total_nights = (
                 pd.to_numeric(features["number_of_weekend_nights"], errors="coerce").fillna(0)
                 + pd.to_numeric(features["number_of_week_nights"], errors="coerce").fillna(0)
             ).astype(int)
-            features["number_of_total_nights"] = total_nights
-            features["weekend_share"] = (
-                pd.to_numeric(features["number_of_weekend_nights"], errors="coerce").fillna(0)
-                / total_nights.replace(0, 1)
-            ).fillna(0)
+            features["number_of_total_nights"] = pd.cut(
+                total_nights,
+                bins=[-1, 0, 3, 7, 14, np.inf],
+                labels=[0, 1, 2, 3, 4],
+            ).astype("Int64").fillna(0).astype(int)
         if "lead_time" in features.columns:
-            lead_time = pd.to_numeric(features["lead_time"], errors="coerce").fillna(0)
-            features["lead_time_raw"] = lead_time
+            features["lead_time"] = pd.cut(
+                lead_time_source,
+                bins=[-1, 1, 7, 30, 365, np.inf],
+                labels=[0, 1, 2, 3, 4],
+            ).astype("Int64").fillna(0).astype(int)
         if {"p_c", "p_not_c", "repeated"}.issubset(features.columns):
             history_total = (
                 pd.to_numeric(features["p_c"], errors="coerce").fillna(0)
@@ -282,10 +313,9 @@ class HotelDataProcessor:
             )
             features["cancellation_ratio"] = features["cancellation_ratio"].round(2)
             features["first_time_visitor"] = 1 - repeated
-            features["history_volume"] = history_total
         if "date_of_reservation" in features.columns:
             date_series = pd.to_datetime(features["date_of_reservation"], errors="coerce")
-            features["day_name"] = date_series.dt.day_name().fillna("Unknown")
+            features["day_name"] = date_series.dt.dayofweek.fillna(0).astype(int)
             features["month"] = date_series.dt.month.fillna(0).astype(int)
             features["year"] = date_series.dt.year.fillna(0).astype(int)
 
@@ -293,6 +323,13 @@ class HotelDataProcessor:
             self.reservation_target_column,
             "booking_id",
             "date_of_reservation",
+            "number_of_adults",
+            "number_of_children",
+            "number_of_weekend_nights",
+            "number_of_week_nights",
+            "repeated",
+            "p_c",
+            "p_not_c",
         ]
         return features.drop(columns=[col for col in drop_columns if col in features.columns], errors="ignore")
 
@@ -348,6 +385,30 @@ class HotelDataProcessor:
     ) -> pd.DataFrame:
         resolved_preset = feature_preset or "honest"
         features = x_data.copy()
+        if self._is_reservation_feature_frame(features):
+            if "lead_time" in features.columns:
+                features["lead_time"] = pd.to_numeric(features["lead_time"], errors="coerce").fillna(0).astype(int)
+            if "number_of_total_nights" in features.columns:
+                features["number_of_total_nights"] = (
+                    pd.to_numeric(features["number_of_total_nights"], errors="coerce").fillna(0).astype(int)
+                )
+            if "day_name" in features.columns:
+                features["day_name"] = pd.to_numeric(features["day_name"], errors="coerce").fillna(0).astype(int)
+            if "number_of_children_and_adults" in features.columns:
+                features["number_of_children_and_adults"] = (
+                    pd.to_numeric(features["number_of_children_and_adults"], errors="coerce")
+                    .fillna(0)
+                    .astype(int)
+                )
+            if "first_time_visitor" in features.columns:
+                features["first_time_visitor"] = (
+                    pd.to_numeric(features["first_time_visitor"], errors="coerce").fillna(0).clip(0, 1).astype(int)
+                )
+            if "cancellation_ratio" in features.columns:
+                features["cancellation_ratio"] = (
+                    pd.to_numeric(features["cancellation_ratio"], errors="coerce").fillna(0).clip(0, 1).round(2)
+                )
+            return features
         if {"average_price", "number_of_children_and_adults"}.issubset(features.columns):
             features["average_price_per_guest"] = (
                 pd.to_numeric(features["average_price"], errors="coerce").fillna(0)
@@ -501,6 +562,68 @@ class HotelDataProcessor:
         return features
 
     def build_preprocessor(self, x_data: pd.DataFrame) -> ColumnTransformer:
+        if self._is_reservation_feature_frame(x_data):
+            categorical_columns = list(x_data.select_dtypes(include=["object", "category"]).columns)
+            forced_categorical = [column for column in ("number_of_children_and_adults",) if column in x_data.columns]
+            categorical_columns = list(dict.fromkeys([*categorical_columns, *forced_categorical]))
+            numeric_columns = [column for column in x_data.columns if column not in categorical_columns]
+            scaled_numeric_columns = [column for column in ("average_price",) if column in numeric_columns]
+            passthrough_numeric_columns = [
+                column for column in numeric_columns if column not in scaled_numeric_columns
+            ]
+            transformers = []
+            if scaled_numeric_columns:
+                transformers.append(
+                    (
+                        "scaled_numeric",
+                        Pipeline(
+                            steps=[
+                                ("imputer", SimpleImputer(strategy="median")),
+                                ("scaler", StandardScaler()),
+                            ]
+                        ),
+                        scaled_numeric_columns,
+                    )
+                )
+            if passthrough_numeric_columns:
+                transformers.append(
+                    (
+                        "numeric",
+                        Pipeline(steps=[("imputer", SimpleImputer(strategy="median"))]),
+                        passthrough_numeric_columns,
+                    )
+                )
+            if categorical_columns:
+                reservation_categories = {
+                    "type_of_meal": ["Meal Plan 1", "Meal Plan 2", "Meal Plan 3", "Not Selected"],
+                    "room_type": [f"Room_Type {index}" for index in range(1, 8)],
+                    "market_segment_type": ["Aviation", "Complementary", "Corporate", "Offline", "Online"],
+                    "number_of_children_and_adults": list(range(1, 13)),
+                }
+                category_lists = [
+                    reservation_categories.get(
+                        column,
+                        sorted(pd.Series(x_data[column]).dropna().unique().tolist()),
+                    )
+                    for column in categorical_columns
+                ]
+                transformers.append(
+                    (
+                        "categorical",
+                        Pipeline(
+                            steps=[
+                                ("imputer", SimpleImputer(strategy="most_frequent")),
+                                ("encoder", _one_hot_encoder(drop_first=True, categories=category_lists)),
+                            ]
+                        ),
+                        categorical_columns,
+                    )
+                )
+            return ColumnTransformer(
+                transformers=transformers,
+                remainder="drop",
+                verbose_feature_names_out=False,
+            )
         categorical_columns = list(x_data.select_dtypes(include=["object", "category"]).columns)
         numeric_columns = [col for col in x_data.columns if col not in categorical_columns]
         numeric_pipeline = Pipeline(
@@ -517,6 +640,18 @@ class HotelDataProcessor:
             remainder="drop",
             verbose_feature_names_out=False,
         )
+
+    @staticmethod
+    def _is_reservation_feature_frame(x_data: pd.DataFrame) -> bool:
+        reservation_markers = {
+            "type_of_meal",
+            "car_parking_space",
+            "room_type",
+            "market_segment_type",
+            "average_price",
+            "special_requests",
+        }
+        return len(reservation_markers.intersection(x_data.columns)) >= 4
 
 
 class NotebookEDAAnalyzer:

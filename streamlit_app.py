@@ -16,8 +16,7 @@ from plotly.subplots import make_subplots
 from hotel_app.ml import HotelDataProcessor, SHAPAnalyzer, _positive_probabilities
 
 
-HIGH_SCORE_ARTIFACTS_DIR = Path("artifacts")
-HONEST_ARTIFACTS_DIR = Path("artifacts_honest")
+ARTIFACTS_DIR = Path("artifacts")
 DATA_PATH = (
     Path("hotel reservation data set .csv")
     if Path("hotel reservation data set .csv").exists()
@@ -26,6 +25,71 @@ DATA_PATH = (
     else Path("hotel_bookings.csv")
 )
 EXCLUDED_FEATURES = {"arrival_date_year"}
+FIELD_LABELS = {
+    "type_of_meal": "Meal Package",
+    "car_parking_space": "Parking Need Flag",
+    "room_type": "Room Category",
+    "lead_time": "Advance Booking Window",
+    "market_segment_type": "Booking Channel",
+    "average_price": "Nightly Room Rate",
+    "special_requests": "Special Request Count",
+    "number_of_children_and_adults": "Traveler Count",
+    "number_of_total_nights": "Stay Length Band",
+    "day_name": "Reservation Weekday",
+    "month": "Reservation Month",
+    "year": "Reservation Year",
+    "cancellation_ratio": "Past Cancellation Share",
+    "first_time_visitor": "New Guest Indicator",
+}
+FIELD_OPTION_LABELS = {
+    "car_parking_space": {0: "No Parking Needed", 1: "Parking Needed"},
+    "lead_time": {
+        0: "Same Day",
+        1: "Short Notice",
+        2: "Medium Term",
+        3: "Long Term",
+        4: "Very Long Term",
+    },
+    "number_of_total_nights": {
+        0: "Day Use",
+        1: "Short Stay",
+        2: "Week Stay",
+        3: "Two Weeks Stay",
+        4: "Long Stay",
+    },
+    "day_name": {
+        0: "Monday",
+        1: "Tuesday",
+        2: "Wednesday",
+        3: "Thursday",
+        4: "Friday",
+        5: "Saturday",
+        6: "Sunday",
+    },
+    "first_time_visitor": {0: "Returning Guest", 1: "First-Time Guest"},
+}
+MODEL_METRIC_COLUMNS = [
+    ("train_accuracy", "train_accuracy"),
+    ("accuracy", "test_accuracy"),
+    ("train_precision", "train_precision"),
+    ("precision", "test_precision"),
+    ("train_recall", "train_recall"),
+    ("recall", "test_recall"),
+    ("train_f1", "train_f1"),
+    ("f1", "test_f1"),
+    ("train_balanced_accuracy", "train_balanced_accuracy"),
+    ("balanced_accuracy", "test_balanced_accuracy"),
+    ("train_roc_auc", "train_roc_auc"),
+    ("roc_auc", "test_roc_auc"),
+    ("train_average_precision", "train_average_precision"),
+    ("average_precision", "test_average_precision"),
+    ("train_brier_score", "train_brier_score"),
+    ("brier_score", "test_brier_score"),
+    ("train_log_loss", "train_log_loss"),
+    ("log_loss", "test_log_loss"),
+    ("train_mcc", "train_mcc"),
+    ("mcc", "test_mcc"),
+]
 
 
 def _format_duration(seconds: Any) -> str:
@@ -602,10 +666,9 @@ class DashboardStyle:
 
 
 class PredictionApp:
-    def __init__(self, artifacts_dir: Path = HIGH_SCORE_ARTIFACTS_DIR) -> None:
+    def __init__(self, artifacts_dir: Path = ARTIFACTS_DIR) -> None:
         self.artifacts_dir = artifacts_dir
         self.processor = HotelDataProcessor()
-        self.active_mode = "high_score"
         self.feature_preset = "high_score"
 
     def add_engineered_features_compat(self, frame: pd.DataFrame) -> pd.DataFrame:
@@ -707,20 +770,36 @@ class PredictionApp:
     def booking_profile_items(model_input: pd.DataFrame) -> List[tuple[str, str]]:
         row = model_input.iloc[0]
         mapping = [
-            ("lead_time_band", "Lead-Time Band"),
-            ("stay_length_bucket", "Stay Length"),
-            ("guest_party_type", "Guest Party"),
-            ("first_time_visitor", "Visitor Type"),
+            ("lead_time", "Booking Window"),
+            ("number_of_total_nights", "Stay Length"),
+            ("number_of_children_and_adults", "Traveler Count"),
+            ("first_time_visitor", "Guest History"),
         ]
         items: List[tuple[str, str]] = []
         for column, label in mapping:
             if column not in row.index:
                 continue
             value = row[column]
-            if column == "first_time_visitor":
-                value = "First-Time Visitor" if float(value) >= 0.5 else "Returning Guest"
-            items.append((label, str(value)))
+            items.append((label, PredictionApp.format_field_value(column, value)))
         return items
+
+    @staticmethod
+    def display_label(column_name: str) -> str:
+        return FIELD_LABELS.get(column_name, column_name.replace("_", " ").title())
+
+    @staticmethod
+    def format_field_value(column_name: str, value: Any) -> str:
+        option_map = FIELD_OPTION_LABELS.get(column_name)
+        if option_map:
+            try:
+                numeric_value = int(float(value))
+            except (TypeError, ValueError):
+                numeric_value = None
+            if numeric_value in option_map:
+                return option_map[numeric_value]
+        if isinstance(value, float):
+            return f"{value:.2f}"
+        return str(value)
 
     @staticmethod
     def file_version(path: Path) -> int:
@@ -772,23 +851,7 @@ class PredictionApp:
             time.sleep(2.8)
             st.rerun()
 
-        st.sidebar.title("Experience Mode")
-        mode_label = st.sidebar.radio(
-            "Open benchmark mode",
-            ["High-Score Benchmark", "Honest Prediction"],
-            index=0,
-            help="High-Score Benchmark reproduces the notebook-style high-accuracy setup. Honest Prediction uses future-booking-safe features.",
-        )
-        requested_mode = "high_score" if mode_label == "High-Score Benchmark" else "honest"
-        requested_artifacts_dir = HIGH_SCORE_ARTIFACTS_DIR if requested_mode == "high_score" else HONEST_ARTIFACTS_DIR
-        if requested_artifacts_dir.exists():
-            self.artifacts_dir = requested_artifacts_dir
-            self.active_mode = requested_mode
-        else:
-            self.artifacts_dir = HIGH_SCORE_ARTIFACTS_DIR
-            self.active_mode = "high_score"
-            if requested_mode == "honest":
-                st.sidebar.warning("Honest prediction artifacts are not available yet, so the app fell back to the high-score benchmark mode.")
+        self.artifacts_dir = ARTIFACTS_DIR
 
         metadata_path = self.artifacts_dir / "reports" / "metadata.json"
         confusion_path = self.artifacts_dir / "reports" / "confusion_matrices.json"
@@ -833,17 +896,12 @@ class PredictionApp:
         holdout = self.normalize_holdout_frame(holdout)
         cv_results = self.normalize_cv_frame(cv_results)
         holdout = self.add_complexity_tiers(holdout)
-        self.feature_preset = str(metadata.get("feature_preset", self.active_mode))
+        self.feature_preset = str(metadata.get("feature_preset", "high_score"))
 
         DashboardStyle.hero(metadata)
-        if self.active_mode == "high_score":
-            st.info(
-                "Current mode: High-Score Benchmark. This default mode mirrors the notebook-style benchmark setup and is optimized for the visible >90% comparison results."
-            )
-        else:
-            st.caption(
-                "Current mode: Honest Prediction. Metrics and predictions use future-booking-safe features, so accuracy is lower but the scores are realistic for true pre-arrival prediction."
-            )
+        st.info(
+            "Current app mode uses the notebook-aligned reservation benchmark only. The form, evaluation tables, deployed model, and reports all come from the same reservation artifact set."
+        )
 
         overview_tab, models_tab, segment_tab, explain_tab, predict_tab = st.tabs(
             ["Overview", "Model Comparison", "Guest Segmentation", "Explainability", "Prediction"]
@@ -874,7 +932,22 @@ class PredictionApp:
             "train_precision": np.nan,
             "train_recall": np.nan,
             "train_f1": np.nan,
+            "train_balanced_accuracy": np.nan,
+            "train_average_precision": np.nan,
+            "train_brier_score": np.nan,
+            "train_log_loss": np.nan,
+            "train_mcc": np.nan,
             "train_roc_auc": np.nan,
+            "accuracy": np.nan,
+            "precision": np.nan,
+            "recall": np.nan,
+            "f1": np.nan,
+            "balanced_accuracy": np.nan,
+            "average_precision": np.nan,
+            "brier_score": np.nan,
+            "log_loss": np.nan,
+            "mcc": np.nan,
+            "roc_auc": np.nan,
             "transformed_feature_count": np.nan,
             "training_time_sec": np.nan,
             "benchmark_training_time_sec": np.nan,
@@ -960,7 +1033,7 @@ class PredictionApp:
                 f"""
                 <div class="insight-box">
                     <strong>Best holdout performer</strong>
-                    <span>{top_model['model']} leads the active 30% test split with accuracy {top_model['accuracy']:.4f}, F1 {top_model['f1']:.4f}, ROC-AUC {top_model['roc_auc']:.4f}, and benchmark train accuracy {top_model.get('train_accuracy', np.nan):.4f}.</span>
+                    <span>{top_model['model']} leads the active {int(metadata.get('test_ratio', 0.2) * 100)}% test split with test accuracy {top_model['accuracy']:.4f}, test F1 {top_model['f1']:.4f}, test ROC-AUC {top_model['roc_auc']:.4f}, and benchmark train accuracy {top_model.get('train_accuracy', np.nan):.4f}.</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -970,7 +1043,7 @@ class PredictionApp:
                 f"""
                 <div class="insight-box">
                     <strong>Best ranking power</strong>
-                    <span>{secondary['model']} shows the strongest class ranking signal with ROC-AUC {secondary['roc_auc']:.4f}. Training and inference times shown below come from the real benchmark run.</span>
+                    <span>{secondary['model']} shows the strongest class ranking signal with ROC-AUC {secondary['roc_auc']:.4f}. Training and inference times shown below come from the real reservation benchmark run.</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1030,7 +1103,21 @@ class PredictionApp:
                 )
             with seg_right:
                 st.markdown("### Segment Summary")
-                st.dataframe(guest_segments, use_container_width=True)
+                st.dataframe(
+                    guest_segments.rename(
+                        columns={
+                            "segment": "segment_id",
+                            "segment_name": "segment_name",
+                            "lead_time": "booking_window_avg",
+                            "average_price": "nightly_rate_avg",
+                            "number_of_total_nights": "stay_band_avg",
+                            "number_of_children_and_adults": "traveler_count_avg",
+                            "special_requests": "request_count_avg",
+                            "cancellation_ratio": "history_cancel_share_avg",
+                        }
+                    ),
+                    use_container_width=True,
+                )
 
         with st.expander("Benchmark Metadata"):
             st.json(metadata)
@@ -1046,12 +1133,24 @@ class PredictionApp:
             "Compare all trained models side by side using holdout metrics, validation averages, model size, timing, and confusion matrices.",
         )
 
-        metric = st.selectbox(
-            "Comparison metric",
-            ["f1", "accuracy", "train_accuracy", "roc_auc", "precision", "recall", "training_time_sec", "inference_ms_per_row"],
-            index=0,
-            key="comparison_metric",
-        )
+        metric_options = [
+            "accuracy",
+            "f1",
+            "roc_auc",
+            "precision",
+            "recall",
+            "balanced_accuracy",
+            "average_precision",
+            "brier_score",
+            "log_loss",
+            "mcc",
+            "train_accuracy",
+            "train_f1",
+            "train_roc_auc",
+            "training_time_sec",
+            "inference_ms_per_row",
+        ]
+        metric = st.selectbox("Comparison metric", metric_options, index=0, key="comparison_metric")
 
         left, right = st.columns([1.1, 0.9], gap="large")
         with left:
@@ -1062,34 +1161,28 @@ class PredictionApp:
         st.plotly_chart(self.build_holdout_bar(holdout, metric), use_container_width=True)
 
         styled = holdout.copy()
-        styled = styled[
-            [
-                "model",
-                "train_accuracy",
-                "accuracy",
-                "train_precision",
-                "precision",
-                "train_recall",
-                "recall",
-                "train_f1",
-                "f1",
-                "balanced_accuracy",
-                "train_roc_auc",
-                "roc_auc",
-                "average_precision",
-                "benchmark_training_time_sec",
-                "full_data_training_time_sec",
-                "training_time_sec",
-                "inference_ms_per_row",
-                "complexity_tier",
-            ]
-        ]
+        display_columns = ["model"]
+        rename_map = {"model": "model"}
+        for source_column, display_column in MODEL_METRIC_COLUMNS:
+            if source_column in styled.columns:
+                display_columns.append(source_column)
+                rename_map[source_column] = display_column
+        for column in [
+            "benchmark_training_time_sec",
+            "full_data_training_time_sec",
+            "training_time_sec",
+            "inference_ms_per_row",
+            "complexity_tier",
+        ]:
+            if column in styled.columns:
+                display_columns.append(column)
+        styled = styled[display_columns].rename(columns=rename_map)
         numeric_columns = styled.select_dtypes(include=["number"]).columns
         st.dataframe(
             styled.style.format({column: "{:.4f}" for column in numeric_columns}),
             use_container_width=True,
         )
-        st.caption("`accuracy`, `precision`, `recall`, `f1`, and `roc_auc` are holdout test metrics from the 30% benchmark split. The `train_*` columns are benchmark training-split metrics for the same fitted model. `benchmark_training_time_sec` is the 70/30 holdout benchmark fit time, `full_data_training_time_sec` is the deployment retrain on the full dataset, and `training_time_sec` is their combined saved run cost. `complexity_tier` is derived from measured training time, inference time, and transformed feature count.")
+        st.caption("The `test_*` columns come from the saved 80/20 holdout benchmark split. The `train_*` columns come from the corresponding benchmark training split for the same fitted model. `benchmark_training_time_sec` is the benchmark fit time, `full_data_training_time_sec` is the deployment retrain on the full dataset, and `training_time_sec` is their combined saved run cost. `complexity_tier` is derived from measured training time, inference time, and transformed feature count.")
 
         cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
         if not cv_mean.empty:
@@ -1146,12 +1239,8 @@ class PredictionApp:
     ) -> None:
         self.render_section_header(
             "Prediction Console",
-            "Use the deployed model for the active mode to score a booking manually. The form, saved metrics, and loaded model all come from the same artifact set.",
+            "Use the deployed reservation model to score a booking manually. The form, saved metrics, and loaded model all come from the same notebook-aligned artifact set.",
         )
-        if self.active_mode == "honest":
-            st.info("This form is using the honest future-booking feature set, so the score is suitable for realistic pre-arrival prediction.")
-        else:
-            st.warning("This form is using the notebook-style high-score benchmark feature set. It may ask for outcome-adjacent fields and is intended for benchmark comparison, not real future-booking deployment.")
         left, right = st.columns([1.2, 0.8], gap="large")
 
         with left:
@@ -1170,7 +1259,7 @@ class PredictionApp:
                 f"""
                 <div class="insight-box">
                     <strong>Cloud deployment model</strong>
-                    <span>{deployment_name} is the active deployed model for this mode. {deployment_note}</span>
+                    <span>{deployment_name} is the active deployed model for the reservation benchmark app. {deployment_note}</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1198,31 +1287,60 @@ class PredictionApp:
                 st.info("Guest segmentation artifacts are not available yet.")
             else:
                 st.plotly_chart(self.build_segmentation_profile_chart(guest_segments), use_container_width=True)
-                st.dataframe(guest_segments, use_container_width=True)
+                st.dataframe(
+                    guest_segments.rename(
+                        columns={
+                            "segment": "segment_id",
+                            "segment_name": "segment_name",
+                            "lead_time": "booking_window_avg",
+                            "average_price": "nightly_rate_avg",
+                            "number_of_total_nights": "stay_band_avg",
+                            "number_of_children_and_adults": "traveler_count_avg",
+                            "special_requests": "request_count_avg",
+                            "cancellation_ratio": "history_cancel_share_avg",
+                        }
+                    ),
+                    use_container_width=True,
+                )
 
     def render_form(self, schema: Dict[str, Any]) -> pd.DataFrame:
         values: Dict[str, Any] = {}
         columns = st.columns(3)
         for index, column in enumerate(schema.get("columns", [])):
             holder = columns[index % 3]
+            field_name = column["name"]
+            field_label = self.display_label(field_name)
+            option_map = FIELD_OPTION_LABELS.get(field_name, {})
             if column["type"] == "categorical":
                 options: List[str] = column["options"]
                 default = column["default"]
                 default_index = options.index(default) if default in options else 0
-                values[column["name"]] = holder.selectbox(
-                    column["name"],
+                values[field_name] = holder.selectbox(
+                    field_label,
                     options=options,
                     index=default_index,
-                    key=f"field_{column['name']}",
+                    key=f"field_{field_name}",
                 )
+            elif option_map:
+                numeric_options = sorted(option_map)
+                default_value = int(round(float(column["default"])))
+                default_index = numeric_options.index(default_value) if default_value in numeric_options else 0
+                selected_option = holder.selectbox(
+                    field_label,
+                    options=numeric_options,
+                    index=default_index,
+                    format_func=lambda option: option_map.get(option, str(option)),
+                    key=f"field_{field_name}",
+                )
+                values[field_name] = selected_option
             else:
-                values[column["name"]] = holder.number_input(
-                    column["name"],
+                values[field_name] = holder.number_input(
+                    field_label,
                     min_value=float(column["min"]),
                     max_value=float(column["max"]),
                     value=float(column["default"]),
                     step=float(column["step"]),
-                    key=f"field_{column['name']}",
+                    key=f"field_{field_name}",
                 )
         return pd.DataFrame([values])
 
@@ -1272,20 +1390,40 @@ class PredictionApp:
         if segment_path.exists():
             try:
                 segments_df = pd.read_csv(segment_path)
-                features_to_match = ["lead_time", "adr", "total_nights", "total_guests", "previous_cancellations"]
-                
-                live_values = {col: float(model_input[col].iloc[0]) if col in model_input.columns else 0.0 for col in features_to_match}
-                
-                min_dist = float('inf')
+                features_to_match = [
+                    column
+                    for column in segments_df.columns
+                    if column not in {"segment", "segment_name"} and pd.api.types.is_numeric_dtype(segments_df[column])
+                ]
+
+                live_values = {
+                    column: float(pd.to_numeric(model_input[column], errors="coerce").iloc[0])
+                    if column in model_input.columns
+                    else 0.0
+                    for column in features_to_match
+                }
+
+                min_dist = float("inf")
                 best_segment = -1
+                best_segment_name = ""
                 for _, row in segments_df.iterrows():
-                    dist = sum((((row[col] - live_values[col]) / max(1.0, row[col])) ** 2) for col in features_to_match if col in row)
+                    dist = sum(
+                        (
+                            (float(pd.to_numeric(pd.Series([row[column]]), errors="coerce").iloc[0]) - live_values[column])
+                            / max(1.0, abs(float(pd.to_numeric(pd.Series([row[column]]), errors="coerce").iloc[0])))
+                        )
+                        ** 2
+                        for column in features_to_match
+                    )
                     if dist < min_dist:
                         min_dist = dist
-                        best_segment = int(row['segment'])
-                
+                        best_segment = int(row["segment"])
+                        best_segment_name = str(row.get("segment_name", f"Segment {best_segment}"))
+
                 if best_segment >= 0:
-                    st.markdown(f"💡 **Guest Intelligence:** Based on k-means clustering, this booking aligns closely with the behavior profile of **Segment {best_segment}**.")
+                    st.markdown(
+                        f"**Guest Intelligence:** Based on k-means clustering, this booking aligns most closely with **{best_segment_name}**."
+                    )
             except Exception:
                 pass
 
@@ -1307,6 +1445,7 @@ class PredictionApp:
                     "shap_value": shap_row,
                 }
             )
+            explanation_frame["feature"] = explanation_frame["feature"].map(self.display_label)
             increasing = explanation_frame[explanation_frame["shap_value"] > 0].nlargest(5, "shap_value")
             decreasing = explanation_frame[explanation_frame["shap_value"] < 0].nsmallest(5, "shap_value")
             st.session_state["latest_prediction"] = {
@@ -1680,13 +1819,23 @@ class PredictionApp:
         return fig
 
     def build_segmentation_profile_chart(self, guest_segments: pd.DataFrame) -> go.Figure:
-        value_columns = [column for column in guest_segments.columns if column != "segment"]
-        frame = guest_segments.melt(id_vars="segment", value_vars=value_columns, var_name="feature", value_name="value")
+        id_columns = ["segment"]
+        color_column = "segment"
+        if "segment_name" in guest_segments.columns:
+            id_columns.append("segment_name")
+            color_column = "segment_name"
+        value_columns = [
+            column
+            for column in guest_segments.columns
+            if column not in {"segment", "segment_name"} and pd.api.types.is_numeric_dtype(guest_segments[column])
+        ]
+        frame = guest_segments.melt(id_vars=id_columns, value_vars=value_columns, var_name="feature", value_name="value")
+        frame["feature"] = frame["feature"].map(self.display_label)
         fig = px.bar(
             frame,
             x="feature",
             y="value",
-            color="segment",
+            color=color_column,
             barmode="group",
             color_discrete_sequence=["#0f766e", "#0ea5e9", "#f59e0b", "#ef4444"],
         )

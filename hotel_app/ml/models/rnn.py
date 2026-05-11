@@ -14,8 +14,12 @@ class RNNModel(BaseHotelModel):
     name = "RNN"
 
     def __init__(self, epochs: int = 45, batch_size: int = 192) -> None:
-        self.epochs = epochs
-        self.batch_size = batch_size
+        self.khaled_rnn_epochs = epochs
+        self.khaled_rnn_batch_size = batch_size
 
     def get_estimator(self) -> KerasTabularClassifier:
-        return KerasTabularClassifier(model_type="rnn", epochs=self.epochs, batch_size=self.batch_size)
+        return KerasTabularClassifier(
+            model_type="rnn",
+            epochs=self.khaled_rnn_epochs,
+            batch_size=self.khaled_rnn_batch_size,
+        )

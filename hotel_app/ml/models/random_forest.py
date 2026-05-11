@@ -13,6 +13,14 @@ class RandomForestModel(BaseHotelModel):
     - tuning: ``RandomizedSearchCV`` over tree count, depth, and split controls
     """
     name = "Random Forest"
+    khaled_random_forest_search_space = {
+        "n_estimators": [120, 180, 240, 320],
+        "max_depth": [12, 18, 24, None],
+        "min_samples_split": [2, 4, 8],
+        "min_samples_leaf": [1, 2, 4],
+        "max_features": [0.3, 0.35, 0.45, "sqrt"],
+        "bootstrap": [True, False],
+    }
 
     def get_estimator(self) -> RandomizedSearchCV:
         base_estimator = RandomForestClassifier(
@@ -22,14 +30,7 @@ class RandomForestModel(BaseHotelModel):
         )
         return RandomizedSearchCV(
             estimator=base_estimator,
-            param_distributions={
-                "n_estimators": [120, 180, 240, 320],
-                "max_depth": [12, 18, 24, None],
-                "min_samples_split": [2, 4, 8],
-                "min_samples_leaf": [1, 2, 4],
-                "max_features": [0.3, 0.35, 0.45, "sqrt"],
-                "bootstrap": [True, False],
-            },
+            param_distributions=self.khaled_random_forest_search_space,
             n_iter=8,
             scoring="accuracy",
             cv=3,

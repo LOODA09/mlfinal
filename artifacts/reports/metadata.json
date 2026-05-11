@@ -4,11 +4,11 @@
   "remove_leakage_features": false,
   "feature_preset": "high_score",
   "balance_strategy": "smote",
-  "evaluation_mode": "High-Score Benchmark",
+  "evaluation_mode": "Notebook-Aligned Reservation Benchmark",
   "python_version": "3.11.9",
-  "train_rows": 29028,
-  "test_rows": 7257,
-  "total_rows": 36285,
+  "train_rows": 28998,
+  "test_rows": 7250,
+  "total_rows": 36248,
   "train_ratio": 0.8,
   "test_ratio": 0.2,
   "cross_validation_folds": 0,
@@ -32,66 +32,70 @@
   "shap_explanations": [
     {
       "feature": "special_requests",
-      "mean_abs_shap": 0.09372858368942874,
-      "correlation_with_risk": -0.9541919257543809,
+      "mean_abs_shap": 0.15676327808319354,
+      "correlation_with_risk": -0.9326654794159644,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
-      "feature": "lead_time_log",
-      "mean_abs_shap": 0.06430182302132084,
-      "correlation_with_risk": 0.853563143659216,
+      "feature": "lead_time",
+      "mean_abs_shap": 0.09650197094306714,
+      "correlation_with_risk": 0.87874078609098,
       "explanation": "Higher values tend to increase cancellation risk."
     },
     {
       "feature": "market_segment_type_Online",
-      "mean_abs_shap": 0.06260385440086522,
-      "correlation_with_risk": 0.9332845596199725,
+      "mean_abs_shap": 0.0770936063362001,
+      "correlation_with_risk": 0.9298251414590151,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
   "segmentation_summary_rows": [
     {
       "segment": 0,
-      "lead_time": 204.83,
-      "average_price": 95.43,
-      "number_of_total_nights": 3.81,
-      "number_of_children_and_adults": 1.89,
-      "special_requests": 0.37,
-      "cancellation_ratio": 0.0
+      "lead_time": 2.41,
+      "average_price": 127.11,
+      "number_of_total_nights": 1.2,
+      "number_of_children_and_adults": 2.51,
+      "special_requests": 1.36,
+      "cancellation_ratio": 0.0,
+      "segment_name": "Premium Experience Guests"
     },
     {
       "segment": 1,
-      "lead_time": 41.29,
-      "average_price": 89.29,
-      "number_of_total_nights": 2.51,
+      "lead_time": 2.33,
+      "average_price": 92.97,
+      "number_of_total_nights": 1.0,
       "number_of_children_and_adults": 1.67,
-      "special_requests": 0.35,
-      "cancellation_ratio": 0.0
+      "special_requests": 0.28,
+      "cancellation_ratio": 0.0,
+      "segment_name": "Quick-Book Value Guests"
     },
     {
       "segment": 2,
-      "lead_time": 57.62,
-      "average_price": 135.92,
-      "number_of_total_nights": 3.24,
-      "number_of_children_and_adults": 2.52,
-      "special_requests": 1.35,
-      "cancellation_ratio": 0.0
+      "lead_time": 2.69,
+      "average_price": 93.9,
+      "number_of_total_nights": 2.07,
+      "number_of_children_and_adults": 1.96,
+      "special_requests": 0.57,
+      "cancellation_ratio": 0.0,
+      "segment_name": "Advance Planners"
     },
     {
       "segment": 3,
-      "lead_time": 32.52,
-      "average_price": 80.79,
-      "number_of_total_nights": 2.44,
+      "lead_time": 1.51,
+      "average_price": 86.76,
+      "number_of_total_nights": 1.09,
       "number_of_children_and_adults": 1.57,
-      "special_requests": 0.23,
-      "cancellation_ratio": 0.92
+      "special_requests": 0.24,
+      "cancellation_ratio": 0.92,
+      "segment_name": "High-Risk Returners"
     }
   ],
   "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1025.873775199987,
-  "shap_phase_wall_clock_sec": 45.89792780019343,
-  "full_retrain_phase_wall_clock_sec": 3.521445200080052,
-  "artifact_finalize_wall_clock_sec": 2.4795695999637246,
-  "total_pipeline_wall_clock_sec": 1094.4600430000573,
-  "pipeline_wall_clock_note": "Total pipeline wall clock includes notebook-style feature generation, SMOTE balancing, benchmark fits, SHAP generation, best-model retraining, and artifact generation."
+  "benchmark_phase_wall_clock_sec": 810.2311768999789,
+  "shap_phase_wall_clock_sec": 100.72858400014229,
+  "full_retrain_phase_wall_clock_sec": 3.562373099848628,
+  "artifact_finalize_wall_clock_sec": 2.673985500121489,
+  "total_pipeline_wall_clock_sec": 936.8339048000053,
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes notebook-aligned reservation feature generation, SMOTE balancing, benchmark fits, SHAP generation, best-model retraining, and artifact generation."
 }

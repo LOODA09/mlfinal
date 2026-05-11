@@ -154,7 +154,7 @@ def main() -> None:
         "remove_leakage_features": False,
         "feature_preset": "high_score",
         "balance_strategy": "smote" if len(x_fit) > len(x_train) else "none",
-        "evaluation_mode": "High-Score Benchmark",
+        "evaluation_mode": "Notebook-Aligned Reservation Benchmark",
         "python_version": sys.version.split()[0],
         "train_rows": int(len(x_train)),
         "test_rows": int(len(x_test)),
@@ -176,7 +176,7 @@ def main() -> None:
         "artifact_finalize_wall_clock_sec": artifact_finalize_wall_clock_sec,
         "total_pipeline_wall_clock_sec": time.perf_counter() - pipeline_start,
         "pipeline_wall_clock_note": (
-            "Total pipeline wall clock includes notebook-style feature generation, "
+            "Total pipeline wall clock includes notebook-aligned reservation feature generation, "
             "SMOTE balancing, benchmark fits, SHAP generation, best-model retraining, "
             "and artifact generation."
         ),

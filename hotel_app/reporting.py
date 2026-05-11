@@ -102,8 +102,18 @@ class BenchmarkPdfBuilder:
                 "recall",
                 "train_f1",
                 "f1",
+                "train_balanced_accuracy",
+                "balanced_accuracy",
+                "train_mcc",
+                "mcc",
                 "train_roc_auc",
                 "roc_auc",
+                "train_average_precision",
+                "average_precision",
+                "train_brier_score",
+                "brier_score",
+                "train_log_loss",
+                "log_loss",
                 "benchmark_training_time_sec",
                 "full_data_training_time_sec",
                 "training_time_sec",
@@ -162,7 +172,9 @@ class BenchmarkPdfBuilder:
             line = (
                 f"{row.model}: {description} Benchmark train accuracy {getattr(row, 'train_accuracy', float('nan')):.4f}, "
                 f"holdout accuracy {row.accuracy:.4f}, precision {row.precision:.4f}, recall {row.recall:.4f}, "
-                f"F1 {row.f1:.4f}, ROC-AUC {row.roc_auc:.4f}, benchmark fit {getattr(row, 'benchmark_training_time_sec', float('nan')):.2f}s, "
+                f"F1 {row.f1:.4f}, balanced accuracy {getattr(row, 'balanced_accuracy', float('nan')):.4f}, MCC {getattr(row, 'mcc', float('nan')):.4f}, "
+                f"ROC-AUC {row.roc_auc:.4f}, average precision {getattr(row, 'average_precision', float('nan')):.4f}, "
+                f"benchmark fit {getattr(row, 'benchmark_training_time_sec', float('nan')):.2f}s, "
                 f"full-data retrain {getattr(row, 'full_data_training_time_sec', float('nan')):.2f}s, total saved run cost {row.training_time_sec:.2f}s, "
                 f"inference {row.inference_ms_per_row:.4f} ms/row."
             )

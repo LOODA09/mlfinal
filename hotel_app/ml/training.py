@@ -63,11 +63,12 @@ class ModelTrainer:
         )
 
     def split_data(self, x_data: pd.DataFrame, y_data: pd.Series):
+        stratify_target = None if self.processor._is_reservation_feature_frame(x_data) else y_data
         return train_test_split(
             x_data,
             y_data,
             test_size=self.test_size,
-            stratify=y_data,
+            stratify=stratify_target,
             random_state=self.random_state,
         )
 
@@ -239,7 +240,7 @@ class TrainingArtifacts:
 
 class TerminalTrainingRunner:
     def __init__(self, trainer: Optional[ModelTrainer] = None, random_state: int = 42) -> None:
-        self.trainer = trainer or ModelTrainer(random_state=random_state, test_size=0.3)
+        self.trainer = trainer or ModelTrainer(random_state=random_state, test_size=0.2)
         self.random_state = random_state
         self.processor = self.trainer.processor
 
@@ -559,11 +560,59 @@ class TerminalTrainingRunner:
             )
         return explanations
 
+    @staticmethod
+    def _segment_display_names(summary: pd.DataFrame) -> dict[int, str]:
+        if summary.empty or "segment" not in summary.columns:
+            return {}
+        working = summary.copy()
+        for column in [
+            "lead_time",
+            "average_price",
+            "number_of_total_nights",
+            "number_of_children_and_adults",
+            "special_requests",
+            "cancellation_ratio",
+        ]:
+            if column in working.columns:
+                working[column] = pd.to_numeric(working[column], errors="coerce").fillna(0)
+
+        names: dict[int, str] = {}
+        if "cancellation_ratio" in working.columns:
+            risk_segment = int(working.sort_values("cancellation_ratio", ascending=False).iloc[0]["segment"])
+            names[risk_segment] = "High-Risk Returners"
+        if "lead_time" in working.columns:
+            planner_segment = int(working.sort_values("lead_time", ascending=False).iloc[0]["segment"])
+            names.setdefault(planner_segment, "Advance Planners")
+        premium_features = [column for column in ("average_price", "special_requests") if column in working.columns]
+        if premium_features:
+            premium_scores = working[premium_features].mean(axis=1)
+            premium_segment = int(working.iloc[int(premium_scores.idxmax())]["segment"])
+            names.setdefault(premium_segment, "Premium Experience Guests")
+
+        for row in working.itertuples(index=False):
+            segment_id = int(getattr(row, "segment"))
+            if segment_id in names:
+                continue
+            lead_time_value = float(getattr(row, "lead_time", 0.0))
+            booking_value = float(getattr(row, "average_price", 0.0))
+            if lead_time_value <= working["lead_time"].median() and booking_value <= working["average_price"].median():
+                names[segment_id] = "Quick-Book Value Guests"
+            else:
+                names[segment_id] = "Steady Leisure Guests"
+        return names
+
     def _save_segmentation_artifacts(self, artifacts: TrainingArtifacts, x_data: pd.DataFrame) -> Dict[str, Any]:
         import matplotlib.pyplot as plt
 
         segmenter = KMeansSegmenter(random_state=self.random_state, n_clusters=4)
         segmentation = segmenter.fit(x_data)
+        segment_names = self._segment_display_names(segmentation["summary"])
+        if not segmentation["summary"].empty:
+            segmentation["summary"] = segmentation["summary"].copy()
+            segmentation["summary"]["segment_name"] = segmentation["summary"]["segment"].map(segment_names)
+        if not segmentation["projection"].empty:
+            segmentation["projection"] = segmentation["projection"].copy()
+            segmentation["projection"]["segment_name"] = segmentation["projection"]["segment"].map(segment_names)
         segmentation["summary"].to_csv(artifacts.reports_dir / "guest_segments.csv", index=False)
         projection = segmentation["projection"]
         figure, axis = plt.subplots(figsize=(8, 6))
