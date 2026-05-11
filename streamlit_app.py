@@ -614,6 +614,7 @@ class DashboardStyle:
 
     @staticmethod
     def hero(metadata: Dict[str, Any]) -> None:
+        cv_folds = metadata.get("cross_validation_folds", "N/A")
         st.markdown(
             f"""
             <div class="hero-shell">
@@ -621,7 +622,7 @@ class DashboardStyle:
                 <h1>Hotel Cancellation Intelligence</h1>
                 <p>
                     Professional dashboard for comparing all trained models, reviewing saved holdout and
-                    5-fold validation metrics, inspecting confusion matrices and SHAP explanations, and
+                    {cv_folds}-fold validation metrics, inspecting confusion matrices and SHAP explanations, and
                     running live booking predictions from the saved deployment model.
                 </p>
             </div>
@@ -976,12 +977,34 @@ class PredictionApp:
     @staticmethod
     def normalize_cv_frame(cv_results: pd.DataFrame) -> pd.DataFrame:
         if cv_results.empty:
-            return cv_results
+            return pd.DataFrame(
+                columns=[
+                    "model",
+                    "fold",
+                    "accuracy",
+                    "precision",
+                    "recall",
+                    "f1",
+                    "balanced_accuracy",
+                    "roc_auc",
+                    "average_precision",
+                ]
+            )
         frame = cv_results.copy()
+        if "model" not in frame.columns:
+            frame["model"] = ""
+        if "fold" not in frame.columns:
+            frame["fold"] = ""
         for column in ["accuracy", "precision", "recall", "f1", "balanced_accuracy", "roc_auc", "average_precision"]:
             if column not in frame.columns:
                 frame[column] = np.nan
         return frame
+
+    @staticmethod
+    def cv_mean_rows(cv_results: pd.DataFrame) -> pd.DataFrame:
+        if cv_results.empty or "fold" not in cv_results.columns:
+            return pd.DataFrame()
+        return cv_results[cv_results["fold"].astype(str) == "mean"].copy()
 
     @staticmethod
     def add_complexity_tiers(holdout: pd.DataFrame) -> pd.DataFrame:
@@ -1082,7 +1105,7 @@ class PredictionApp:
         with left:
             st.plotly_chart(self.build_metric_radar(top_model), use_container_width=True)
         with right:
-            cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].sort_values("f1", ascending=False)
+            cv_mean = self.cv_mean_rows(cv_results).sort_values("f1", ascending=False)
             if cv_mean.empty:
                 st.info("Cross-validation results are not available for the current artifact set.")
             else:
@@ -1260,9 +1283,10 @@ class PredictionApp:
         )
         st.caption("The `test_*` columns come from the saved 80/20 holdout benchmark split. The `train_*` columns come from the corresponding benchmark training split for the same fitted model. `benchmark_training_time_sec` is the benchmark fit time, `full_data_training_time_sec` is the deployment retrain on the full dataset, and `training_time_sec` is their combined saved run cost. `complexity_tier` is derived from measured training time, inference time, and transformed feature count.")
 
-        cv_mean = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
+        cv_mean = self.cv_mean_rows(cv_results)
         if not cv_mean.empty:
-            st.markdown("### 5-Fold Validation Means")
+            fold_count = len([value for value in cv_results["fold"].astype(str).unique() if value.isdigit()])
+            st.markdown(f"### {fold_count or 'Saved'}-Fold Validation Means")
             cv_mean = cv_mean[
                 [
                     "model",
@@ -1282,7 +1306,7 @@ class PredictionApp:
                 use_container_width=True,
             )
             if "RNN" not in cv_mean["model"].tolist() and "RNN" in holdout["model"].tolist():
-                st.caption("RNN appears in the holdout benchmark, but the saved 5-fold validation table does not yet include an RNN row from the TensorFlow runtime.")
+                st.caption("RNN appears in the holdout benchmark, but the saved cross-validation table does not yet include an RNN row from the TensorFlow runtime.")
 
         model_options = holdout["model"].tolist()
         selected_confusion = st.selectbox("Confusion matrix model", model_options, index=0)
@@ -1752,7 +1776,7 @@ class PredictionApp:
         fig.update_layout(
             height=420,
             xaxis_title="Model",
-            yaxis_title="Mean 5-fold F1",
+            yaxis_title="Mean Cross-Validation F1",
             margin=dict(l=10, r=10, t=20, b=20),
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(248,250,252,0.7)",

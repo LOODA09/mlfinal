@@ -14,7 +14,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--data", default="hotel_bookings.csv", help="Path to the dataset CSV file.")
     parser.add_argument("--output", default="artifacts", help="Directory for saved models and reports.")
-    parser.add_argument("--cv-folds", type=int, default=5, help="Number of stratified CV folds. Use 0 or 1 to skip CV.")
+    parser.add_argument("--cv-folds", type=int, default=3, help="Number of stratified CV folds. Use 0 or 1 to skip CV.")
     parser.add_argument("--ann-epochs", type=int, default=250, help="ANN max iterations.")
     parser.add_argument("--rnn-epochs", type=int, default=10, help="RNN epochs when TensorFlow is available.")
     parser.add_argument("--lstm-epochs", type=int, default=10, help="LSTM epochs when TensorFlow is available.")
@@ -67,7 +67,8 @@ def main() -> None:
     print(f"Holdout summary ({int(round(test_ratio * 100))}% test split plus benchmark-train metrics):")
     print(holdout.round(4).to_string(index=False))
 
-    print("\n5-fold cross-validation means:")
+    fold_count = int(metadata.get("cross_validation_folds", args.cv_folds))
+    print(f"\n{fold_count}-fold cross-validation means:")
     if not cross_validation.empty and "fold" in cross_validation.columns:
         cv_means = cross_validation[cross_validation["fold"].astype(str) == "mean"].copy()
     else:

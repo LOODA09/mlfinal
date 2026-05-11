@@ -300,7 +300,7 @@ class TerminalTrainingRunner:
         self,
         data_path: str,
         output_dir: str = "artifacts",
-        cv_folds: int = 5,
+        cv_folds: int = 3,
         ann_epochs: int = 250,
         rnn_epochs: int = 10,
         lstm_epochs: int = 10,
