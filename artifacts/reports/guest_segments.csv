@@ -1,5 +1,5 @@
-segment,lead_time,average_price,number_of_total_nights,number_of_children_and_adults,special_requests,cancellation_ratio,segment_name
-0,2.41,127.11,1.2,2.51,1.36,0.0,Premium Experience Guests
-1,2.33,92.97,1.0,1.67,0.28,0.0,Quick-Book Value Guests
-2,2.69,93.9,2.07,1.96,0.57,0.0,Advance Planners
-3,1.51,86.76,1.09,1.57,0.24,0.92,High-Risk Returners
+segment,lead_time,average_price,number_of_total_nights,special_requests,cancellation_ratio,segment_name
+0,2.81,101.86,1.0,0.5,0.0,Advance Planners
+1,2.81,100.15,2.06,0.73,0.0,Steady Leisure Guests
+2,0.76,103.47,1.12,0.81,0.0,Premium Experience Guests
+3,1.51,86.76,1.09,0.24,0.92,High-Risk Returners

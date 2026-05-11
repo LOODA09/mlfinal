@@ -70,14 +70,6 @@
       "step": 1.0
     },
     {
-      "name": "number_of_children_and_adults",
-      "type": "numeric",
-      "default": 2.0,
-      "min": 1.0,
-      "max": 12.0,
-      "step": 1.0
-    },
-    {
       "name": "number_of_total_nights",
       "type": "numeric",
       "default": 1.0,
@@ -115,14 +107,6 @@
       "default": 8.0,
       "min": 1.0,
       "max": 12.0,
-      "step": 1.0
-    },
-    {
-      "name": "year",
-      "type": "numeric",
-      "default": 2018.0,
-      "min": 2015.0,
-      "max": 2018.0,
       "step": 1.0
     }
   ]

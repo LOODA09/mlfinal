@@ -330,6 +330,8 @@ class HotelDataProcessor:
             "repeated",
             "p_c",
             "p_not_c",
+            "year",
+            "number_of_children_and_adults",
         ]
         return features.drop(columns=[col for col in drop_columns if col in features.columns], errors="ignore")
 

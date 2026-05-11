@@ -135,6 +135,11 @@ class ModelTrainer:
             for fold, (train_index, valid_index) in enumerate(splitter.split(x_data, y_data), start=1):
                 x_train, x_valid = x_data.iloc[train_index], x_data.iloc[valid_index]
                 y_train, y_valid = y_data.iloc[train_index], y_data.iloc[valid_index]
+                if self.processor._is_reservation_feature_frame(x_data):
+                    try:
+                        x_train, y_train = self.resample_training_data(x_train, y_train)
+                    except Exception:
+                        pass
                 fitted_model = self.train_model(model_spec, x_train, y_train)
                 y_pred = fitted_model.predict(x_valid)
                 y_score = _positive_probabilities(fitted_model, x_valid)
