@@ -27,9 +27,9 @@ DATA_PATH = (
 )
 EXCLUDED_FEATURES = {"arrival_date_year"}
 FIELD_LABELS = {
-    "type_of_meal": "Meal Package",
+    "type_of_meal": "Meal Type",
     "car_parking_space": "Parking Need Flag",
-    "room_type": "Room Category",
+    "room_type": "Room Type",
     "lead_time": "Advance Booking Window",
     "market_segment_type": "Booking Channel",
     "average_price": "Nightly Room Rate",
@@ -41,6 +41,23 @@ FIELD_LABELS = {
     "year": "Reservation Year",
     "cancellation_ratio": "Past Cancellation Share",
     "first_time_visitor": "New Guest Indicator",
+}
+CATEGORICAL_UI_MAPS = {
+    "room_type": {
+        "Deluxe Room": "Luxury Room",
+        "Suite": "Suite",
+        "Standard Room": "Normal Room",
+        "Double Room": "Simple Room",
+        "Family Room": "Family Suite",
+        "Presidential Suite": "Presidential Suite",
+        "Penthouse": "Penthouse"
+    },
+    "type_of_meal": {
+        "Full Board": "VIP Meal",
+        "Half Board": "Luxury Meal",
+        "Breakfast": "Normal Meal",
+        "No Meal": "No Meal"
+    }
 }
 FIELD_OPTION_LABELS = {
     "car_parking_space": {0: "No Parking Needed", 1: "Parking Needed"},
@@ -944,6 +961,34 @@ class PredictionApp:
                     "type": "negative"
                 })
 
+        # Rule 4: Room Type Impact
+        # (Using UI names since they are passed from the form)
+        room_type = str(raw_input["room_type"].iloc[0]) if "room_type" in raw_input.columns else ""
+        if room_type in ["Luxury Room", "Suite"]:
+            prob -= 0.03
+            adjustments.append({
+                "rule": f"Premium Room ({room_type})",
+                "impact_pct": "-3.0%",
+                "type": "positive"
+            })
+        elif room_type in ["Normal Room", "Simple Room"]:
+            prob += 0.03
+            adjustments.append({
+                "rule": f"Standard Room ({room_type})",
+                "impact_pct": "+3.0%",
+                "type": "negative"
+            })
+
+        # Rule 5: Meal + Room Combination
+        meal_type = str(raw_input["type_of_meal"].iloc[0]) if "type_of_meal" in raw_input.columns else ""
+        if meal_type == "Normal Meal" and room_type in ["Normal Room", "Simple Room"]:
+            prob -= 0.02
+            adjustments.append({
+                "rule": "Normal Meal with Standard Room",
+                "impact_pct": "-2.0%",
+                "type": "positive"
+            })
+
         # Clamp between 0.0 and 1.0
         final_prob = max(0.0, min(1.0, prob))
         
@@ -1361,11 +1406,19 @@ class PredictionApp:
             option_map = FIELD_OPTION_LABELS.get(field_name, {})
             if column["type"] == "categorical":
                 options: List[str] = column["options"]
-                default = column["default"]
-                default_index = options.index(default) if default in options else 0
-                values[field_name] = holder.selectbox(
-                    field_label, options=options, index=default_index, key=f"field_{field_name}",
+                ui_map = CATEGORICAL_UI_MAPS.get(field_name, {})
+                
+                # Create a list of UI names, but keep track of original values
+                display_options = [ui_map.get(opt, opt) for opt in options]
+                default_val = column["default"]
+                default_display = ui_map.get(default_val, default_val)
+                default_index = display_options.index(default_display) if default_display in display_options else 0
+                
+                selected_ui_name = holder.selectbox(
+                    field_label, options=display_options, index=default_index, key=f"field_{field_name}",
                 )
+                # Store the UI name in values (apply_business_rules uses UI names)
+                values[field_name] = selected_ui_name
             elif option_map:
                 numeric_options = sorted(option_map)
                 default_value = int(round(float(column["default"])))
@@ -1392,8 +1445,16 @@ class PredictionApp:
         model_name: str,
         examples: pd.DataFrame,
     ) -> None:
-        engineered_preview = self.add_engineered_features_compat(raw_input.copy())
-        model_input = self.align_input_to_model(engineered_preview.copy(), raw_input, model, examples)
+        # Before prediction, map UI names back to model names for technical processing
+        model_ready_input = raw_input.copy()
+        for field_name, ui_map in CATEGORICAL_UI_MAPS.items():
+            if field_name in model_ready_input.columns:
+                # Reverse the map: UI Name -> Model Name
+                reverse_map = {v: k for k, v in ui_map.items()}
+                model_ready_input[field_name] = model_ready_input[field_name].map(lambda x: reverse_map.get(x, x))
+
+        engineered_preview = self.add_engineered_features_compat(model_ready_input.copy())
+        model_input = self.align_input_to_model(engineered_preview.copy(), model_ready_input, model, examples)
 
         ml_prediction = int(model.predict(model_input)[0])
         probabilities = _positive_probabilities(model, model_input)
@@ -1433,7 +1494,7 @@ class PredictionApp:
 
             # Render Business Rules Breakdown UI
             if rule_adjustments:
-                rules_html = '<div class="rules-breakdown"><h4>ΓÜû∩╕Å Business Rules Adjustments</h4>'
+                rules_html = '<div class="rules-breakdown"><h4>⚖️ Business Rules Adjustments</h4>'
                 rules_html += f'''<div class="rule-row">
                     <span class="rule-label">Base ML Probability</span>
                     <span class="rule-impact neutral">{ml_cancel_probability * 100:.2f}%</span>
