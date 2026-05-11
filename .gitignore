@@ -1,14 +1,10 @@
+.venv311/
+artifacts_dual_hotel_bookings/
+artifacts_dual_hotel_booking_tf/
+artifacts_honest/
+KHALED .csv
+*.zip
 __pycache__/
-*.py[cod]
-.pytest_cache/
-.streamlit/secrets.toml
-.venv*/
-.venv/
-venv/
-env/
-.env
-.DS_Store
-artifacts/models/*.joblib
-!artifacts/models/deployment_model.joblib
-artifacts_honest/models/*.joblib
-!artifacts_honest/models/deployment_model.joblib
+*.csv
+!artifacts/reports/*.csv
+!artifacts/plots/*.png
