@@ -18,19 +18,19 @@ EXCLUDED_FEATURES = {"arrival_date_year"}
 FIELD_LABELS = {"type_of_meal": "Meal Type", "car_parking_space": "Parking Need Flag", "room_type": "Room Type", "lead_time": "Advance Booking Window", "market_segment_type": "Booking Channel", "average_price": "Nightly Room Rate", "special_requests": "Special Request Count", "number_of_children_and_adults": "Traveler Count", "number_of_total_nights": "Stay Length Band", "day_name": "Reservation Weekday", "month": "Reservation Month", "year": "Reservation Year", "cancellation_ratio": "Past Cancellation Share", "first_time_visitor": "New Guest Indicator"}
 CATEGORICAL_UI_MAPS = {
     "room_type": {
-        "Deluxe Room": "Luxury Room",
-        "Suite": "Suite",
-        "Standard Room": "Normal Room",
-        "Double Room": "Simple Room",
-        "Family Room": "Family Suite",
-        "Presidential Suite": "Presidential Suite",
-        "Penthouse": "Penthouse"
+        "Room_Type 4": "Luxury Room",
+        "Room_Type 6": "Suite",
+        "Room_Type 1": "Normal Room",
+        "Room_Type 2": "Simple Room",
+        "Room_Type 3": "Executive Room",
+        "Room_Type 5": "Family Room",
+        "Room_Type 7": "Presidential Suite"
     },
     "type_of_meal": {
-        "Full Board": "VIP Meal",
-        "Half Board": "Luxury Meal",
-        "Breakfast": "Normal Meal",
-        "No Meal": "No Meal"
+        "Meal Plan 3": "VIP Meal",
+        "Meal Plan 2": "Luxury Meal",
+        "Meal Plan 1": "Normal Meal",
+        "Not Selected": "No Meal"
     }
 }
 FIELD_OPTION_LABELS = {"car_parking_space": {0: "No Parking Needed", 1: "Parking Needed"}, "lead_time": {0: "Same Day", 1: "Short Notice", 2: "Medium Term", 3: "Long Term", 4: "Very Long Term"}, "number_of_total_nights": {0: "Day Use", 1: "Short Stay", 2: "Week Stay", 3: "Two Weeks Stay", 4: "Long Stay"}, "day_name": {0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}, "first_time_visitor": {0: "Returning Guest", 1: "First-Time Guest"}}
