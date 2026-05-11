@@ -407,7 +407,11 @@ class PredictionApp:
         if mlp is not None: fcp, adj = self.apply_business_rules(mlp, raw); pred = 1 if fcp >= 0.5 else 0
         else: pred = mp
         st.divider(); c1, c2 = st.columns([1, 1], gap="large")
-        with c1: st.error(f"{mn}: this booking is predicted to cancel.") if pred == 1 else st.success(f"{mn}: this booking is predicted to stay active.")
+        with c1:
+            if pred == 1:
+                st.error(f"{mn}: this booking is predicted to cancel.")
+            else:
+                st.success(f"{mn}: this booking is predicted to stay active.")
         if fcp is not None:
             sp = 1.0 - fcp
             with c2: st.metric("Final Cancellation probability", f"{fcp*100:.2f}%"); st.metric("Final Stay probability", f"{sp*100:.2f}%")
