@@ -171,7 +171,7 @@ class PredictionApp:
         return items
 
     @staticmethod
-    def display_label(c: str) -> str: return FIELD_LABELS.get(c, c.replace("_", " ").title())
+    def display_label(c: Any) -> str: return FIELD_LABELS.get(c, str(c).replace("_", " ").title())
 
     @staticmethod
     def format_field_value(c: str, v: Any) -> str:
@@ -463,7 +463,7 @@ class PredictionApp:
         ic, cc = ["segment"], "segment"
         if "segment_name" in g.columns: ic.append("segment_name"); cc = "segment_name"
         vc = [c for c in g.columns if c not in {"segment","segment_name"} and pd.api.types.is_numeric_dtype(g[c])]
-        f = px.bar(g.melt(id_vars=ic, value_vars=vc, var_name="feature", value_name="value").assign(feature=lambda x: x.map(self.display_label)), x="feature", y="value", color=cc, barmode="group", color_discrete_sequence=["#0f766e","#0ea5e9","#f59e0b","#ef4444"]); f.update_layout(title="Cluster Profiles", height=420, margin=dict(l=10,r=10,t=40,b=20), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(248,250,252,0.7)", xaxis_title="Feature", yaxis_title="Average value"); return f
+        f = px.bar(g.melt(id_vars=ic, value_vars=vc, var_name="feature", value_name="value").assign(feature=lambda df: df["feature"].map(self.display_label)), x="feature", y="value", color=cc, barmode="group", color_discrete_sequence=["#0f766e","#0ea5e9","#f59e0b","#ef4444"]); f.update_layout(title="Cluster Profiles", height=420, margin=dict(l=10,r=10,t=40,b=20), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(248,250,252,0.7)", xaxis_title="Feature", yaxis_title="Average value"); return f
 
     def build_local_shap_waterfall(self, i: pd.DataFrame, d: pd.DataFrame) -> go.Figure:
         fr = pd.concat([d if not d.empty else pd.DataFrame(columns=["feature","shap_value"]), i if not i.empty else pd.DataFrame(columns=["feature","shap_value"])], ignore_index=True)
