@@ -100,6 +100,7 @@ def _count_model_complexity(estimator: Any) -> int:
 @dataclass
 class HotelDataProcessor:
     target_column: str = "is_canceled"
+    reservation_target_column: str = "booking_status"
     dropped_low_signal_columns: Sequence[str] = field(default_factory=lambda: ("arrival_date_year",))
     dropped_behavior_columns: Sequence[str] = field(
         default_factory=lambda: (
@@ -126,20 +127,54 @@ class HotelDataProcessor:
             return feature_preset
         return "honest" if remove_leakage_features else "high_score"
 
+    @staticmethod
+    def _snake_case(value: str) -> str:
+        value = value.strip().lower()
+        value = re.sub(r"[^a-z0-9]+", "_", value)
+        return re.sub(r"_+", "_", value).strip("_")
+
+    def _standardize_columns(self, data: pd.DataFrame) -> pd.DataFrame:
+        df = data.copy()
+        df.columns = [self._snake_case(str(column)) for column in df.columns]
+        return df
+
+    def detect_dataset(self, data: pd.DataFrame) -> str:
+        columns = set(data.columns)
+        if self.reservation_target_column in columns:
+            return "reservation"
+        if self.target_column in columns:
+            return "hotel"
+        raise KeyError("Could not find a supported target column in the dataset.")
+
+    def resolve_target_column(self, data: pd.DataFrame) -> str:
+        if self.target_column in data.columns:
+            return self.target_column
+        if self.reservation_target_column in data.columns:
+            return self.reservation_target_column
+        raise KeyError("Could not resolve the target column for the dataset.")
+
     def load_data(self, path: str = "hotel_bookings.csv") -> pd.DataFrame:
-        return pd.read_csv(path)
+        return self._standardize_columns(pd.read_csv(path))
 
     def clean_data(self, data: pd.DataFrame) -> pd.DataFrame:
-        df = data.copy()
+        df = self._standardize_columns(data)
 
-        if "adr" in df.columns:
-            adr = pd.to_numeric(df["adr"], errors="coerce").fillna(0)
-            adr = adr.clip(lower=0)
-            if len(adr) > 10:
-                lower_quantile = float(adr.quantile(0.01))
-                upper_quantile = float(adr.quantile(0.99))
-                adr = adr.clip(lower=lower_quantile, upper=upper_quantile)
-            df["adr"] = adr
+        if "date_of_reservation" in df.columns:
+            df["date_of_reservation"] = pd.to_datetime(
+                df["date_of_reservation"],
+                format="%m/%d/%Y",
+                errors="coerce",
+            )
+
+        for price_column in ("adr", "average_price"):
+            if price_column in df.columns:
+                prices = pd.to_numeric(df[price_column], errors="coerce").fillna(0)
+                prices = prices.clip(lower=0)
+                if len(prices) > 10:
+                    lower_quantile = float(prices.quantile(0.01))
+                    upper_quantile = float(prices.quantile(0.99))
+                    prices = prices.clip(lower=lower_quantile, upper=upper_quantile)
+                df[price_column] = prices
         guest_columns = [col for col in ("children", "adults", "babies") if col in df.columns]
         if guest_columns:
             df = df[df[guest_columns].sum(axis=1) > 0]
@@ -156,7 +191,11 @@ class HotelDataProcessor:
         feature_preset: Optional[FeaturePreset] = None,
     ) -> Tuple[pd.DataFrame, pd.Series]:
         df = self.clean_data(data)
-        y = df[self.target_column].astype(int)
+        target_column = self.resolve_target_column(df)
+        if target_column == self.reservation_target_column:
+            y = df[target_column].astype(str).str.lower().eq("canceled").astype(int)
+        else:
+            y = pd.to_numeric(df[target_column], errors="coerce").fillna(0).astype(int)
         resolved_preset = self.resolve_feature_preset(
             remove_leakage_features=remove_leakage_features,
             feature_preset=feature_preset,
@@ -178,10 +217,13 @@ class HotelDataProcessor:
         feature_preset: Optional[FeaturePreset] = None,
     ) -> pd.DataFrame:
         df = self.clean_data(data)
+        dataset_kind = self.detect_dataset(df)
         resolved_preset = self.resolve_feature_preset(
             remove_leakage_features=remove_leakage_features,
             feature_preset=feature_preset,
         )
+        if dataset_kind == "reservation":
+            return self._build_reservation_inputs(df)
         if resolved_preset == "high_score":
             return self._build_high_score_inputs(df)
         if resolved_preset == "honest":
@@ -204,6 +246,55 @@ class HotelDataProcessor:
         year_columns = [col for col in df.columns if col.endswith("_year")]
         drop_columns.extend(year_columns)
         return df.drop(columns=[col for col in drop_columns if col in df.columns], errors="ignore")
+
+    def _build_reservation_inputs(self, df: pd.DataFrame) -> pd.DataFrame:
+        features = df.copy()
+        if {"number_of_adults", "number_of_children"}.issubset(features.columns):
+            total_people = (
+                pd.to_numeric(features["number_of_adults"], errors="coerce").fillna(0)
+                + pd.to_numeric(features["number_of_children"], errors="coerce").fillna(0)
+            ).astype(int)
+            features["number_of_children_and_adults"] = total_people
+            features["party_size_bucket"] = np.where(total_people > 5, "Group", total_people.astype(str))
+        if {"number_of_weekend_nights", "number_of_week_nights"}.issubset(features.columns):
+            total_nights = (
+                pd.to_numeric(features["number_of_weekend_nights"], errors="coerce").fillna(0)
+                + pd.to_numeric(features["number_of_week_nights"], errors="coerce").fillna(0)
+            ).astype(int)
+            features["number_of_total_nights"] = total_nights
+            features["weekend_share"] = (
+                pd.to_numeric(features["number_of_weekend_nights"], errors="coerce").fillna(0)
+                / total_nights.replace(0, 1)
+            ).fillna(0)
+        if "lead_time" in features.columns:
+            lead_time = pd.to_numeric(features["lead_time"], errors="coerce").fillna(0)
+            features["lead_time_raw"] = lead_time
+        if {"p_c", "p_not_c", "repeated"}.issubset(features.columns):
+            history_total = (
+                pd.to_numeric(features["p_c"], errors="coerce").fillna(0)
+                + pd.to_numeric(features["p_not_c"], errors="coerce").fillna(0)
+            )
+            repeated = pd.to_numeric(features["repeated"], errors="coerce").fillna(0).clip(lower=0, upper=1)
+            features["cancellation_ratio"] = np.where(
+                repeated > 0,
+                pd.to_numeric(features["p_c"], errors="coerce").fillna(0) / history_total.replace(0, 1),
+                0,
+            )
+            features["cancellation_ratio"] = features["cancellation_ratio"].round(2)
+            features["first_time_visitor"] = 1 - repeated
+            features["history_volume"] = history_total
+        if "date_of_reservation" in features.columns:
+            date_series = pd.to_datetime(features["date_of_reservation"], errors="coerce")
+            features["day_name"] = date_series.dt.day_name().fillna("Unknown")
+            features["month"] = date_series.dt.month.fillna(0).astype(int)
+            features["year"] = date_series.dt.year.fillna(0).astype(int)
+
+        drop_columns = [
+            self.reservation_target_column,
+            "booking_id",
+            "date_of_reservation",
+        ]
+        return features.drop(columns=[col for col in drop_columns if col in features.columns], errors="ignore")
 
     def _build_high_score_inputs(self, df: pd.DataFrame) -> pd.DataFrame:
         features = df.copy()
@@ -257,6 +348,48 @@ class HotelDataProcessor:
     ) -> pd.DataFrame:
         resolved_preset = feature_preset or "honest"
         features = x_data.copy()
+        if {"average_price", "number_of_children_and_adults"}.issubset(features.columns):
+            features["average_price_per_guest"] = (
+                pd.to_numeric(features["average_price"], errors="coerce").fillna(0)
+                / pd.to_numeric(features["number_of_children_and_adults"], errors="coerce").fillna(0).replace(0, 1)
+            ).fillna(0)
+            total_people = pd.to_numeric(features["number_of_children_and_adults"], errors="coerce").fillna(0)
+            features["guest_party_type"] = np.select(
+                [total_people <= 1, total_people == 2, total_people <= 4],
+                ["Solo", "Couple", "Small Group"],
+                default="Large Group",
+            )
+        if {"average_price", "number_of_total_nights"}.issubset(features.columns):
+            features["total_stay_value"] = (
+                pd.to_numeric(features["average_price"], errors="coerce").fillna(0)
+                * pd.to_numeric(features["number_of_total_nights"], errors="coerce").fillna(0)
+            )
+        if "lead_time" in features.columns and "lead_time_band" not in features.columns:
+            lead_time_value = pd.to_numeric(features.get("lead_time_raw", features["lead_time"]), errors="coerce").fillna(0)
+            features["lead_time_band"] = lead_time_value.map(
+                lambda value: "Same Day" if value <= 1 else "Short Notice" if value <= 7 else "Medium Term" if value <= 30 else "Long Term" if value <= 365 else "Very Long Term"
+            )
+            features["lead_time_bucket_code"] = lead_time_value.map(
+                lambda value: 0 if value <= 1 else 1 if value <= 7 else 2 if value <= 30 else 3 if value <= 365 else 4
+            )
+        if "number_of_total_nights" in features.columns and "stay_length_bucket" not in features.columns:
+            total_nights_bucket = pd.to_numeric(features["number_of_total_nights"], errors="coerce").fillna(0)
+            features["stay_length_bucket"] = total_nights_bucket.map(
+                lambda value: "Day Use" if value == 0 else "Short Stay" if value <= 3 else "Week Stay" if value <= 7 else "Two Weeks Stay" if value <= 14 else "Long Stay"
+            )
+            features["stay_length_bucket_code"] = total_nights_bucket.map(
+                lambda value: 0 if value == 0 else 1 if value <= 3 else 2 if value <= 7 else 3 if value <= 14 else 4
+            )
+        if {"special_requests", "number_of_total_nights"}.issubset(features.columns):
+            features["special_requests_per_night"] = (
+                pd.to_numeric(features["special_requests"], errors="coerce").fillna(0)
+                / pd.to_numeric(features["number_of_total_nights"], errors="coerce").fillna(0).replace(0, 1)
+            ).fillna(0)
+        if {"special_requests", "number_of_children_and_adults"}.issubset(features.columns):
+            features["special_requests_per_guest"] = (
+                pd.to_numeric(features["special_requests"], errors="coerce").fillna(0)
+                / pd.to_numeric(features["number_of_children_and_adults"], errors="coerce").fillna(0).replace(0, 1)
+            ).fillna(0)
         if "agent" in features.columns:
             agent_numeric = pd.to_numeric(features["agent"], errors="coerce").fillna(0)
             features["has_agent"] = (agent_numeric > 0).astype(int)

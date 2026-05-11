@@ -1,5 +1,5 @@
-segment,lead_time,adr,total_nights,total_guests,previous_cancellations
-0,47.4,86.91,2.63,1.72,0.04
-1,239.61,88.12,4.75,1.93,0.12
-2,193.96,62.05,3.47,1.97,19.84
-3,76.46,173.52,3.97,2.85,0.01
+segment,lead_time,average_price,number_of_total_nights,number_of_children_and_adults,special_requests,cancellation_ratio
+0,204.83,95.43,3.81,1.89,0.37,0.0
+1,41.29,89.29,2.51,1.67,0.35,0.0
+2,57.62,135.92,3.24,2.52,1.35,0.0
+3,32.52,80.79,2.44,1.57,0.23,0.92

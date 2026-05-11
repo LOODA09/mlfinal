@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, ClassifierMixin, clone
 from sklearn.compose import ColumnTransformer
+from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.pipeline import Pipeline
 from sklearn.utils.class_weight import compute_sample_weight
 
@@ -77,6 +78,54 @@ class BalancedClassifierWrapper(BaseEstimator, ClassifierMixin):
             return x_data.iloc[combined].reset_index(drop=True), y_data[combined]
         array = np.asarray(x_data)
         return array[combined], y_data[combined]
+
+    def predict(self, x_data: Any) -> Any:
+        return self.estimator_.predict(x_data)
+
+    def predict_proba(self, x_data: Any) -> Any:
+        return self.estimator_.predict_proba(x_data)
+
+    def decision_function(self, x_data: Any) -> Any:
+        return self.estimator_.decision_function(x_data)
+
+
+class SubsampledEstimatorWrapper(BaseEstimator, ClassifierMixin):
+    """Fit expensive estimators on a stratified subset when needed.
+
+    This is mainly useful for algorithms such as an RBF SVM whose training
+    cost can explode on the full hotel-booking table. The wrapper keeps the
+    estimator honest while bounding runtime and memory use.
+    """
+
+    def __init__(self, estimator: Any, max_samples: int = 20000, random_state: int = 42) -> None:
+        self.estimator = estimator
+        self.max_samples = max_samples
+        self.random_state = random_state
+
+    def fit(self, x_data: Any, y_data: Any) -> "SubsampledEstimatorWrapper":
+        y_array = np.asarray(y_data)
+        self.classes_ = np.unique(y_array)
+        x_fit = x_data
+        y_fit = y_array
+        if self.max_samples and len(y_array) > self.max_samples:
+            splitter = StratifiedShuffleSplit(
+                n_splits=1,
+                train_size=self.max_samples,
+                random_state=self.random_state,
+            )
+            sample_index, _ = next(splitter.split(np.zeros(len(y_array)), y_array))
+            if isinstance(x_data, pd.DataFrame):
+                x_fit = x_data.iloc[sample_index]
+            elif isinstance(x_data, pd.Series):
+                x_fit = x_data.iloc[sample_index]
+            else:
+                x_fit = np.asarray(x_data)[sample_index]
+            y_fit = y_array[sample_index]
+        self.estimator_ = clone(self.estimator)
+        self.estimator_.fit(x_fit, y_fit)
+        if hasattr(self.estimator_, "n_features_in_"):
+            self.n_features_in_ = self.estimator_.n_features_in_
+        return self
 
     def predict(self, x_data: Any) -> Any:
         return self.estimator_.predict(x_data)

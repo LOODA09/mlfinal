@@ -18,7 +18,13 @@ from hotel_app.ml import HotelDataProcessor, SHAPAnalyzer, _positive_probabiliti
 
 HIGH_SCORE_ARTIFACTS_DIR = Path("artifacts")
 HONEST_ARTIFACTS_DIR = Path("artifacts_honest")
-DATA_PATH = Path("hotel_booking.csv") if Path("hotel_booking.csv").exists() else Path("hotel_bookings.csv")
+DATA_PATH = (
+    Path("hotel reservation data set .csv")
+    if Path("hotel reservation data set .csv").exists()
+    else Path("hotel_booking.csv")
+    if Path("hotel_booking.csv").exists()
+    else Path("hotel_bookings.csv")
+)
 EXCLUDED_FEATURES = {"arrival_date_year"}
 
 
@@ -741,18 +747,20 @@ class PredictionApp:
         return pd.read_csv(path)
 
     @st.cache_resource(show_spinner=False)
-    def load_models(_self, artifacts_dir: Path, deployment_model_name: str, version: int) -> Dict[str, Any]:
+    def load_models(_self, artifacts_dir: Path, model_names: tuple[str, ...], version: int) -> Dict[str, Any]:
         models: Dict[str, Any] = {}
         models_dir = artifacts_dir / "models"
         if not models_dir.exists():
             return models
+        for model_name in model_names:
+            slug_name = model_name.lower().replace(" ", "_")
+            model_path = models_dir / f"{slug_name}.joblib"
+            if model_path.exists():
+                models[model_name] = joblib.load(model_path)
         deployment_path = models_dir / "deployment_model.joblib"
-        slug_name = deployment_model_name.lower().replace(" ", "_")
-        preferred_path = models_dir / f"{slug_name}.joblib"
-        if not deployment_path.exists() and preferred_path.exists():
-            deployment_path = preferred_path
+        deployment_name = str(model_names[0]) if model_names else "Deployment Model"
         if deployment_path.exists():
-            models["Deployment Model"] = joblib.load(deployment_path)
+            models[deployment_name] = joblib.load(deployment_path)
         return models
 
     def run(self) -> None:
@@ -798,10 +806,21 @@ class PredictionApp:
         holdout = self.load_csv(holdout_path, self.file_version(holdout_path))
         cv_results = self.load_csv(cv_path, self.file_version(cv_path))
         guest_segments = self.load_csv(segments_path, self.file_version(segments_path))
-        raw_data = self.load_raw_data(DATA_PATH, self.file_version(DATA_PATH))
+        metadata_data_path = Path(str(metadata.get("data_path", DATA_PATH)))
+        if not metadata_data_path.exists():
+            metadata_data_path = DATA_PATH
+        raw_data = self.load_raw_data(metadata_data_path, self.file_version(metadata_data_path))
+        ordered_model_names: List[str] = []
+        deployment_name = str(metadata.get("deployment_model", metadata.get("best_model", "Deployment Model")))
+        trained_names = list(metadata.get("full_data_models") or metadata.get("trained_models") or [])
+        if deployment_name:
+            ordered_model_names.append(deployment_name)
+        for name in trained_names:
+            if name not in ordered_model_names:
+                ordered_model_names.append(name)
         models = self.load_models(
             self.artifacts_dir,
-            str(metadata.get("deployment_model", metadata.get("best_model", "Deployment Model"))),
+            tuple(ordered_model_names),
             self.file_version(model_path),
         )
 

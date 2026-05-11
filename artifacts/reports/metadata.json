@@ -1,103 +1,97 @@
 {
-  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel_booking.csv",
+  "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel reservation data set .csv",
+  "dataset_kind": "reservation",
   "remove_leakage_features": false,
+  "feature_preset": "high_score",
+  "balance_strategy": "smote",
   "evaluation_mode": "High-Score Benchmark",
   "python_version": "3.11.9",
-  "train_rows": 83446,
-  "test_rows": 35763,
-  "total_rows": 119209,
-  "train_ratio": 0.7,
-  "test_ratio": 0.3,
-  "cross_validation_folds": 3,
-  "best_model": "Logistic Regression",
-  "deployment_model": "Logistic Regression",
+  "train_rows": 29028,
+  "test_rows": 7257,
+  "total_rows": 36285,
+  "train_ratio": 0.8,
+  "test_ratio": 0.2,
+  "cross_validation_folds": 0,
+  "best_model": "Random Forest",
+  "deployment_model": "Random Forest",
   "trained_models": [
     "Logistic Regression",
     "KNN",
     "Decision Tree",
-    "Naive Bayes",
+    "Random Forest",
+    "XGBoost",
     "SVM",
     "ANN",
     "RNN",
-    "LSTM",
-    "Random Forest",
-    "LightGBM"
+    "LSTM"
   ],
   "full_data_models": [
-    "Logistic Regression",
-    "KNN",
-    "Decision Tree",
-    "Naive Bayes",
-    "SVM",
-    "ANN",
-    "RNN",
-    "LSTM",
-    "Random Forest",
-    "LightGBM"
+    "Random Forest"
   ],
   "skipped_models": {},
   "shap_explanations": [
     {
-      "feature": "reservation_status_Check-Out",
-      "mean_abs_shap": 0.3314067019635024,
-      "correlation_with_risk": -0.9948749755240551,
+      "feature": "special_requests",
+      "mean_abs_shap": 0.09372858368942874,
+      "correlation_with_risk": -0.9541919257543809,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
-      "feature": "reservation_status_Canceled",
-      "mean_abs_shap": 0.1004447977091882,
-      "correlation_with_risk": 0.977050814670273,
+      "feature": "lead_time_log",
+      "mean_abs_shap": 0.06430182302132084,
+      "correlation_with_risk": 0.853563143659216,
       "explanation": "Higher values tend to increase cancellation risk."
     },
     {
-      "feature": "previous_cancel_rate",
-      "mean_abs_shap": 0.012589103486433186,
-      "correlation_with_risk": 0.8513279399133588,
+      "feature": "market_segment_type_Online",
+      "mean_abs_shap": 0.06260385440086522,
+      "correlation_with_risk": 0.9332845596199725,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
   "segmentation_summary_rows": [
     {
       "segment": 0,
-      "lead_time": 47.4,
-      "adr": 86.91,
-      "total_nights": 2.63,
-      "total_guests": 1.72,
-      "previous_cancellations": 0.04
+      "lead_time": 204.83,
+      "average_price": 95.43,
+      "number_of_total_nights": 3.81,
+      "number_of_children_and_adults": 1.89,
+      "special_requests": 0.37,
+      "cancellation_ratio": 0.0
     },
     {
       "segment": 1,
-      "lead_time": 239.61,
-      "adr": 88.12,
-      "total_nights": 4.75,
-      "total_guests": 1.93,
-      "previous_cancellations": 0.12
+      "lead_time": 41.29,
+      "average_price": 89.29,
+      "number_of_total_nights": 2.51,
+      "number_of_children_and_adults": 1.67,
+      "special_requests": 0.35,
+      "cancellation_ratio": 0.0
     },
     {
       "segment": 2,
-      "lead_time": 193.96,
-      "adr": 62.05,
-      "total_nights": 3.47,
-      "total_guests": 1.97,
-      "previous_cancellations": 19.84
+      "lead_time": 57.62,
+      "average_price": 135.92,
+      "number_of_total_nights": 3.24,
+      "number_of_children_and_adults": 2.52,
+      "special_requests": 1.35,
+      "cancellation_ratio": 0.0
     },
     {
       "segment": 3,
-      "lead_time": 76.46,
-      "adr": 173.52,
-      "total_nights": 3.97,
-      "total_guests": 2.85,
-      "previous_cancellations": 0.01
+      "lead_time": 32.52,
+      "average_price": 80.79,
+      "number_of_total_nights": 2.44,
+      "number_of_children_and_adults": 1.57,
+      "special_requests": 0.23,
+      "cancellation_ratio": 0.92
     }
   ],
   "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 1037.0674631998409,
-  "shap_phase_wall_clock_sec": 19.371940799988806,
-  "full_retrain_phase_wall_clock_sec": 287.1430148999207,
-  "artifact_finalize_wall_clock_sec": 5.705934800207615,
-  "total_pipeline_wall_clock_sec": 1357.2333711998072,
-  "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, full-data retraining for deployment artifacts, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec for the saved run.",
-  "deployment_model_note": "Logistic Regression is deployed in the default high-score mode because it preserves the TensorFlow-backed benchmark table while keeping the shipped deployment artifact tiny and GitHub-safe.",
-  "mode_summary": "Default high-score benchmark mode restored from the TensorFlow-backed leakage-enabled benchmark so ANN, RNN, and LSTM appear again in the active report tables.",
-  "feature_preset": "high_score"
+  "benchmark_phase_wall_clock_sec": 1025.873775199987,
+  "shap_phase_wall_clock_sec": 45.89792780019343,
+  "full_retrain_phase_wall_clock_sec": 3.521445200080052,
+  "artifact_finalize_wall_clock_sec": 2.4795695999637246,
+  "total_pipeline_wall_clock_sec": 1094.4600430000573,
+  "pipeline_wall_clock_note": "Total pipeline wall clock includes notebook-style feature generation, SMOTE balancing, benchmark fits, SHAP generation, best-model retraining, and artifact generation."
 }

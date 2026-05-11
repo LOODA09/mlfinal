@@ -16,14 +16,8 @@ MODEL_DESCRIPTIONS = {
     "Decision Tree": "Rule-based tree learner that splits bookings into cancellation patterns.",
     "Logistic Regression": "Linear probabilistic baseline using the logistic sigmoid for binary classification.",
     "Random Forest": "Bagged ensemble of decision trees with randomized feature selection.",
-    "Naive Bayes": "Probabilistic classifier with conditional independence assumptions.",
-    "SVM": "Margin-based classifier calibrated for probability-style output.",
-    "Gradient Boosting": "Sequential boosted trees focusing on previous residual errors.",
-    "Extra Trees": "Highly randomized tree ensemble reducing variance through random splits.",
+    "SVM": "RBF-kernel support vector machine trained on a bounded stratified sample for practicality.",
     "XGBoost": "Optimized gradient boosting tree method with regularized boosting.",
-    "LightGBM": "Histogram-based gradient boosting tree model with efficient leaf-wise growth.",
-    "Voting Ensemble": "Soft-voting ensemble that averages probabilities from several models.",
-    "Stacking Ensemble": "Meta-ensemble combining strong base learners through a final estimator.",
     "RNN": "Recurrent neural network trained on reshaped tabular sequences with TensorFlow.",
 }
 
@@ -50,7 +44,7 @@ class BenchmarkPdfBuilder:
 
     def build(self) -> Path:
         holdout = pd.read_csv(self.reports_dir / "holdout_summary.csv")
-        cv_results = pd.read_csv(self.reports_dir / "cross_validation_results.csv")
+        cv_results = self._safe_read_csv(self.reports_dir / "cross_validation_results.csv")
         metadata = json.loads((self.reports_dir / "metadata.json").read_text(encoding="utf-8-sig"))
 
         with PdfPages(self.output_path) as pdf:
@@ -61,6 +55,13 @@ class BenchmarkPdfBuilder:
 
         plt.close("all")
         return self.output_path
+
+    @staticmethod
+    def _safe_read_csv(path: Path) -> pd.DataFrame:
+        try:
+            return pd.read_csv(path)
+        except (pd.errors.EmptyDataError, FileNotFoundError):
+            return pd.DataFrame()
 
     def _cover_page(self, metadata: dict) -> plt.Figure:
         fig, ax = plt.subplots(figsize=(8.27, 11.69))
@@ -126,6 +127,16 @@ class BenchmarkPdfBuilder:
     def _cv_page(self, cv_results: pd.DataFrame) -> plt.Figure:
         fig, ax = plt.subplots(figsize=(11.69, 8.27))
         ax.axis("off")
+        if cv_results.empty or "fold" not in cv_results.columns:
+            ax.text(
+                0.08,
+                0.88,
+                "Cross-validation was skipped for this saved run, so no CV rows are available.",
+                fontsize=13,
+                va="top",
+            )
+            ax.set_title("Cross-Validation Mean Scores", fontsize=14, pad=18)
+            return fig
         means = cv_results[cv_results["fold"].astype(str) == "mean"].copy()
         cols = [c for c in ["model", "accuracy", "precision", "recall", "f1", "roc_auc", "average_precision"] if c in means.columns]
         table = ax.table(

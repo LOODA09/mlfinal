@@ -1,73 +1,13 @@
 {
-  "ANN": {
+  "Logistic Regression": {
     "matrix": [
       [
-        21153,
-        1350
+        4092,
+        787
       ],
       [
-        2122,
-        11138
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "Decision Tree": {
-    "matrix": [
-      [
-        22443,
-        60
-      ],
-      [
-        95,
-        13165
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "Extra Trees": {
-    "matrix": [
-      [
-        21794,
-        709
-      ],
-      [
-        1497,
-        11763
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "Gradient Boosting": {
-    "matrix": [
-      [
-        20518,
-        1985
-      ],
-      [
-        3183,
-        10077
+        642,
+        1736
       ]
     ],
     "labels": [
@@ -82,12 +22,12 @@
   "KNN": {
     "matrix": [
       [
-        20698,
-        1805
+        4374,
+        505
       ],
       [
-        1840,
-        11420
+        414,
+        1964
       ]
     ],
     "labels": [
@@ -99,15 +39,15 @@
       "Predicted 1"
     ]
   },
-  "Naive Bayes": {
+  "Decision Tree": {
     "matrix": [
       [
-        6278,
-        16225
+        4418,
+        461
       ],
       [
-        236,
-        13024
+        439,
+        1939
       ]
     ],
     "labels": [
@@ -122,72 +62,12 @@
   "Random Forest": {
     "matrix": [
       [
-        21408,
-        1095
+        4584,
+        295
       ],
       [
-        612,
-        12648
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "Stacking Ensemble": {
-    "matrix": [
-      [
-        18980,
-        3523
-      ],
-      [
-        6082,
-        7178
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "SVM": {
-    "matrix": [
-      [
-        17925,
-        4578
-      ],
-      [
-        2120,
-        11140
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "Voting Ensemble": {
-    "matrix": [
-      [
-        21034,
-        1469
-      ],
-      [
-        2053,
-        11207
+        417,
+        1961
       ]
     ],
     "labels": [
@@ -202,12 +82,92 @@
   "XGBoost": {
     "matrix": [
       [
-        20653,
-        1850
+        4510,
+        369
       ],
       [
-        2379,
-        10881
+        429,
+        1949
+      ]
+    ],
+    "labels": [
+      "Actual 0",
+      "Actual 1"
+    ],
+    "predicted": [
+      "Predicted 0",
+      "Predicted 1"
+    ]
+  },
+  "SVM": {
+    "matrix": [
+      [
+        4288,
+        591
+      ],
+      [
+        534,
+        1844
+      ]
+    ],
+    "labels": [
+      "Actual 0",
+      "Actual 1"
+    ],
+    "predicted": [
+      "Predicted 0",
+      "Predicted 1"
+    ]
+  },
+  "ANN": {
+    "matrix": [
+      [
+        4272,
+        607
+      ],
+      [
+        614,
+        1764
+      ]
+    ],
+    "labels": [
+      "Actual 0",
+      "Actual 1"
+    ],
+    "predicted": [
+      "Predicted 0",
+      "Predicted 1"
+    ]
+  },
+  "RNN": {
+    "matrix": [
+      [
+        3994,
+        885
+      ],
+      [
+        666,
+        1712
+      ]
+    ],
+    "labels": [
+      "Actual 0",
+      "Actual 1"
+    ],
+    "predicted": [
+      "Predicted 0",
+      "Predicted 1"
+    ]
+  },
+  "LSTM": {
+    "matrix": [
+      [
+        4319,
+        560
+      ],
+      [
+        1390,
+        988
       ]
     ],
     "labels": [

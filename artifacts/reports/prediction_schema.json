@@ -1,175 +1,103 @@
 {
   "columns": [
     {
-      "name": "hotel",
+      "name": "type_of_meal",
       "type": "categorical",
-      "default": "City Hotel",
+      "default": "Meal Plan 1",
       "options": [
-        "City Hotel",
-        "Resort Hotel"
+        "Meal Plan 1",
+        "Meal Plan 2",
+        "Meal Plan 3",
+        "Not Selected"
       ]
     },
     {
-      "name": "arrival_date_month",
+      "name": "room_type",
       "type": "categorical",
-      "default": "August",
+      "default": "Room_Type 1",
       "options": [
-        "April",
-        "August",
-        "December",
-        "February",
-        "January",
-        "July",
-        "June",
-        "March",
-        "May",
-        "November",
-        "October",
-        "September"
+        "Room_Type 1",
+        "Room_Type 2",
+        "Room_Type 3",
+        "Room_Type 4",
+        "Room_Type 5",
+        "Room_Type 6",
+        "Room_Type 7"
       ]
     },
     {
-      "name": "meal",
+      "name": "market_segment_type",
       "type": "categorical",
-      "default": "BB",
-      "options": [
-        "BB",
-        "FB",
-        "HB",
-        "SC",
-        "Undefined"
-      ]
-    },
-    {
-      "name": "market_segment",
-      "type": "categorical",
-      "default": "Online TA",
+      "default": "Online",
       "options": [
         "Aviation",
         "Complementary",
         "Corporate",
-        "Direct",
-        "Groups",
-        "Offline TA/TO",
-        "Online TA",
-        "Undefined"
+        "Offline",
+        "Online"
       ]
     },
     {
-      "name": "distribution_channel",
+      "name": "party_size_bucket",
       "type": "categorical",
-      "default": "TA/TO",
+      "default": "2",
       "options": [
-        "Corporate",
-        "Direct",
-        "GDS",
-        "TA/TO",
-        "Undefined"
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "Group"
       ]
     },
     {
-      "name": "reserved_room_type",
+      "name": "day_name",
       "type": "categorical",
-      "default": "A",
+      "default": "Sunday",
       "options": [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "L"
+        "Friday",
+        "Monday",
+        "Saturday",
+        "Sunday",
+        "Thursday",
+        "Tuesday",
+        "Wednesday"
       ]
     },
     {
-      "name": "customer_type",
-      "type": "categorical",
-      "default": "Transient",
-      "options": [
-        "Contract",
-        "Group",
-        "Transient",
-        "Transient-Party"
-      ]
-    },
-    {
-      "name": "reservation_status",
-      "type": "categorical",
-      "default": "Check-Out",
-      "options": [
-        "Canceled",
-        "Check-Out",
-        "No-Show"
-      ]
-    },
-    {
-      "name": "lead_time",
+      "name": "number_of_adults",
       "type": "numeric",
-      "default": 69.0,
+      "default": 2.0,
       "min": 0.0,
-      "max": 737.0,
+      "max": 4.0,
       "step": 1.0
     },
     {
-      "name": "arrival_date_week_number",
+      "name": "number_of_children",
       "type": "numeric",
-      "default": 28.0,
-      "min": 1.0,
-      "max": 53.0,
+      "default": 0.0,
+      "min": 0.0,
+      "max": 10.0,
       "step": 1.0
     },
     {
-      "name": "arrival_date_day_of_month",
-      "type": "numeric",
-      "default": 16.0,
-      "min": 1.0,
-      "max": 31.0,
-      "step": 1.0
-    },
-    {
-      "name": "stays_in_weekend_nights",
+      "name": "number_of_weekend_nights",
       "type": "numeric",
       "default": 1.0,
       "min": 0.0,
-      "max": 19.0,
+      "max": 7.0,
       "step": 1.0
     },
     {
-      "name": "stays_in_week_nights",
+      "name": "number_of_week_nights",
       "type": "numeric",
       "default": 2.0,
       "min": 0.0,
-      "max": 50.0,
+      "max": 17.0,
       "step": 1.0
     },
     {
-      "name": "adults",
-      "type": "numeric",
-      "default": 2.0,
-      "min": 0.0,
-      "max": 55.0,
-      "step": 1.0
-    },
-    {
-      "name": "children",
-      "type": "numeric",
-      "default": 0.0,
-      "min": 0.0,
-      "max": 10.0,
-      "step": 0.1
-    },
-    {
-      "name": "babies",
-      "type": "numeric",
-      "default": 0.0,
-      "min": 0.0,
-      "max": 10.0,
-      "step": 1.0
-    },
-    {
-      "name": "is_repeated_guest",
+      "name": "car_parking_space",
       "type": "numeric",
       "default": 0.0,
       "min": 0.0,
@@ -177,63 +105,47 @@
       "step": 1.0
     },
     {
-      "name": "previous_cancellations",
+      "name": "lead_time",
       "type": "numeric",
-      "default": 0.0,
+      "default": 57.0,
       "min": 0.0,
-      "max": 26.0,
+      "max": 443.0,
       "step": 1.0
     },
     {
-      "name": "previous_bookings_not_canceled",
+      "name": "repeated",
       "type": "numeric",
       "default": 0.0,
       "min": 0.0,
-      "max": 72.0,
+      "max": 1.0,
       "step": 1.0
     },
     {
-      "name": "booking_changes",
+      "name": "p_c",
       "type": "numeric",
       "default": 0.0,
       "min": 0.0,
-      "max": 18.0,
+      "max": 13.0,
       "step": 1.0
     },
     {
-      "name": "agent",
+      "name": "p_not_c",
       "type": "numeric",
-      "default": 9.0,
+      "default": 0.0,
       "min": 0.0,
-      "max": 535.0,
+      "max": 58.0,
+      "step": 1.0
+    },
+    {
+      "name": "average_price",
+      "type": "numeric",
+      "default": 99.45,
+      "min": 0.0,
+      "max": 208.0,
       "step": 0.1
     },
     {
-      "name": "company",
-      "type": "numeric",
-      "default": 0.0,
-      "min": 0.0,
-      "max": 543.0,
-      "step": 0.1
-    },
-    {
-      "name": "days_in_waiting_list",
-      "type": "numeric",
-      "default": 0.0,
-      "min": 0.0,
-      "max": 391.0,
-      "step": 1.0
-    },
-    {
-      "name": "adr",
-      "type": "numeric",
-      "default": 94.95,
-      "min": 0.0,
-      "max": 5400.0,
-      "step": 0.1
-    },
-    {
-      "name": "total_of_special_requests",
+      "name": "special_requests",
       "type": "numeric",
       "default": 0.0,
       "min": 0.0,
@@ -241,19 +153,75 @@
       "step": 1.0
     },
     {
-      "name": "reservation_status_month",
+      "name": "number_of_children_and_adults",
       "type": "numeric",
-      "default": 6.0,
+      "default": 2.0,
       "min": 1.0,
       "max": 12.0,
       "step": 1.0
     },
     {
-      "name": "reservation_status_day",
+      "name": "number_of_total_nights",
       "type": "numeric",
-      "default": 16.0,
+      "default": 3.0,
+      "min": 0.0,
+      "max": 24.0,
+      "step": 1.0
+    },
+    {
+      "name": "weekend_share",
+      "type": "numeric",
+      "default": 0.25,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.1
+    },
+    {
+      "name": "lead_time_raw",
+      "type": "numeric",
+      "default": 57.0,
+      "min": 0.0,
+      "max": 443.0,
+      "step": 1.0
+    },
+    {
+      "name": "cancellation_ratio",
+      "type": "numeric",
+      "default": 0.0,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.1
+    },
+    {
+      "name": "first_time_visitor",
+      "type": "numeric",
+      "default": 1.0,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 1.0
+    },
+    {
+      "name": "history_volume",
+      "type": "numeric",
+      "default": 0.0,
+      "min": 0.0,
+      "max": 64.0,
+      "step": 1.0
+    },
+    {
+      "name": "month",
+      "type": "numeric",
+      "default": 8.0,
       "min": 1.0,
-      "max": 31.0,
+      "max": 12.0,
+      "step": 1.0
+    },
+    {
+      "name": "year",
+      "type": "numeric",
+      "default": 2018.0,
+      "min": 1970.0,
+      "max": 2018.0,
       "step": 1.0
     }
   ]

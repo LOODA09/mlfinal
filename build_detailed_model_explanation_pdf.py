@@ -60,44 +60,21 @@ MODEL_NOTES = {
             "memorize narrow patterns."
         ),
     },
-    "Naive Bayes": {
-        "class_file": "hotel_app/ml/models/naive_bayes.py",
-        "training_setup": (
-            "Uses GaussianNB inside a balancing wrapper that applies balanced sample weights. "
-            "This keeps the minority cancellation class from being ignored."
-        ),
-        "how_it_works": (
-            "Naive Bayes estimates how likely each feature value is under each class and then combines them under a "
-            "conditional-independence assumption. Even when the assumption is not exactly true, it can still work well "
-            "if a few features are extremely informative."
-        ),
-        "why_fit": (
-            "It is useful in this project as a lightweight probabilistic baseline and as a contrast to more complex models."
-        ),
-        "why_metrics": (
-            "Its perfect benchmark score happens because leakage features are so informative that even a simple probabilistic "
-            "model can separate the classes almost completely. That performance should therefore be interpreted as a property "
-            "of the benchmark mode, not as proof that Naive Bayes is the best real-world model."
-        ),
-    },
     "SVM": {
         "class_file": "hotel_app/ml/models/svm.py",
         "training_setup": (
-            "Uses a LinearSVC with class_weight='balanced', wrapped by CalibratedClassifierCV, then tuned with GridSearchCV "
-            "over C values [0.35, 0.75, 1.25, 2.0]. The calibration layer produces probability-style outputs."
+            "Uses an RBF-kernel SVC with class_weight='balanced' and native probability output, wrapped in a stratified subsampling "
+            "wrapper so training remains practical on the full hotel-booking table, then tuned with GridSearchCV over C and gamma."
         ),
         "how_it_works": (
-            "A support vector machine looks for the separating hyperplane with the largest margin between classes. "
-            "The calibrated wrapper then maps its scores into probabilities so the project can compute ROC-AUC, log loss, "
-            "and probability-driven explanations."
+            "An RBF SVM builds a non-linear margin boundary in kernel space, which lets it separate patterns that are not linearly separable in the original feature representation."
         ),
         "why_fit": (
-            "Because the project uses scaling and high-dimensional encoded features, a linear margin model is a sensible option."
+            "Because you asked specifically for the RBF SVM, the project now uses the non-linear kernel version instead of the old linear one."
         ),
         "why_metrics": (
-            "In high-score mode the classes are nearly linearly separable once leakage variables are included, so SVM reaches "
-            "perfect scores. In an honest mode, its performance typically falls because the real task is noisier and less "
-            "cleanly separable."
+            "In the high-score mode the leakage-heavy benchmark is easy enough that even the bounded-sample RBF SVM can score very strongly. "
+            "In the honest mode, any drop is expected because the real task is noisier and the RBF SVM must trade capacity against runtime."
         ),
     },
     "Random Forest": {
@@ -122,24 +99,21 @@ MODEL_NOTES = {
             "complex interactions among lead time, booking history, market segment, grouped country, and other pre-arrival signals."
         ),
     },
-    "LightGBM": {
-        "class_file": "hotel_app/ml/models/lightgbm.py",
+    "XGBoost": {
+        "class_file": "hotel_app/ml/models/xgboost_model.py",
         "training_setup": (
-            "Uses LGBMClassifier with objective='binary', learning_rate=0.05, n_estimators=400, num_leaves=31, "
-            "min_child_samples=40, subsample=0.9, colsample_bytree=0.9, reg_lambda=1.0, and class_weight='balanced'."
+            "Uses XGBClassifier with gbtree boosting, learning_rate=0.05, max_depth=6, n_estimators=320, min_child_weight=2, "
+            "subsample=0.85, colsample_bytree=0.85, reg_lambda=1.5, eval_metric='logloss', and tree_method='hist'."
         ),
         "how_it_works": (
-            "LightGBM is a gradient boosting tree method. Instead of averaging many independent trees, it builds trees "
-            "sequentially so each new tree focuses on the errors left by the previous ones."
+            "XGBoost is a gradient boosting tree method. Instead of averaging independent trees, it trains trees sequentially "
+            "so each new tree focuses on the mistakes left behind by the previous ensemble."
         ),
         "why_fit": (
-            "Boosted trees are usually excellent for structured business datasets like hotel bookings because they capture "
-            "non-linear relationships with strong predictive efficiency."
+            "Boosted trees are often among the strongest choices for structured business datasets because they model non-linear interactions very efficiently."
         ),
         "why_metrics": (
-            "Its perfect benchmark score reflects how aggressively boosting can exploit leakage features. In a leakage-free "
-            "setting it would usually be competitive, but the latest honest artifact bundle does not currently publish a "
-            "fresh LightGBM row, so the report should not overclaim a realistic score for it."
+            "Its benchmark score is usually very strong because boosted trees exploit the high-signal booking patterns effectively, especially in the leakage-heavy benchmark mode."
         ),
     },
     "ANN": {

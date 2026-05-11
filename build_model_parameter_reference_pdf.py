@@ -74,44 +74,34 @@ MODEL_DETAILS = {
             "The search space was centered on medium-to-strong forests instead of tiny ones because the project benefits from ensemble stability more than from extreme simplicity."
         ),
     },
-    "Naive Bayes": {
-        "class_file": "hotel_app/ml/models/naive_bayes.py",
+    "XGBoost": {
+        "class_file": "hotel_app/ml/models/xgboost_model.py",
         "parameters": (
-            "Estimator: GaussianNB(var_smoothing=1e-8) inside BalancedClassifierWrapper(strategy='sample_weight', random_state=42)."
+            "Estimator: XGBClassifier(booster='gbtree', learning_rate=0.05, max_depth=6, n_estimators=320, min_child_weight=2, "
+            "subsample=0.85, colsample_bytree=0.85, reg_lambda=1.5, eval_metric='logloss', tree_method='hist', n_jobs=1, random_state=42)."
         ),
         "how_it_works": (
-            "Naive Bayes models each feature distribution under each class and combines them under a conditional-independence assumption. It is a simple probabilistic classifier."
+            "XGBoost builds trees sequentially and each new tree concentrates on the residual errors left by the previous trees. "
+            "It is one of the strongest off-the-shelf algorithms for structured business tables."
         ),
         "why_picked": (
-            "A very small var_smoothing value preserves useful separation while avoiding numerical instability. The wrapper uses balanced sample weights because Naive Bayes has no direct class_weight parameter."
+            "The settings balance predictive power with runtime. The moderate learning rate and 320 trees give the booster enough capacity, "
+            "while max_depth, child weight, subsampling, and regularization keep the model from becoming unnecessarily unstable."
         ),
     },
     "SVM": {
         "class_file": "hotel_app/ml/models/svm.py",
         "parameters": (
-            "Base estimator: LinearSVC(class_weight='balanced', random_state=42, dual='auto') wrapped in CalibratedClassifierCV(cv=3). "
-            "Search space: estimator__C [0.35, 0.75, 1.25, 2.0] through GridSearchCV(cv=3, scoring='accuracy')."
+            "Base estimator: SVC(kernel='rbf', probability=True, class_weight='balanced', random_state=42) wrapped in "
+            "SubsampledEstimatorWrapper(max_samples=20000, random_state=42). Search space: estimator__C [1.0, 3.0] and estimator__gamma ['scale', 0.01] "
+            "through GridSearchCV(cv=3, scoring='accuracy', n_jobs=1)."
         ),
         "how_it_works": (
-            "The linear SVM finds the widest-margin separating hyperplane in the transformed feature space. Calibration then maps raw decision scores into probability-like outputs."
+            "The RBF SVM creates a non-linear decision boundary by measuring similarity to support vectors in an implicit high-dimensional kernel space."
         ),
         "why_picked": (
-            "A linear SVM is appropriate because the project uses scaling and one-hot encoding, creating a wide sparse feature space where margin methods are often competitive. "
-            "The moderate C grid keeps the model from being either too rigid or too unstable."
-        ),
-    },
-    "LightGBM": {
-        "class_file": "hotel_app/ml/models/lightgbm.py",
-        "parameters": (
-            "Estimator: LGBMClassifier(objective='binary', learning_rate=0.05, n_estimators=400, num_leaves=31, min_child_samples=40, "
-            "subsample=0.9, colsample_bytree=0.9, reg_lambda=1.0, random_state=42, class_weight='balanced', verbosity=-1)."
-        ),
-        "how_it_works": (
-            "LightGBM is a gradient boosting tree model. It builds trees sequentially so each tree focuses on correcting the errors made by the previous trees."
-        ),
-        "why_picked": (
-            "The learning_rate and n_estimators pair are conservative enough to learn detailed patterns without exploding variance. "
-            "The leaf, child-sample, subsampling, and regularization settings were chosen to keep boosted trees expressive but not too noisy on hotel-booking tabular data."
+            "An RBF kernel was chosen because you explicitly asked for the non-linear SVM version. The stratified subsampling wrapper is necessary because a full RBF SVM "
+            "on the entire hotel-booking table would be impractically expensive. The compact C/gamma grid keeps the search realistic while still testing a stronger non-linear margin boundary."
         ),
     },
     "ANN": {

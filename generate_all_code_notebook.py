@@ -28,18 +28,11 @@ FILES = [
     "hotel_app/ml/models/knn.py",
     "hotel_app/ml/models/decision_tree.py",
     "hotel_app/ml/models/random_forest.py",
-    "hotel_app/ml/models/naive_bayes.py",
     "hotel_app/ml/models/svm.py",
     "hotel_app/ml/models/ann.py",
     "hotel_app/ml/models/rnn.py",
     "hotel_app/ml/models/lstm.py",
-    "hotel_app/ml/models/lightgbm.py",
     "hotel_app/ml/models/xgboost_model.py",
-    "hotel_app/ml/models/adaboost.py",
-    "hotel_app/ml/models/gradient_boosting.py",
-    "hotel_app/ml/models/extra_trees.py",
-    "hotel_app/ml/models/voting.py",
-    "hotel_app/ml/models/stacking.py",
 ]
 
 MODEL_REFERENCE = [
@@ -76,11 +69,19 @@ MODEL_REFERENCE = [
         "training_metrics": "saved in holdout_summary.csv as train_* columns",
     },
     {
+        "name": "XGBoost",
+        "path": "hotel_app/ml/models/xgboost_model.py",
+        "estimator": "XGBClassifier with tuned tree parameters",
+        "balancing": "boosted tree regularization and weighted loss behavior",
+        "probability": "native predict_proba from XGBoost",
+        "training_metrics": "saved in holdout_summary.csv as train_* columns",
+    },
+    {
         "name": "SVM",
         "path": "hotel_app/ml/models/svm.py",
-        "estimator": "LinearSVC wrapped by CalibratedClassifierCV and GridSearchCV",
+        "estimator": "RBF-kernel SVC inside a stratified subsampling wrapper and GridSearchCV",
         "balancing": "class_weight='balanced'",
-        "probability": "calibrated predict_proba; fallback sigmoid helper in hotel_app/ml/data.py",
+        "probability": "native SVC predict_proba",
         "training_metrics": "saved in holdout_summary.csv as train_* columns",
     },
     {
