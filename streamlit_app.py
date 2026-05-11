@@ -15,7 +15,24 @@ from hotel_app.ml import HotelDataProcessor, SHAPAnalyzer, _positive_probabiliti
 ARTIFACTS_DIR = Path("artifacts")
 DATA_PATH = Path("hotel reservation data set .csv") if Path("hotel reservation data set .csv").exists() else Path("hotel_booking.csv") if Path("hotel_booking.csv").exists() else Path("hotel_bookings.csv")
 EXCLUDED_FEATURES = {"arrival_date_year"}
-FIELD_LABELS = {"type_of_meal": "Meal Package", "car_parking_space": "Parking Need Flag", "room_type": "Room Category", "lead_time": "Advance Booking Window", "market_segment_type": "Booking Channel", "average_price": "Nightly Room Rate", "special_requests": "Special Request Count", "number_of_children_and_adults": "Traveler Count", "number_of_total_nights": "Stay Length Band", "day_name": "Reservation Weekday", "month": "Reservation Month", "year": "Reservation Year", "cancellation_ratio": "Past Cancellation Share", "first_time_visitor": "New Guest Indicator"}
+FIELD_LABELS = {"type_of_meal": "Meal Type", "car_parking_space": "Parking Need Flag", "room_type": "Room Type", "lead_time": "Advance Booking Window", "market_segment_type": "Booking Channel", "average_price": "Nightly Room Rate", "special_requests": "Special Request Count", "number_of_children_and_adults": "Traveler Count", "number_of_total_nights": "Stay Length Band", "day_name": "Reservation Weekday", "month": "Reservation Month", "year": "Reservation Year", "cancellation_ratio": "Past Cancellation Share", "first_time_visitor": "New Guest Indicator"}
+CATEGORICAL_UI_MAPS = {
+    "room_type": {
+        "Deluxe Room": "Luxury Room",
+        "Suite": "Suite",
+        "Standard Room": "Normal Room",
+        "Double Room": "Simple Room",
+        "Family Room": "Family Suite",
+        "Presidential Suite": "Presidential Suite",
+        "Penthouse": "Penthouse"
+    },
+    "type_of_meal": {
+        "Full Board": "VIP Meal",
+        "Half Board": "Luxury Meal",
+        "Breakfast": "Normal Meal",
+        "No Meal": "No Meal"
+    }
+}
 FIELD_OPTION_LABELS = {"car_parking_space": {0: "No Parking Needed", 1: "Parking Needed"}, "lead_time": {0: "Same Day", 1: "Short Notice", 2: "Medium Term", 3: "Long Term", 4: "Very Long Term"}, "number_of_total_nights": {0: "Day Use", 1: "Short Stay", 2: "Week Stay", 3: "Two Weeks Stay", 4: "Long Stay"}, "day_name": {0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}, "first_time_visitor": {0: "Returning Guest", 1: "First-Time Guest"}}
 MODEL_METRIC_COLUMNS = [("train_accuracy", "Train Accuracy"), ("accuracy", "Test Accuracy"), ("train_precision", "Train Precision"), ("precision", "Test Precision"), ("train_recall", "Train Recall"), ("recall", "Test Recall"), ("train_f1", "Train F1"), ("f1", "Test F1"), ("train_balanced_accuracy", "Train Balanced Accuracy"), ("balanced_accuracy", "Test Balanced Accuracy"), ("train_roc_auc", "Train ROC-AUC"), ("roc_auc", "Test ROC-AUC"), ("train_average_precision", "Train Average Precision"), ("average_precision", "Test Average Precision"), ("train_brier_score", "Train Brier Score"), ("brier_score", "Test Brier Score"), ("train_log_loss", "Train Log Loss"), ("log_loss", "Test Log Loss"), ("train_mcc", "Train MCC"), ("mcc", "Test MCC")]
 
@@ -214,6 +231,22 @@ class PredictionApp:
         sr = int(float(ri["special_requests"].iloc[0])) if "special_requests" in ri.columns else 0
         pk = int(float(ri["car_parking_space"].iloc[0])) if "car_parking_space" in ri.columns else 0
         pr = float(ri["average_price"].iloc[0]) if "average_price" in ri.columns else 0.0
+        
+        # Room Type Logic (using UI names as they are in the 'ri' dataframe)
+        rt = str(ri["room_type"].iloc[0]) if "room_type" in ri.columns else ""
+        if rt in ["Luxury Room", "Suite"]:
+            adj.append({"rule": f"Premium Room ({rt})", "impact_pct": "-3.0%", "type": "positive"})
+            p -= 0.03
+        elif rt in ["Normal Room", "Simple Room"]:
+            adj.append({"rule": f"Standard Room ({rt})", "impact_pct": "+3.0%", "type": "negative"})
+            p += 0.03
+
+        # Meal Type Logic
+        mt = str(ri["type_of_meal"].iloc[0]) if "type_of_meal" in ri.columns else ""
+        if mt == "Normal Meal" and rt in ["Normal Room", "Simple Room"]:
+            adj.append({"rule": "Normal Meal with Standard Room", "impact_pct": "-2.0%", "type": "positive"})
+            p -= 0.02
+
         if sr > 0: adj.append({"rule": f"Special Requests ({sr})", "impact_pct": f"-{sr*5:.0f}%", "type": "positive"}); p -= sr * 0.05
         if pk == 1: adj.append({"rule": "Parking Space Added", "impact_pct": "-2.0%", "type": "positive"}); p -= 0.02
         if pr > 99:
@@ -347,7 +380,12 @@ class PredictionApp:
         for i, col in enumerate(s.get("columns", [])):
             h, fn, fl, om = c[i%3], col["name"], self.display_label(col["name"]), FIELD_OPTION_LABELS.get(col["name"], {})
             if col["type"] == "categorical":
-                o, d = col["options"], col["default"]; v[fn] = h.selectbox(fl, o, o.index(d) if d in o else 0, key=f"f_{fn}")
+                opts = col["options"]
+                ui_map = CATEGORICAL_UI_MAPS.get(fn, {})
+                display_opts = [ui_map.get(o, o) for o in opts]
+                d = col["default"]
+                d_display = ui_map.get(d, d)
+                v[fn] = h.selectbox(fl, display_opts, display_opts.index(d_display) if d_display in display_opts else 0, key=f"f_{fn}")
             elif om:
                 no, dv = sorted(om), int(round(float(col["default"]))); di = no.index(dv) if dv in no else 0
                 v[fn] = h.selectbox(fl, no, di, format_func=lambda x: om.get(x, str(x)), key=f"f_{fn}")
@@ -355,7 +393,14 @@ class PredictionApp:
         return pd.DataFrame([v])
 
     def render_prediction(self, model: Any, raw: pd.DataFrame, mn: str, ex: pd.DataFrame) -> None:
-        ep = self.add_engineered_features_compat(raw.copy()); mi = self.align_input_to_model(ep.copy(), raw, model, ex)
+        # Map UI values back to model values
+        model_ready = raw.copy()
+        for fn, ui_map in CATEGORICAL_UI_MAPS.items():
+            if fn in model_ready.columns:
+                rev_map = {v: k for k, v in ui_map.items()}
+                model_ready[fn] = model_ready[fn].map(lambda x: rev_map.get(x, x))
+        
+        ep = self.add_engineered_features_compat(model_ready.copy()); mi = self.align_input_to_model(ep.copy(), model_ready, model, ex)
         mp, probs = int(model.predict(mi)[0]), _positive_probabilities(model, mi)
         mlp = float(probs[0]) if probs is not None else None
         fcp, adj = mlp, []
