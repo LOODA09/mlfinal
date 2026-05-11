@@ -2,52 +2,12 @@
   "Logistic Regression": {
     "matrix": [
       [
-        3432,
-        1449
+        3422,
+        1459
       ],
       [
-        627,
-        1742
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "KNN": {
-    "matrix": [
-      [
-        4134,
-        747
-      ],
-      [
-        459,
-        1910
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "Decision Tree": {
-    "matrix": [
-      [
-        4120,
-        761
-      ],
-      [
-        469,
-        1900
+        625,
+        1744
       ]
     ],
     "labels": [
@@ -62,12 +22,12 @@
   "Random Forest": {
     "matrix": [
       [
-        4310,
-        571
+        4306,
+        575
       ],
       [
-        431,
-        1938
+        466,
+        1903
       ]
     ],
     "labels": [
@@ -79,15 +39,35 @@
       "Predicted 1"
     ]
   },
-  "SVM": {
+  "Decision Tree": {
     "matrix": [
       [
-        3639,
-        1242
+        4216,
+        665
       ],
       [
-        534,
-        1835
+        518,
+        1851
+      ]
+    ],
+    "labels": [
+      "Actual 0",
+      "Actual 1"
+    ],
+    "predicted": [
+      "Predicted 0",
+      "Predicted 1"
+    ]
+  },
+  "KNN": {
+    "matrix": [
+      [
+        4043,
+        838
+      ],
+      [
+        483,
+        1886
       ]
     ],
     "labels": [
@@ -102,72 +82,12 @@
   "XGBoost": {
     "matrix": [
       [
-        4133,
-        748
+        4138,
+        743
       ],
       [
-        461,
-        1908
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "ANN": {
-    "matrix": [
-      [
-        0,
-        4881
-      ],
-      [
-        0,
-        2369
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "RNN": {
-    "matrix": [
-      [
-        3151,
-        1730
-      ],
-      [
-        495,
-        1874
-      ]
-    ],
-    "labels": [
-      "Actual 0",
-      "Actual 1"
-    ],
-    "predicted": [
-      "Predicted 0",
-      "Predicted 1"
-    ]
-  },
-  "LSTM": {
-    "matrix": [
-      [
-        2453,
-        2428
-      ],
-      [
-        680,
-        1689
+        429,
+        1940
       ]
     ],
     "labels": [

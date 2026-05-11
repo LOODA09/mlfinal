@@ -2,10 +2,10 @@
   "data_path": "K:\\mlfinal_project\\Hotel-Booking-Cancellation-Prediction\\hotel reservation data set .csv",
   "dataset_kind": "reservation",
   "remove_leakage_features": true,
-  "feature_preset": "high_score",
+  "feature_preset": "honest",
   "balance_strategy": "smote",
-  "evaluation_mode": "High-Score Benchmark",
-  "python_version": "3.11.9",
+  "evaluation_mode": "Honest Prediction",
+  "python_version": "3.14.3",
   "train_rows": 28998,
   "test_rows": 7250,
   "total_rows": 36248,
@@ -16,14 +16,10 @@
   "deployment_model": "Random Forest",
   "trained_models": [
     "Logistic Regression",
-    "KNN",
-    "Decision Tree",
     "Random Forest",
-    "SVM",
-    "XGBoost",
-    "ANN",
-    "RNN",
-    "LSTM"
+    "Decision Tree",
+    "KNN",
+    "XGBoost"
   ],
   "full_data_models": [
     "Random Forest"
@@ -32,20 +28,20 @@
   "shap_explanations": [
     {
       "feature": "special_requests",
-      "mean_abs_shap": 0.15978893922579218,
-      "correlation_with_risk": -0.9240863928217722,
+      "mean_abs_shap": 0.14802276759506333,
+      "correlation_with_risk": -0.9237960473449058,
       "explanation": "Higher values tend to reduce cancellation risk."
     },
     {
       "feature": "lead_time",
-      "mean_abs_shap": 0.0959085926992489,
-      "correlation_with_risk": 0.8951288466022796,
+      "mean_abs_shap": 0.09389170595767629,
+      "correlation_with_risk": 0.8692381599753929,
       "explanation": "Higher values tend to increase cancellation risk."
     },
     {
       "feature": "market_segment_type_Online",
-      "mean_abs_shap": 0.08586553980786671,
-      "correlation_with_risk": 0.9328466885370927,
+      "mean_abs_shap": 0.07227564051780809,
+      "correlation_with_risk": 0.9113662865998307,
       "explanation": "Higher values tend to increase cancellation risk."
     }
   ],
@@ -91,11 +87,11 @@
       "segment_name": "High-Risk Returners"
     }
   ],
-  "tensorflow_version": "2.21.0",
-  "benchmark_phase_wall_clock_sec": 2572.5818872998934,
-  "shap_phase_wall_clock_sec": 268.9219894001726,
-  "full_retrain_phase_wall_clock_sec": 3.4243326000869274,
-  "artifact_finalize_wall_clock_sec": 19.896062099840492,
-  "total_pipeline_wall_clock_sec": 2873.090526400134,
+  "tensorflow_version": null,
+  "benchmark_phase_wall_clock_sec": 47.844210900133476,
+  "shap_phase_wall_clock_sec": 41.244907800108194,
+  "full_retrain_phase_wall_clock_sec": 4.02149309986271,
+  "artifact_finalize_wall_clock_sec": 11.873210099991411,
+  "total_pipeline_wall_clock_sec": 109.81839769985527,
   "pipeline_wall_clock_note": "Total pipeline wall clock includes the benchmark holdout fits, cross-validation, SHAP generation, best-model full-data retraining for the deployment artifact, and report creation. Per-model training_time_sec is the sum of benchmark_training_time_sec and full_data_training_time_sec when a full-data retrain was performed."
 }

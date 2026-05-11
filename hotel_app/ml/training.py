@@ -378,6 +378,13 @@ class TerminalTrainingRunner:
                     }
                 )
                 benchmark_rows.append(metrics)
+                # Print notebook-style output
+                train_m = detail.get("train_metrics", {})
+                print(f"Model: {model_spec.name}")
+                print(f"Train - Accuracy: {train_m.get('accuracy', 0):.4f} | Precision: {train_m.get('precision', 0):.4f} | Recall: {train_m.get('recall', 0):.4f} | F1: {train_m.get('f1', 0):.4f}")
+                print(f"Test  - Accuracy: {metrics.get('accuracy', 0):.4f} | Precision: {metrics.get('precision', 0):.4f} | Recall: {metrics.get('recall', 0):.4f} | F1: {metrics.get('f1', 0):.4f}")
+                print(f"Training Time: {training_time:.2f}s | Testing Time: {inference_time:.2f}s")
+                print("-" * 50)
                 benchmark_rows_by_name[model_spec.name] = metrics
                 details[model_spec.name] = detail
                 trained_models[model_spec.name] = trained_model
