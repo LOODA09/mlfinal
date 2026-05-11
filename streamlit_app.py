@@ -827,7 +827,10 @@ class PredictionApp:
     def load_csv(_self, path: Path, version: int) -> pd.DataFrame:
         if not path.exists():
             return pd.DataFrame()
-        return pd.read_csv(path)
+        try:
+            return pd.read_csv(path)
+        except pd.errors.EmptyDataError:
+            return pd.DataFrame()
 
     @st.cache_data(show_spinner=False)
     def load_raw_data(_self, path: Path, version: int) -> pd.DataFrame:
