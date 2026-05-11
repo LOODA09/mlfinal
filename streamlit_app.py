@@ -69,26 +69,26 @@ FIELD_OPTION_LABELS = {
     "first_time_visitor": {0: "Returning Guest", 1: "First-Time Guest"},
 }
 MODEL_METRIC_COLUMNS = [
-    ("train_accuracy", "train_accuracy"),
-    ("accuracy", "test_accuracy"),
-    ("train_precision", "train_precision"),
-    ("precision", "test_precision"),
-    ("train_recall", "train_recall"),
-    ("recall", "test_recall"),
-    ("train_f1", "train_f1"),
-    ("f1", "test_f1"),
-    ("train_balanced_accuracy", "train_balanced_accuracy"),
-    ("balanced_accuracy", "test_balanced_accuracy"),
-    ("train_roc_auc", "train_roc_auc"),
-    ("roc_auc", "test_roc_auc"),
-    ("train_average_precision", "train_average_precision"),
-    ("average_precision", "test_average_precision"),
-    ("train_brier_score", "train_brier_score"),
-    ("brier_score", "test_brier_score"),
-    ("train_log_loss", "train_log_loss"),
-    ("log_loss", "test_log_loss"),
-    ("train_mcc", "train_mcc"),
-    ("mcc", "test_mcc"),
+    ("train_accuracy", "Train Accuracy"),
+    ("accuracy", "Test Accuracy"),
+    ("train_precision", "Train Precision"),
+    ("precision", "Test Precision"),
+    ("train_recall", "Train Recall"),
+    ("recall", "Test Recall"),
+    ("train_f1", "Train F1"),
+    ("f1", "Test F1"),
+    ("train_balanced_accuracy", "Train Balanced Accuracy"),
+    ("balanced_accuracy", "Test Balanced Accuracy"),
+    ("train_roc_auc", "Train ROC-AUC"),
+    ("roc_auc", "Test ROC-AUC"),
+    ("train_average_precision", "Train Average Precision"),
+    ("average_precision", "Test Average Precision"),
+    ("train_brier_score", "Train Brier Score"),
+    ("brier_score", "Test Brier Score"),
+    ("train_log_loss", "Train Log Loss"),
+    ("log_loss", "Test Log Loss"),
+    ("train_mcc", "Train MCC"),
+    ("mcc", "Test MCC"),
 ]
 
 
@@ -104,6 +104,16 @@ def _format_duration(seconds: Any) -> str:
         return f"{minutes}m {remainder}s"
     hours, minutes = divmod(minutes, 60)
     return f"{hours}h {minutes}m"
+
+
+def _format_score(value: Any) -> str:
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return "N/A"
+    if np.isnan(numeric):
+        return "N/A"
+    return f"{numeric * 100:.2f}%"
 
 
 class DashboardStyle:
@@ -1075,6 +1085,27 @@ class PredictionApp:
             else:
                 st.plotly_chart(self.build_cv_f1_chart(cv_mean), use_container_width=True)
 
+        st.markdown("### Notebook-Style Train vs Test Snapshot")
+        train_accuracy = pd.to_numeric(top_model.get("train_accuracy"), errors="coerce")
+        test_accuracy = pd.to_numeric(top_model.get("accuracy"), errors="coerce")
+        train_f1 = pd.to_numeric(top_model.get("train_f1"), errors="coerce")
+        test_f1 = pd.to_numeric(top_model.get("f1"), errors="coerce")
+        train_roc_auc = pd.to_numeric(top_model.get("train_roc_auc"), errors="coerce")
+        test_roc_auc = pd.to_numeric(top_model.get("roc_auc"), errors="coerce")
+        gap_value = train_accuracy - test_accuracy if pd.notna(train_accuracy) and pd.notna(test_accuracy) else np.nan
+        snapshot_columns = st.columns(4, gap="large")
+        snapshot_columns[0].metric("Train Accuracy", _format_score(train_accuracy))
+        snapshot_columns[1].metric(
+            "Test Accuracy",
+            _format_score(test_accuracy),
+            None if np.isnan(gap_value) else f"{gap_value * 100:.2f} pts gap",
+        )
+        snapshot_columns[2].metric("Train F1", _format_score(train_f1))
+        snapshot_columns[3].metric("Test F1", _format_score(test_f1))
+        st.caption(
+            f"For the current leading model, Train ROC-AUC is {_format_score(train_roc_auc)} and Test ROC-AUC is {_format_score(test_roc_auc)}."
+        )
+
         rnn_reason = metadata.get("skipped_models", {}).get("RNN")
         if rnn_reason:
             st.markdown(
@@ -1157,6 +1188,48 @@ class PredictionApp:
             st.plotly_chart(self.build_metrics_comparison_chart(holdout), use_container_width=True)
         with right:
             st.plotly_chart(self.build_accuracy_vs_time(holdout), use_container_width=True)
+
+        st.markdown("### Train vs Test Accuracy By Model")
+        st.plotly_chart(self.build_train_test_accuracy_chart(holdout), use_container_width=True)
+
+        notebook_style_columns = [
+            "model",
+            "train_accuracy",
+            "accuracy",
+            "train_precision",
+            "precision",
+            "train_recall",
+            "recall",
+            "train_f1",
+            "f1",
+            "train_roc_auc",
+            "roc_auc",
+        ]
+        available_notebook_columns = [column for column in notebook_style_columns if column in holdout.columns]
+        notebook_style_frame = holdout[available_notebook_columns].rename(
+            columns={
+                "model": "Model",
+                "train_accuracy": "Train Accuracy",
+                "accuracy": "Test Accuracy",
+                "train_precision": "Train Precision",
+                "precision": "Test Precision",
+                "train_recall": "Train Recall",
+                "recall": "Test Recall",
+                "train_f1": "Train F1",
+                "f1": "Test F1",
+                "train_roc_auc": "Train ROC-AUC",
+                "roc_auc": "Test ROC-AUC",
+            }
+        )
+        st.dataframe(
+            notebook_style_frame.style.format(
+                {column: "{:.4f}" for column in notebook_style_frame.select_dtypes(include=["number"]).columns}
+            ),
+            use_container_width=True,
+        )
+        st.caption(
+            "This notebook-style table shows the benchmark training metrics beside the saved holdout testing metrics for every model."
+        )
 
         st.plotly_chart(self.build_holdout_bar(holdout, metric), use_container_width=True)
 
@@ -1628,6 +1701,40 @@ class PredictionApp:
             plot_bgcolor="rgba(248,250,252,0.7)",
         )
         fig.update_traces(marker=dict(line=dict(color="white", width=1.2), opacity=0.9))
+        return fig
+
+    def build_train_test_accuracy_chart(self, holdout: pd.DataFrame) -> go.Figure:
+        chart = holdout[["model", "train_accuracy", "accuracy"]].copy()
+        chart["train_accuracy"] = pd.to_numeric(chart["train_accuracy"], errors="coerce").fillna(0.0)
+        chart["accuracy"] = pd.to_numeric(chart["accuracy"], errors="coerce").fillna(0.0)
+        long_frame = chart.melt(
+            id_vars="model",
+            value_vars=["train_accuracy", "accuracy"],
+            var_name="split",
+            value_name="score",
+        )
+        long_frame["split"] = long_frame["split"].map(
+            {"train_accuracy": "Train Accuracy", "accuracy": "Test Accuracy"}
+        )
+        fig = px.bar(
+            long_frame,
+            x="model",
+            y="score",
+            color="split",
+            barmode="group",
+            text_auto=".3f",
+            color_discrete_map={"Train Accuracy": "#0f766e", "Test Accuracy": "#38bdf8"},
+        )
+        fig.update_layout(
+            height=440,
+            yaxis_title="Accuracy",
+            xaxis_title="Model",
+            legend_title="Split",
+            margin=dict(l=10, r=10, t=20, b=20),
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(248,250,252,0.7)",
+        )
+        fig.update_traces(marker_line_color="rgba(7,17,31,0.15)", marker_line_width=1.1)
         return fig
 
     def build_cv_f1_chart(self, cv_mean: pd.DataFrame) -> go.Figure:
