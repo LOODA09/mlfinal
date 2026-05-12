@@ -231,8 +231,10 @@ class PredictionApp:
         sr = int(float(ri["special_requests"].iloc[0])) if "special_requests" in ri.columns else 0
         pk = int(float(ri["car_parking_space"].iloc[0])) if "car_parking_space" in ri.columns else 0
         pr = float(ri["average_price"].iloc[0]) if "average_price" in ri.columns else 0.0
+        lt = int(float(ri["lead_time"].iloc[0])) if "lead_time" in ri.columns else 0
+        sn = int(float(ri["number_of_total_nights"].iloc[0])) if "number_of_total_nights" in ri.columns else 0
         
-        # Room Type Logic (using UI names as they are in the 'ri' dataframe)
+        # Room Type Logic
         rt = str(ri["room_type"].iloc[0]) if "room_type" in ri.columns else ""
         if rt in ["Luxury Room", "Suite"]:
             adj.append({"rule": f"Premium Room ({rt})", "impact_pct": "-3.0%", "type": "positive"})
@@ -247,11 +249,25 @@ class PredictionApp:
             adj.append({"rule": "Normal Meal with Standard Room", "impact_pct": "-2.0%", "type": "positive"})
             p -= 0.02
 
+        # Advance Booking Window (Lead Time) Logic
+        if lt >= 3:
+            adj.append({"rule": f"Long Advance Booking ({FIELD_OPTION_LABELS['lead_time'].get(lt)})", "impact_pct": "+2.0%", "type": "negative"})
+            p += 0.02
+        elif lt == 0:
+            adj.append({"rule": "Same Day Booking", "impact_pct": "-2.0%", "type": "positive"})
+            p -= 0.02
+
+        # Stay Length Logic
+        if sn >= 3:
+            adj.append({"rule": f"Extended Stay ({FIELD_OPTION_LABELS['number_of_total_nights'].get(sn)})", "impact_pct": "+2.0%", "type": "negative"})
+            p += 0.02
+
         if sr > 0: adj.append({"rule": f"Special Requests ({sr})", "impact_pct": f"-{sr*5:.0f}%", "type": "positive"}); p -= sr * 0.05
         if pk == 1: adj.append({"rule": "Parking Space Added", "impact_pct": "-2.0%", "type": "positive"}); p -= 0.02
         if pr > 99:
             st = int((pr - 99) // 10)
             if st > 0: adj.append({"rule": f"High ADR ({pr:.0f} > 99)", "impact_pct": f"+{st*2:.0f}%", "type": "negative"}); p += st * 0.02
+        
         return max(0.0, min(1.0, p)), adj
 
     def run(self) -> None:
