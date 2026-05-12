@@ -450,11 +450,17 @@ class PredictionApp:
     def render_live_prediction_explainability(self, k: str) -> None:
         la = st.session_state.get("latest_prediction")
         if not la: st.markdown('<div class="insight-box"><strong>Live SHAP will appear here</strong><span>Run a prediction to generate interactive feature explanations.</span></div>', unsafe_allow_html=True); return
-        pr, rc, hl, sc = la.get("prediction"), la.get("cancel_probability"), "Booking Likely To Cancel" if la.get("prediction")==1 else "Booking Likely To Stay", f"Live explanation for {la.get('model_name','model')}. Cancellation probability: {pr*100:.2f}%." if pr is not None else f"Live explanation for {la.get('model_name','model')}."
-        st.markdown(f'<div class="live-result {"risk-high" if rc>=0.5 else "risk-low"}"><h3>{hl}</h3><p>{sc}</p></div>', unsafe_allow_html=True)
+        
+        pr = la.get("prediction")
+        rc = la.get("cancel_probability")
+        mn = la.get("model_name", "model")
+        hl = "Booking Likely To Cancel" if pr == 1 else "Booking Likely To Stay"
+        sc = f"Live explanation for {mn}. Cancellation probability: {rc*100:.2f}%." if rc is not None else f"Live explanation for {mn}."
+        
+        st.markdown(f'<div class="live-result {"risk-high" if rc is not None and rc>=0.5 else "risk-low"}"><h3>{hl}</h3><p>{sc}</p></div>', unsafe_allow_html=True)
         gl, gr = st.columns([0.9, 1.1], gap="large")
         with gl:
-            if pr is not None: st.plotly_chart(self.build_probability_gauge(pr), use_container_width=True, key=f"pg_{k}")
+            if rc is not None: st.plotly_chart(self.build_probability_gauge(rc), use_container_width=True, key=f"pg_{k}")
         with gr: st.plotly_chart(self.build_local_shap_waterfall(pd.DataFrame(la.get("increasing",[])), pd.DataFrame(la.get("decreasing",[]))), use_container_width=True, key=f"sw_{k}")
         co1, co2 = st.columns(2, gap="large")
         with co1:
